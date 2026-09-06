@@ -36,7 +36,6 @@ function App() {
       <div className="content">
         <h1 className="name-title">PRIYA</h1>
         <div className="shayari">
-          <p>Ek bewafa ke zakhmon par marham lagane hum gaye</p>
           <p>Ek bewafa ke zakhmon par marham lagane hum gaye...</p>
           <br/>
           <p>Marham ki qasam, marham na mila,</p>
