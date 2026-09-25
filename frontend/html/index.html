@@ -3,34 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Virtual Circular GD Arena | UnMute-Yourself AI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>UnMute-Yourself AI | GD, Debate & Interview Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #080c14;
-      --bg-surface: #101726;
-      --bg-card: #182238;
-      --border-color: #24324f;
+      --bg-main: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-glass: rgba(255, 255, 255, 0.85);
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --border-glow: #cbd5e1;
 
-      --accent-cyan: #06b6d4;
-      --accent-blue: #3b82f6;
-      --accent-purple: #a855f7;
-      --accent-red: #ef4444;
-      --accent-green: #10b981;
+      --accent-cyan: #0284c7;
+      --accent-cyan-glow: rgba(2, 132, 199, 0.25);
+      --accent-blue: #2563eb;
+      --accent-blue-glow: rgba(37, 99, 235, 0.25);
+      --accent-purple: #7e22ce;
+      --accent-purple-glow: rgba(126, 34, 206, 0.25);
+      --accent-red: #dc2626;
+      --accent-green: #16a34a;
 
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --font-tech: 'Space Grotesk', sans-serif;
+      --font-primary: 'Plus Jakarta Sans', sans-serif;
+      --font-display: 'Outfit', sans-serif;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: var(--font-primary);
     }
 
     body {
-      background-color: var(--bg-dark);
+      background-color: var(--bg-main);
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(37, 99, 235, 0.05) 0px, transparent 50%),
+        radial-gradient(at 90% 90%, rgba(126, 34, 206, 0.05) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(2, 132, 199, 0.04) 0px, transparent 60%),
+        linear-gradient(to right, rgba(226, 232, 240, 0.4) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(226, 232, 240, 0.4) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
       color: var(--text-main);
       height: 100vh;
       display: flex;
@@ -38,244 +53,640 @@
       overflow: hidden;
     }
 
-    /* Top Banner Header */
+    /* Cinematic Header Navigation */
     header {
-      background: var(--bg-surface);
-      border-bottom: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
       padding: 10px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 56px;
+      height: 64px;
       z-index: 20;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 16px var(--accent-blue-glow);
+      position: relative;
+    }
+    .brand-logo::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      z-index: -1;
+      opacity: 0.5;
+      filter: blur(4px);
+    }
+
+    .brand-text-main {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #0f172a 30%, #334155 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-hud-badge {
+      font-family: var(--font-tech);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(2, 132, 199, 0.08);
+      border: 1px solid rgba(2, 132, 199, 0.2);
+      padding: 2px 8px;
+      border-radius: 6px;
+      display: inline-block;
     }
 
     .topic-banner {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--text-main);
-      background: rgba(255,255,255,0.04);
-      padding: 6px 20px;
-      border-radius: 20px;
+      background: var(--bg-glass);
       border: 1px solid var(--border-color);
+      border-radius: 30px;
+      padding: 6px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      max-width: 500px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .topic-banner span { color: var(--accent-cyan); }
 
-    .btn-evaluate {
-      background: rgba(239, 68, 68, 0.15);
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-header {
+      background: rgba(220, 38, 38, 0.08);
       color: var(--accent-red);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      padding: 8px 16px;
+      border: 1px solid rgba(220, 38, 38, 0.25);
+      padding: 8px 18px;
       border-radius: 12px;
+      font-family: var(--font-tech);
       font-weight: 700;
       font-size: 13px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.05);
     }
-    .btn-evaluate:hover { background: rgba(239, 68, 68, 0.3); }
+    .btn-header:hover {
+      background: rgba(220, 38, 38, 0.18);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+    }
 
     .timer-pill {
-      background: rgba(6, 182, 212, 0.15);
+      background: rgba(2, 132, 199, 0.08);
       color: var(--accent-cyan);
-      border: 1px solid rgba(6, 182, 212, 0.3);
+      border: 1px solid rgba(2, 132, 199, 0.25);
       padding: 6px 16px;
       border-radius: 20px;
-      font-weight: 800;
-      font-size: 13px;
-      letter-spacing: 0.05em;
-    }
-
-    /* Main Grid Split: Stage (Left 70%) & Transcript Panel (Right 30%) */
-    .app-workspace {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      height: calc(100vh - 56px);
-      overflow: hidden;
-    }
-
-    /* Stage Area: Circular Table Arena */
-    .table-stage {
-      background: radial-gradient(circle at center, #151e33 0%, #080c14 90%);
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      overflow: hidden;
-    }
-
-    /* 3D Realistic Circular / Oval Conference Table */
-    .circular-table {
-      width: 620px;
-      height: 340px;
-      background: radial-gradient(ellipse at center, #1e2b47 0%, #0d1526 100%);
-      border: 4px solid var(--border-color);
-      border-radius: 50%;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(6, 182, 212, 0.1);
-      transition: all 0.3s ease;
-    }
-
-    /* Table Center Teller (Next Turn Teller) */
-    .table-teller-center {
-      text-align: center;
-      padding: 16px 24px;
-      background: rgba(16, 23, 38, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      max-width: 320px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-    }
-
-    .teller-title {
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--accent-cyan);
-      margin-bottom: 4px;
-    }
-
-    .teller-status {
-      font-size: 14px;
+      font-family: var(--font-tech);
       font-weight: 700;
-      color: var(--text-main);
-      line-height: 1.4;
+      font-size: 13px;
+      letter-spacing: 0.04em;
     }
 
-    /* Participant Seats Positioned Around Table */
-    .participant-seat {
-      position: absolute;
-      width: 110px;
+    /* Views Container */
+    .view-screen {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #screenHome, #screenPrep {
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    .view-screen.active {
+      display: flex;
+    }
+
+    /* SCREEN 1: MODERN TECH HERO HOME */
+    .home-hero {
+      min-height: 100%;
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 10;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
     }
 
-    /* Positions around oval table */
-    .seat-top { top: -65px; left: 50%; transform: translateX(-50%); }
-    .seat-top-right { top: -45px; right: -40px; }
-    .seat-left { top: 50%; left: -65px; transform: translateY(-50%); }
-    .seat-right { top: 50%; right: -65px; transform: translateY(-50%); }
-    .seat-bottom { bottom: -65px; left: 50%; transform: translateX(-50%); }
+    .hero-hud-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(37, 99, 235, 0.06);
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: 30px;
+      font-family: var(--font-tech);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+    }
 
-    /* Avatar Ring & Styling */
-    .seat-avatar-wrapper {
-      width: 76px;
-      height: 76px;
-      border-radius: 50%;
-      border: 3px solid var(--border-color);
+    .home-title {
+      font-family: var(--font-display);
+      font-size: 44px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #0f172a 20%, #2563eb 60%, #7e22ce 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      max-width: 800px;
+    }
+
+    .home-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin-bottom: 44px;
+      line-height: 1.6;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .module-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 24px;
+      padding: 36px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.02);
       position: relative;
       overflow: hidden;
-      margin-bottom: 6px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-      background: var(--bg-card);
-      transition: all 0.3s ease;
     }
 
-    .seat-avatar-img {
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .module-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 20px 40px rgba(2, 132, 199, 0.12), 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    .module-card:hover::before {
+      opacity: 1;
+    }
+
+    .module-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .icon-gd { background: linear-gradient(135deg, rgba(2, 132, 199, 0.1), rgba(37, 99, 235, 0.15)); border: 1px solid rgba(2, 132, 199, 0.25); }
+    .icon-debate { background: linear-gradient(135deg, rgba(126, 34, 206, 0.1), rgba(168, 85, 247, 0.15)); border: 1px solid rgba(126, 34, 206, 0.25); }
+    .icon-interview { background: linear-gradient(135deg, rgba(22, 163, 74, 0.1), rgba(34, 197, 94, 0.15)); border: 1px solid rgba(22, 163, 74, 0.25); }
+
+    .module-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: var(--text-main);
+    }
+
+    .module-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .btn-launch {
+      margin-top: auto;
+      width: 100%;
+      padding: 12px 24px;
+      border-radius: 14px;
+      font-family: var(--font-tech);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      background: linear-gradient(135deg, var(--accent-blue), #1d4ed8);
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 18px var(--accent-blue-glow);
+      transition: all 0.25s ease;
+    }
+
+    .btn-launch:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+    }
+
+    /* SCREEN 2: TOPIC DRAW & 15-MIN PREPARATION */
+    .prep-stage {
+      min-height: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px 60px 20px;
+      text-align: center;
+    }
+
+    .slot-box {
+      background: var(--bg-card);
+      border: 2px solid var(--accent-cyan);
+      border-radius: 28px;
+      padding: 28px 48px;
+      box-shadow: 0 15px 45px rgba(2, 132, 199, 0.15);
+      margin-bottom: 32px;
+      max-width: 760px;
+      width: 100%;
+      position: relative;
+    }
+
+    .topic-reel {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .prep-timer-box {
+      font-family: var(--font-tech);
+      font-size: 52px;
+      font-weight: 800;
+      color: var(--accent-purple);
+      margin: 18px 0;
+      letter-spacing: 0.06em;
+      text-shadow: 0 4px 20px var(--accent-purple-glow);
+    }
+
+    .notes-textarea {
+      width: 100%;
+      max-width: 760px;
+      height: 150px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 18px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+      margin-bottom: 24px;
+      resize: none;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.02);
+      transition: border-color 0.2s;
+    }
+    .notes-textarea:focus { border-color: var(--accent-cyan); }
+
+    /* SCREEN 3: CINEMATIC 3D GD ARENA */
+    /* VIEW 3: LIVE CIRCULAR GD ARENA - 2D REDESIGN */
+    .app-workspace {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      height: calc(100vh - 64px);
+      overflow: hidden;
+      background: #050914;
+    }
+
+    .table-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 40%, #0d172e 0%, #050914 90%);
       width: 100%;
       height: 100%;
-      object-fit: cover;
     }
 
-    .participant-seat.active-speaker .seat-avatar-wrapper {
-      transform: scale(1.1);
+    /* 2D Canvas matching Bg.png aspect ratio */
+    .gd-2d-canvas {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 1280px;
+      max-height: 720px;
+      aspect-ratio: 16 / 9;
+      background: url('avatars/Bg.png') no-repeat center center;
+      background-size: cover;
+      border-radius: 20px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 0 60px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
     }
 
-    .participant-seat.speaker-kavita.active-speaker .seat-avatar-wrapper {
-      border-color: var(--accent-purple);
-      box-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
+    /* Top Floating 2D HUD Bar */
+    .gd-2d-header {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 16, 30, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      border-radius: 30px;
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 50;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(6, 182, 212, 0.2);
     }
 
-    .participant-seat.speaker-rohan.active-speaker .seat-avatar-wrapper {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 25px rgba(6, 182, 212, 0.6);
-    }
-
-    .participant-seat.speaker-aarav.active-speaker .seat-avatar-wrapper {
-      border-color: var(--accent-red);
-      box-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
-    }
-
-    .participant-seat.speaker-sneha.active-speaker .seat-avatar-wrapper {
-      border-color: var(--accent-green);
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
-    }
-
-    .participant-seat.speaker-user.active-speaker .seat-avatar-wrapper {
-      border-color: var(--accent-blue);
-      box-shadow: 0 0 25px rgba(59, 130, 246, 0.6);
-    }
-
-    .seat-name {
-      font-size: 13px;
-      font-weight: 700;
-      text-align: center;
+    .gd-header-badge {
+      font-family: var(--font-tech);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.15);
+      padding: 3px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(6, 182, 212, 0.3);
       white-space: nowrap;
     }
 
-    .seat-role {
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      padding: 2px 8px;
-      border-radius: 10px;
-      margin-top: 2px;
+    .teller-status {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f8fafc;
+      white-space: nowrap;
     }
-    .role-purple { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
-    .role-cyan { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.4); }
-    .role-red { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
-    .role-green { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
-    .role-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
 
-    /* Equalizer animation inside seat */
-    .seat-eq {
+    .header-eq-wave {
       display: flex;
-      gap: 2px;
+      gap: 3px;
+      height: 16px;
+      align-items: flex-end;
+    }
+    .header-eq-wave .eq-bar {
+      width: 3px;
+      border-radius: 2px;
+      background: var(--accent-cyan);
+      animation: eqBounce 0.6s infinite alternate;
+    }
+    .header-eq-wave .bar-1 { height: 40%; background: #a855f7; animation-delay: 0.1s; }
+    .header-eq-wave .bar-2 { height: 90%; background: #06b6d4; animation-delay: 0.3s; }
+    .header-eq-wave .bar-3 { height: 60%; background: #ef4444; animation-delay: 0.2s; }
+    .header-eq-wave .bar-4 { height: 100%; background: #10b981; animation-delay: 0.4s; }
+
+    @keyframes eqBounce {
+      0% { height: 25%; }
+      100% { height: 100%; }
+    }
+
+    /* 2D Participant Seat Overlay Hotspots */
+    .participant-seat-2d {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* 2D Positions matching 2D avatars in Bg.png */
+    .seat-rohan  { left: 20%; top: 35.6%; }
+    .seat-kavita { left: 39%; top: 37.5%; }
+    .seat-aarav  { left: 60.7%; top: 37.5%; }
+    .seat-sneha  { left: 79.7%; top: 35.6%; }
+    .seat-user   { left: 50%; top: 76%; }
+
+    /* Voice Glow Rings around Avatar Heads in Bg.png */
+    .voice-glow-ring {
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 3px solid transparent;
+      pointer-events: none;
+      transition: all 0.4s ease;
+      opacity: 0;
+    }
+
+    .participant-seat-2d.active-speaker .voice-glow-ring {
+      opacity: 1;
+      animation: ringPulse 1.4s infinite ease-out;
+    }
+
+    .ring-purple { border-color: #a855f7; box-shadow: 0 0 45px rgba(168, 85, 247, 0.8), inset 0 0 25px rgba(168, 85, 247, 0.4); }
+    .ring-cyan   { border-color: #06b6d4; box-shadow: 0 0 45px rgba(6, 182, 212, 0.8), inset 0 0 25px rgba(6, 182, 212, 0.4); }
+    .ring-red    { border-color: #ef4444; box-shadow: 0 0 45px rgba(239, 68, 68, 0.8), inset 0 0 25px rgba(239, 68, 68, 0.4); }
+    .ring-green  { border-color: #10b981; box-shadow: 0 0 45px rgba(16, 185, 129, 0.8), inset 0 0 25px rgba(16, 185, 129, 0.4); }
+    .ring-gold   { border-color: #f59e0b; box-shadow: 0 0 45px rgba(245, 158, 11, 0.8), inset 0 0 25px rgba(245, 158, 11, 0.4); }
+
+    @keyframes ringPulse {
+      0% { transform: translateX(-50%) scale(0.92); opacity: 0.95; }
+      50% { transform: translateX(-50%) scale(1.22); opacity: 0.5; }
+      100% { transform: translateX(-50%) scale(0.92); opacity: 0.95; }
+    }
+
+    /* Floating Voice Icon & Equalizer Pill */
+    .voice-icon-badge {
+      position: absolute;
+      top: -38px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.85);
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 5px 12px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      opacity: 0.7;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .participant-seat-2d.active-speaker .voice-icon-badge {
+      opacity: 1;
+      transform: translateX(-50%) scale(1.1);
+    }
+
+    .badge-purple { border-color: #a855f7; box-shadow: 0 0 20px rgba(168, 85, 247, 0.6); }
+    .badge-cyan   { border-color: #06b6d4; box-shadow: 0 0 20px rgba(6, 182, 212, 0.6); }
+    .badge-red    { border-color: #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
+    .badge-green  { border-color: #10b981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
+    .badge-gold   { border-color: #f59e0b; box-shadow: 0 0 20px rgba(245, 158, 11, 0.6); }
+
+    .mic-icon { font-size: 13px; line-height: 1; }
+
+    .voice-bars {
+      display: flex;
+      gap: 2.5px;
       height: 12px;
       align-items: flex-end;
-      margin-top: 3px;
-      visibility: hidden;
+    }
+    .voice-bars span {
+      width: 2.5px;
+      background: #e2e8f0;
+      border-radius: 2px;
+      height: 25%;
+      transition: height 0.2s ease;
     }
 
-    .participant-seat.active-speaker .seat-eq {
-      visibility: visible;
+    .participant-seat-2d.active-speaker .voice-bars span {
+      animation: voiceBarBounce 0.5s infinite alternate;
+    }
+    .participant-seat-2d.active-speaker .badge-purple .voice-bars span { background: #c084fc; }
+    .participant-seat-2d.active-speaker .badge-cyan .voice-bars span { background: #22d3ee; }
+    .participant-seat-2d.active-speaker .badge-red .voice-bars span { background: #f87171; }
+    .participant-seat-2d.active-speaker .badge-green .voice-bars span { background: #34d399; }
+    .participant-seat-2d.active-speaker .badge-gold .voice-bars span { background: #fbbf24; }
+
+    .voice-bars span:nth-child(1) { animation-delay: 0.1s !important; }
+    .voice-bars span:nth-child(2) { animation-delay: 0.3s !important; }
+    .voice-bars span:nth-child(3) { animation-delay: 0.2s !important; }
+    .voice-bars span:nth-child(4) { animation-delay: 0.4s !important; }
+
+    @keyframes voiceBarBounce {
+      0% { height: 20%; }
+      100% { height: 100%; }
     }
 
-    .seat-eq-bar {
-      width: 2px;
-      background: var(--accent-cyan);
-      animation: bounce 0.6s infinite alternate;
+    /* 2D Floating Name Tags below Avatars */
+    .seat-tag-2d {
+      margin-top: 65px;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 4px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+      white-space: nowrap;
+      transition: all 0.3s ease;
     }
-    .seat-eq-bar:nth-child(1) { height: 40%; animation-delay: 0.1s; }
-    .seat-eq-bar:nth-child(2) { height: 100%; animation-delay: 0.3s; }
-    .seat-eq-bar:nth-child(3) { height: 60%; animation-delay: 0.2s; }
 
-    @keyframes bounce { 0% { height: 20%; } 100% { height: 100%; } }
+    .participant-seat-2d.active-speaker .seat-tag-2d {
+      transform: scale(1.08);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
 
-    /* Right Side Panel: Transcript & Mic Controls */
+    .seat-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: #f8fafc;
+      letter-spacing: 0.02em;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+
+    .seat-role {
+      font-family: var(--font-tech);
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 1px 7px;
+      border-radius: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .role-purple { background: rgba(168, 85, 247, 0.25); color: #e9d5ff; border: 1px solid rgba(168, 85, 247, 0.5); }
+    .role-cyan   { background: rgba(6, 182, 212, 0.25); color: #cffaff; border: 1px solid rgba(6, 182, 212, 0.5); }
+    .role-red    { background: rgba(239, 68, 68, 0.25); color: #fecdd3; border: 1px solid rgba(239, 68, 68, 0.5); }
+    .role-green  { background: rgba(16, 185, 129, 0.25); color: #d1fae5; border: 1px solid rgba(16, 185, 129, 0.5); }
+    .role-gold   { background: rgba(245, 158, 11, 0.25); color: #fef3c7; border: 1px solid rgba(245, 158, 11, 0.5); }
+
+    /* Right Transcript Panel & Cinematic Diamond Mic */
     .transcript-panel {
-      background: var(--bg-surface);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
       border-left: 1px solid var(--border-color);
       display: flex;
       flex-direction: column;
       height: 100%;
       overflow: hidden;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.02);
     }
 
     .panel-title {
-      padding: 14px 18px;
+      padding: 16px 20px;
       border-bottom: 1px solid var(--border-color);
-      font-weight: 800;
-      font-size: 14px;
+      font-family: var(--font-tech);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -284,56 +695,38 @@
 
     .transcript-feed {
       flex: 1;
-      padding: 16px;
+      padding: 18px;
       overflow-y: scroll;
-      overflow-x: hidden;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       min-height: 0;
     }
 
-    /* Custom Smooth Scrollbar for Transcript */
-    .transcript-feed::-webkit-scrollbar {
-      width: 6px;
-    }
-    .transcript-feed::-webkit-scrollbar-track {
-      background: var(--bg-dark);
-    }
-    .transcript-feed::-webkit-scrollbar-thumb {
-      background: var(--border-color);
-      border-radius: 4px;
-    }
-    .transcript-feed::-webkit-scrollbar-thumb:hover {
-      background: var(--accent-cyan);
-    }
+    .transcript-feed::-webkit-scrollbar { width: 6px; }
+    .transcript-feed::-webkit-scrollbar-track { background: transparent; }
+    .transcript-feed::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 4px; }
+    .transcript-feed::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
 
     .feed-bubble {
-      background: var(--bg-card);
+      background: #f8fafc;
       border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 12px;
+      border-radius: 14px;
+      padding: 14px;
       font-size: 13px;
       line-height: 1.5;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
-    .feed-speaker {
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--accent-cyan);
-      margin-bottom: 4px;
-    }
+    .feed-speaker { font-family: var(--font-tech); font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent-cyan); margin-bottom: 4px; letter-spacing: 0.04em; }
 
-    /* Bottom Right Diamond Mic Controls Box */
     .mic-control-box {
-      background: rgba(16, 23, 38, 0.95);
-      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.98);
       border-top: 1px solid var(--border-color);
-      padding: 16px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       align-items: center;
       flex-shrink: 0;
     }
@@ -341,67 +734,36 @@
     .mic-diamond-btn {
       width: 64px;
       height: 64px;
-      background: linear-gradient(135deg, var(--accent-blue), #2563eb);
-      border: 2px solid rgba(255,255,255,0.2);
+      background: linear-gradient(135deg, var(--accent-blue), #1d4ed8);
+      border: 2px solid rgba(255,255,255,0.6);
       transform: rotate(45deg);
-      border-radius: 16px;
+      border-radius: 18px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 25px var(--accent-blue-glow);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    .mic-diamond-btn:hover {
-      transform: rotate(45deg) scale(1.06);
-    }
-
+    .mic-diamond-btn:hover { transform: rotate(45deg) scale(1.08); }
     .mic-diamond-btn.recording {
-      background: linear-gradient(135deg, var(--accent-red), #dc2626);
-      box-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
+      background: linear-gradient(135deg, var(--accent-red), #b91c1c);
+      box-shadow: 0 0 30px rgba(220, 38, 38, 0.5);
       animation: pulseMic 1.2s infinite alternate;
     }
+    @keyframes pulseMic { 0% { transform: rotate(45deg) scale(1.0); } 100% { transform: rotate(45deg) scale(1.12); } }
 
-    @keyframes pulseMic {
-      0% { transform: rotate(45deg) scale(1.0); }
-      100% { transform: rotate(45deg) scale(1.1); }
-    }
+    .mic-icon-inner { transform: rotate(-45deg); font-size: 24px; color: white; }
+    .mic-status-label { font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center; letter-spacing: 0.04em; }
 
-    .mic-icon-inner {
-      transform: rotate(-45deg);
-      font-size: 24px;
-      color: white;
-    }
-
-    .mic-status-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-align: center;
-    }
-
-    .input-fallback-row {
-      width: 100%;
-      display: flex;
-      gap: 8px;
-    }
-    .input-fallback-row input {
-      flex: 1;
-      background: var(--bg-dark);
-      border: 1px solid var(--border-color);
-      color: white;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      outline: none;
-    }
+    .input-fallback-row { width: 100%; display: flex; gap: 8px; }
+    .input-fallback-row input { flex: 1; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; }
 
     /* Scorecard Modal */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(8, 12, 20, 0.88);
+      background: rgba(15, 23, 42, 0.65);
       backdrop-filter: blur(16px);
       display: none;
       align-items: center;
@@ -411,156 +773,259 @@
     }
 
     .modal-card {
-      background: var(--bg-card);
+      background: var(--bg-surface);
       border: 1px solid var(--border-color);
-      border-radius: 20px;
+      border-radius: 24px;
       width: 100%;
-      max-width: 680px;
-      padding: 28px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      max-width: 700px;
+      padding: 32px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.2);
       max-height: 90vh;
       overflow-y: auto;
     }
 
-    .score-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin: 16px 0;
-    }
-
-    .score-box {
-      background: var(--bg-dark);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 12px;
+    .winner-banner {
+      background: linear-gradient(135deg, rgba(22, 163, 74, 0.08), rgba(2, 132, 199, 0.08));
+      border: 2px solid var(--accent-green);
+      border-radius: 18px;
+      padding: 18px 24px;
+      margin: 18px 0;
       text-align: center;
     }
 
-    .score-val {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--accent-cyan);
-      margin-top: 4px;
+    .winner-name { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--accent-green); }
+    .winner-reason { font-size: 14px; color: var(--text-main); margin-top: 6px; line-height: 1.5; }
+
+    .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0; }
+    .score-box { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; }
+    .score-val { font-family: var(--font-tech); font-size: 22px; font-weight: 800; color: var(--accent-cyan); margin-top: 4px; }
+
+    .weakness-box {
+      background: rgba(220, 38, 38, 0.06);
+      border: 1px solid rgba(220, 38, 38, 0.25);
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-top: 14px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Banner -->
+  <!-- Top Header Navigation -->
   <header>
-    <button class="btn-evaluate" onclick="endSession()">🛑 End & Evaluate</button>
-
-    <div class="topic-banner">
-      Topic: <span id="topicText">Will AI Replace Software Engineers?</span>
+    <div class="brand" onclick="navToHome()">
+      <div class="brand-logo">🎙️</div>
+      <div>
+        <div class="brand-text-main">UnMute-Yourself AI</div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span class="brand-hud-badge">v2.0 Neural Engine</span>
+          <span style="font-size: 10px; color: var(--text-muted);">| GD & Interview Platform</span>
+        </div>
+      </div>
     </div>
 
-    <div id="gdTimer" class="timer-pill">⏱️ 00:00</div>
+    <div id="headerTopicBox" class="topic-banner" style="display: none;">
+      <span style="font-family: var(--font-tech); color: var(--accent-cyan); font-size: 11px; margin-right: 6px;">[TOPIC]</span>
+      <span id="topicText">Will AI Replace Software Engineers in the Upcoming Era?</span>
+    </div>
+
+    <div class="header-actions">
+      <button id="btnHeaderEval" class="btn-header" style="display: none;" onclick="endSession()">🛑 End & Evaluate</button>
+      <div id="gdTimer" class="timer-pill" style="display: none;">⏱️ 20:00</div>
+    </div>
   </header>
 
-  <!-- Main Workspace Area -->
-  <div class="app-workspace">
-    
-    <!-- Stage: Realistic Circular Oval Table -->
-    <div class="table-stage">
+  <!-- SCREEN 1: MODERN TECH HERO HOME -->
+  <div id="screenHome" class="view-screen active">
+    <div class="home-hero">
+      <div class="hero-hud-chip">⚡ Real-time Multi-Agent AI Platform</div>
+      <h1 class="home-title">Master Group Discussions & Technical Debates with AI</h1>
+      <p class="home-subtitle">Sharpen your communication, articulation, and quick thinking with realistic AI personas in immersive, timed simulation rooms.</p>
+
+      <div class="modules-grid">
+        <!-- 1. Group Discussion -->
+        <div class="module-card" onclick="selectModule('gd')">
+          <div class="module-icon icon-gd">👥</div>
+          <div class="module-name">Group Discussion</div>
+          <div class="module-desc">Real-time 5-member circular GD arena with AI personas (Moderator, Analyst, Contrarian, Peacemaker). Features topic draw, 15m prep, and 20m debate.</div>
+          <button class="btn-launch">Start GD Session 🚀</button>
+        </div>
+
+        <!-- 2. 1v1 Debate -->
+        <div class="module-card" onclick="selectModule('debate')">
+          <div class="module-icon icon-debate">⚔️</div>
+          <div class="module-name">1v1 AI Debate</div>
+          <div class="module-desc">Head-to-head competitive debate against an aggressive AI adversary with timed cross-examinations and rebuttals.</div>
+          <button class="btn-launch" style="background: linear-gradient(135deg, var(--accent-purple), #6b21a8);">Launch Debate ⚔️</button>
+        </div>
+
+        <!-- 3. Mock Interview -->
+        <div class="module-card" onclick="selectModule('interview')">
+          <div class="module-icon icon-interview">💼</div>
+          <div class="module-name">Mock Interview</div>
+          <div class="module-desc">Technical & behavioral interview simulator with real-time feedback on confidence, clarity, and body language.</div>
+          <button class="btn-launch" style="background: linear-gradient(135deg, var(--accent-green), #15803d);">Start Interview 💼</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: TOPIC DRAW & 15-MIN PREPARATION -->
+  <div id="screenPrep" class="view-screen">
+    <div class="prep-stage">
+      <div style="font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: var(--accent-cyan); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">[STAGE 1: PREPARATION]</div>
+      <h2 style="font-family: var(--font-display); font-size: 28px; font-weight: 800; margin-bottom: 8px;">🎲 Drawing Group Discussion Topic...</h2>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 28px;">Your technical topic is being drawn from the AI knowledge engine.</p>
+
+      <div class="slot-box">
+        <div id="topicReel" class="topic-reel">Spinning Topic Reels...</div>
+      </div>
+
+      <div style="display: flex; gap: 10px; max-width: 760px; width: 100%; margin-bottom: 20px;">
+        <input type="text" id="customTopicInput" placeholder="Or enter your custom technical topic (System Design, AI, Programming)..." style="flex: 1; background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-main); padding: 14px 20px; border-radius: 14px; font-size: 13px; outline: none; box-shadow: 0 4px 12px rgba(0,0,0,0.02);" />
+        <button class="btn-header" style="background: linear-gradient(135deg, var(--accent-cyan), #0369a1); color: white; border: none; padding: 14px 24px; font-weight: 800; border-radius: 14px;" onclick="setCustomTopic()">Set Topic</button>
+      </div>
+
+      <div id="prepTimerBox" class="prep-timer-box" style="display: none;">15:00</div>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">Use this 15-minute preparation window to organize your core points.</p>
+
+      <textarea id="notesArea" class="notes-textarea" placeholder="Jot down your key arguments, statistics, and opening points here..."></textarea>
+
+      <button id="btnPrepared" class="btn-launch" style="padding: 16px 40px; font-size: 16px; max-width: 400px;" onclick="finishPrepAndStartGD()">I'm Prepared - Start GD Now 🚀</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: LIVE CIRCULAR GD ARENA -->
+  <div id="screenArena" class="view-screen">
+    <div class="app-workspace">
       
-      <div class="circular-table">
-        
-        <!-- Table Center Teller -->
-        <div class="table-teller-center">
-          <div class="teller-title">Discussion Status</div>
-          <div id="tellerStatus" class="teller-status">Click <strong>Connect</strong> to join the room</div>
-        </div>
-
-        <!-- 1. Moderator Kavita (Top Seat) -->
-        <div id="seat-Kavita" class="participant-seat seat-top speaker-kavita">
-          <div class="seat-avatar-wrapper">
-            <img src="avatars/kavita.jpg" alt="Kavita" class="seat-avatar-img" />
+      <!-- Center Stage: 2D GD Arena with Bg.png -->
+      <div class="table-stage">
+        <div class="gd-2d-canvas">
+          
+          <!-- Top Floating 2D Status HUD -->
+          <div class="gd-2d-header">
+            <div class="gd-header-badge">LIVE 2D GD ARENA</div>
+            <div id="tellerStatus" class="teller-status">Connecting to GD room...</div>
+            <div class="header-eq-wave">
+              <span class="eq-bar bar-1"></span>
+              <span class="eq-bar bar-2"></span>
+              <span class="eq-bar bar-3"></span>
+              <span class="eq-bar bar-4"></span>
+            </div>
           </div>
-          <div class="seat-name">Kavita R.</div>
-          <div class="seat-role role-purple">Moderator</div>
-          <div class="seat-eq"><div class="seat-eq-bar"></div><div class="seat-eq-bar"></div><div class="seat-eq-bar"></div></div>
-        </div>
 
-        <!-- 2. Analyst Rohan (Top Right Seat) -->
-        <div id="seat-Rohan" class="participant-seat seat-top-right speaker-rohan">
-          <div class="seat-avatar-wrapper">
-            <img src="avatars/rohan.jpg" alt="Rohan" class="seat-avatar-img" />
+          <!-- 1. Analyst Rohan (Purple Sparkle Head) -->
+          <div id="seat-Rohan" class="participant-seat-2d seat-rohan speaker-rohan">
+            <div class="voice-glow-ring ring-purple"></div>
+            <div class="voice-icon-badge badge-purple">
+              <span class="mic-icon">🎙️</span>
+              <div class="voice-bars"><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="seat-tag-2d">
+              <span class="seat-name">Rohan S.</span>
+              <span class="seat-role role-purple">Analyst</span>
+            </div>
           </div>
-          <div class="seat-name">Rohan S.</div>
-          <div class="seat-role role-cyan">Analyst</div>
-          <div class="seat-eq"><div class="seat-eq-bar"></div><div class="seat-eq-bar"></div><div class="seat-eq-bar"></div></div>
-        </div>
 
-        <!-- 3. Contrarian Aarav (Left Seat) -->
-        <div id="seat-Aarav" class="participant-seat seat-left speaker-aarav">
-          <div class="seat-avatar-wrapper">
-            <img src="avatars/aarav.jpg" alt="Aarav" class="seat-avatar-img" />
+          <!-- 2. Moderator Kavita (Cyan Mesh Head) -->
+          <div id="seat-Kavita" class="participant-seat-2d seat-kavita speaker-kavita">
+            <div class="voice-glow-ring ring-cyan"></div>
+            <div class="voice-icon-badge badge-cyan">
+              <span class="mic-icon">🎙️</span>
+              <div class="voice-bars"><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="seat-tag-2d">
+              <span class="seat-name">Kavita R.</span>
+              <span class="seat-role role-cyan">Moderator</span>
+            </div>
           </div>
-          <div class="seat-name">Aarav M.</div>
-          <div class="seat-role role-red">Contrarian</div>
-          <div class="seat-eq"><div class="seat-eq-bar"></div><div class="seat-eq-bar"></div><div class="seat-eq-bar"></div></div>
-        </div>
 
-        <!-- 4. Peacemaker Sneha (Right Seat) -->
-        <div id="seat-Sneha" class="participant-seat seat-right speaker-sneha">
-          <div class="seat-avatar-wrapper">
-            <img src="avatars/sneha.jpg" alt="Sneha" class="seat-avatar-img" />
+          <!-- 3. Contrarian Aarav (Orange Sunburst Head) -->
+          <div id="seat-Aarav" class="participant-seat-2d seat-aarav speaker-aarav">
+            <div class="voice-glow-ring ring-red"></div>
+            <div class="voice-icon-badge badge-red">
+              <span class="mic-icon">🎙️</span>
+              <div class="voice-bars"><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="seat-tag-2d">
+              <span class="seat-name">Aarav M.</span>
+              <span class="seat-role role-red">Contrarian</span>
+            </div>
           </div>
-          <div class="seat-name">Sneha P.</div>
-          <div class="seat-role role-green">Peacemaker</div>
-          <div class="seat-eq"><div class="seat-eq-bar"></div><div class="seat-eq-bar"></div><div class="seat-eq-bar"></div></div>
-        </div>
 
-        <!-- 5. You User (Bottom Seat) -->
-        <div id="seat-User" class="participant-seat seat-bottom speaker-user">
-          <div class="seat-avatar-wrapper" style="background: linear-gradient(135deg, #1e40af, #2563eb); display:flex; align-items:center; justify-content:center; font-size: 32px;">
-            👤
+          <!-- 4. Peacemaker Sneha (Green Swirl Head) -->
+          <div id="seat-Sneha" class="participant-seat-2d seat-sneha speaker-sneha">
+            <div class="voice-glow-ring ring-green"></div>
+            <div class="voice-icon-badge badge-green">
+              <span class="mic-icon">🎙️</span>
+              <div class="voice-bars"><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="seat-tag-2d">
+              <span class="seat-name">Sneha P.</span>
+              <span class="seat-role role-green">Peacemaker</span>
+            </div>
           </div>
-          <div class="seat-name">You</div>
-          <div class="seat-role role-blue">Participant</div>
-          <div class="seat-eq"><div class="seat-eq-bar"></div><div class="seat-eq-bar"></div><div class="seat-eq-bar"></div></div>
+
+          <!-- 5. User Seat (Foreground Executive Chair) -->
+          <div id="seat-User" class="participant-seat-2d seat-user speaker-user">
+            <div class="voice-glow-ring ring-gold"></div>
+            <div class="voice-icon-badge badge-gold">
+              <span class="mic-icon">🎙️</span>
+              <div class="voice-bars"><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="seat-tag-2d">
+              <span class="seat-name">USER (YOU)</span>
+              <span class="seat-role role-gold">Candidate</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right Panel: Persistent Transcript Feed & Mic Button -->
+      <div class="transcript-panel">
+        <div class="panel-title">
+          <span>📜 LIVE TRANSCRIPT</span>
+          <span style="font-size: 10px; color: var(--accent-cyan); background: rgba(2, 132, 199, 0.08); padding: 2px 8px; border-radius: 6px;">REALTIME</span>
         </div>
 
+        <div id="transcriptFeed" class="transcript-feed">
+          <div class="feed-bubble">
+            <div class="feed-speaker">System</div>
+            <div>GD session initialized. Introductions starting...</div>
+          </div>
+        </div>
+
+        <div class="mic-control-box">
+          <div id="btnMic" class="mic-diamond-btn" onclick="toggleMicRecording()">
+            <div class="mic-icon-inner">🎙️</div>
+          </div>
+          <div id="micStatus" class="mic-status-label">Click Mic to Speak (up to 1m)</div>
+
+          <div class="input-fallback-row">
+            <input type="text" id="userInput" placeholder="Or type argument here..." onkeydown="handleKeyPress(event)" />
+            <button class="btn-header" style="background: var(--accent-blue); color: white; border: none;" onclick="sendTextInput()">Send</button>
+          </div>
+        </div>
       </div>
 
     </div>
-
-    <!-- Right Side Panel: Persistent Transcript Feed & Mic Button -->
-    <div class="transcript-panel">
-      <div class="panel-title">
-        <span>📜 Discussion Transcript</span>
-        <button id="btnConnect" class="btn-evaluate" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border-color: rgba(16,185,129,0.4);" onclick="connectWebSocket()">Connect</button>
-      </div>
-
-      <div id="transcriptFeed" class="transcript-feed">
-        <div class="feed-bubble">
-          <div class="feed-speaker">System</div>
-          <div>Click <strong>Connect</strong> to establish WebSocket session.</div>
-        </div>
-      </div>
-
-      <!-- Bottom Right Diamond Mic Controls Box -->
-      <div class="mic-control-box">
-        <div id="btnMic" class="mic-diamond-btn" onclick="toggleMicRecording()">
-          <div class="mic-icon-inner">🎙️</div>
-        </div>
-        <div id="micStatus" class="mic-status-label">Click Mic to Speak (up to 1m)</div>
-
-        <div class="input-fallback-row">
-          <input type="text" id="userInput" placeholder="Or type argument here..." onkeydown="handleKeyPress(event)" />
-          <button class="btn-evaluate" style="background: var(--accent-blue); color: white; border: none;" onclick="sendTextInput()">Send</button>
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <!-- Scorecard Evaluation Modal -->
   <div id="scorecardModal" class="modal-overlay">
     <div class="modal-card">
-      <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">🏆 Performance Scorecard</h2>
-      <p style="font-size: 13px; color: var(--text-muted);">Assessor evaluation with speech fluency & filler word analytics.</p>
+      <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">🏆 GD Evaluation & Winner Announcement</h2>
+      <p style="font-size: 13px; color: var(--text-muted);">Assessor evaluation with candidate rankings, weak points, and speech delivery analytics.</p>
+
+      <div class="winner-banner">
+        <div style="font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 0.08em; color: var(--accent-cyan);">👑 Winner Candidate</div>
+        <div id="winnerName" class="winner-name">Analyst (Rohan)</div>
+        <div id="winnerReason" class="winner-reason">Delivered well-structured arguments supported by data and active listening throughout the debate.</div>
+      </div>
 
       <div class="score-grid">
         <div class="score-box"><div style="font-size: 11px; color: var(--text-muted);">Overall Score</div><div id="scoreOverall" class="score-val">--%</div></div>
@@ -571,46 +1036,157 @@
         <div class="score-box"><div style="font-size: 11px; color: var(--text-muted);">Fillers Tracked</div><div id="scoreFillers" class="score-val" style="color: var(--accent-red);">0</div></div>
       </div>
 
-      <div style="background: var(--bg-dark); padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 13px; line-height: 1.5; margin-top: 10px;">
+      <div class="weakness-box">
+        <strong style="color: var(--accent-red); display: block; margin-bottom: 4px;">User Weak Points & Areas to Improve:</strong>
+        <div id="weaknessText">Evaluating...</div>
+      </div>
+
+      <div style="background: #f8fafc; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 13px; line-height: 1.5; margin-top: 10px;">
         <strong style="color: var(--accent-cyan); display: block; margin-bottom: 4px;">Assessor Feedback:</strong>
         <div id="feedbackText">Evaluating...</div>
       </div>
 
-      <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
-        <button class="btn-evaluate" style="background: var(--accent-blue); color: white; border: none;" onclick="closeScorecardModal()">Close</button>
+      <div style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn-header" style="background: var(--accent-blue); color: white; border: none;" onclick="closeScorecardModal(); navToHome();">Back to Home</button>
       </div>
     </div>
   </div>
 
   <script>
+    let currentTopic = "Will AI Replace Software Engineers in the Upcoming Era?";
     let ws = null;
     let recognition = null;
     let isRecording = false;
 
-    // Speech Queue & Audio State
     let speechQueue = [];
     let isSpeaking = false;
 
-    // Mic Recording Timer & Filler Words tracking
+    // Timers
+    let prepSeconds = 15 * 60;
+    let prepTimerInterval = null;
+
+    let gdSeconds = 20 * 60;
+    let gdTimerInterval = null;
+
     let micTimerInterval = null;
     let micSecondsRemaining = 60;
     let accumulatedUserSpeech = "";
     let sessionUserFillerCount = 0;
 
-    // GD Room Timer
-    let sessionSeconds = 0;
-    let sessionTimerInterval = null;
-
     const fillerWordsRegex = /\b(um|uh|like|basically|actually|you know|sort of|kind of|i mean|right)\b/gi;
 
-    function startSessionTimer() {
-      if (sessionTimerInterval) clearInterval(sessionTimerInterval);
-      sessionSeconds = 0;
-      sessionTimerInterval = setInterval(() => {
-        sessionSeconds++;
-        const mins = String(Math.floor(sessionSeconds / 60)).padStart(2, '0');
-        const secs = String(sessionSeconds % 60).padStart(2, '0');
+    const sampleTopics = [
+      "Will AI Replace Software Engineers in the Upcoming Era?",
+      "Monolithic Architecture vs Microservices for High Scalability Systems",
+      "Impact of Generative AI & Autonomous Coding Agents on Core Programming Skills",
+      "Designing Fault-Tolerant Scalable Systems: CAP Theorem & Consistency Trade-offs",
+      "AI Code Generation vs Manual Code Reviews: Security & Vulnerability Risks",
+      "Low-Code/No-Code AI Platforms vs Traditional Full-Stack Engineering",
+      "The Future of DevOps: Autonomous Infrastructure as Code vs Human Reliability Engineers"
+    ];
+
+    function showScreen(screenId) {
+      document.querySelectorAll('.view-screen').forEach(s => s.classList.remove('active'));
+      const screenEl = document.getElementById(screenId);
+      if (screenEl) {
+        screenEl.classList.add('active');
+        screenEl.scrollTop = 0;
+      }
+    }
+
+    function navToHome() {
+      if (ws) ws.close();
+      if (prepTimerInterval) clearInterval(prepTimerInterval);
+      if (gdTimerInterval) clearInterval(gdTimerInterval);
+      document.getElementById('headerTopicBox').style.display = 'none';
+      document.getElementById('btnHeaderEval').style.display = 'none';
+      document.getElementById('gdTimer').style.display = 'none';
+      showScreen('screenHome');
+    }
+
+    function setCustomTopic() {
+      const custom = document.getElementById('customTopicInput').value.trim();
+      if (custom) {
+        currentTopic = custom;
+        document.getElementById('topicReel').innerText = "🎯 Custom Topic: " + currentTopic;
+      }
+    }
+
+    function selectModule(moduleType) {
+      if (moduleType === 'gd') {
+        startTopicDraw();
+      } else {
+        alert(`${moduleType.toUpperCase()} module is available. Launching GD session...`);
+        startTopicDraw();
+      }
+    }
+
+    function startTopicDraw() {
+      showScreen('screenPrep');
+      const reel = document.getElementById('topicReel');
+      let count = 0;
+      const spinInterval = setInterval(() => {
+        reel.innerText = sampleTopics[count % sampleTopics.length];
+        count++;
+        if (count > 12) {
+          clearInterval(spinInterval);
+          currentTopic = sampleTopics[Math.floor(Math.random() * sampleTopics.length)];
+          reel.innerText = "🎯 Topic Drawn: " + currentTopic;
+          startPrepCountdown();
+        }
+      }, 150);
+    }
+
+    function startPrepCountdown() {
+      document.getElementById('prepTimerBox').style.display = 'block';
+      prepSeconds = 15 * 60;
+      if (prepTimerInterval) clearInterval(prepTimerInterval);
+
+      setTimeout(() => {
+        const btnPrep = document.getElementById('btnPrepared');
+        if (btnPrep) {
+          btnPrep.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 400);
+
+      prepTimerInterval = setInterval(() => {
+        prepSeconds--;
+        const mins = String(Math.floor(prepSeconds / 60)).padStart(2, '0');
+        const secs = String(prepSeconds % 60).padStart(2, '0');
+        document.getElementById('prepTimerBox').innerText = `${mins}:${secs}`;
+        if (prepSeconds <= 0) {
+          clearInterval(prepTimerInterval);
+          finishPrepAndStartGD();
+        }
+      }, 1000);
+    }
+
+    function finishPrepAndStartGD() {
+      if (prepTimerInterval) clearInterval(prepTimerInterval);
+
+      document.getElementById('topicText').innerText = currentTopic;
+      document.getElementById('headerTopicBox').style.display = 'flex';
+      document.getElementById('btnHeaderEval').style.display = 'block';
+      document.getElementById('gdTimer').style.display = 'block';
+
+      showScreen('screenArena');
+      connectAndStartGD();
+    }
+
+    function start20MinGDTimer() {
+      if (gdTimerInterval) clearInterval(gdTimerInterval);
+      gdSeconds = 20 * 60;
+
+      gdTimerInterval = setInterval(() => {
+        gdSeconds--;
+        const mins = String(Math.floor(gdSeconds / 60)).padStart(2, '0');
+        const secs = String(gdSeconds % 60).padStart(2, '0');
         document.getElementById('gdTimer').innerText = `⏱️ ${mins}:${secs}`;
+
+        if (gdSeconds <= 0) {
+          clearInterval(gdTimerInterval);
+          endSession();
+        }
       }, 1000);
     }
 
@@ -619,7 +1195,9 @@
     }
 
     function updateActiveSeatUI(speakerName) {
-      document.querySelectorAll('.participant-seat').forEach(s => s.classList.remove('active-speaker'));
+      document.querySelectorAll('.participant-seat-2d, .participant-seat').forEach(s => s.classList.remove('active-speaker'));
+      const povEdge = document.getElementById('povUserEdge');
+      if (povEdge) povEdge.classList.remove('active-speaker');
 
       if (!speakerName) return;
 
@@ -632,7 +1210,7 @@
       } else if (speakerName.includes('Sneha') || speakerName.includes('Peacemaker')) {
         document.getElementById('seat-Sneha').classList.add('active-speaker');
       } else if (speakerName.includes('You') || speakerName.includes('User')) {
-        document.getElementById('seat-User').classList.add('active-speaker');
+        if (povEdge) povEdge.classList.add('active-speaker');
       }
     }
 
@@ -663,14 +1241,13 @@
       updateTellerStatus(`🔊 <strong>${item.sender}</strong> is speaking...`);
       appendTranscript(item.sender, item.text);
 
-      // Play Neural Audio if present
       if (item.audio) {
         try {
           const audioObj = new Audio("data:audio/mp3;base64," + item.audio);
           audioObj.onended = () => handleSpeechEnd(item);
           audioObj.onerror = () => handleSpeechEnd(item);
           audioObj.play().catch(e => {
-            console.warn("Audio autoplay fallback:", e);
+            console.warn("Audio fallback:", e);
             handleSpeechEnd(item);
           });
           return;
@@ -685,7 +1262,6 @@
     function handleSpeechEnd(item) {
       updateTellerStatus(`⏳ Pause before next turn...`);
 
-      // 2-second natural pause after speech completion
       setTimeout(() => {
         isSpeaking = false;
         updateActiveSeatUI(null);
@@ -694,15 +1270,15 @@
           processSpeechQueue();
         } else {
           if (item.turnState === 'USER_TURN') {
-            updateTellerStatus(`🎙️ <strong>Your turn!</strong> Click Mic to speak.`);
+            updateTellerStatus(`🎙️ <strong>Your turn!</strong> Introduce yourself or present your argument.`);
           } else {
-            updateTellerStatus(`Active in GD Room`);
+            updateTellerStatus(`Live 20m GD Debate active`);
           }
         }
       }, 2000);
     }
 
-    // Continuous Speech Recognition setup (Up to 1 minute / 60 seconds)
+    // Continuous Speech Recognition setup
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRecognition();
@@ -721,14 +1297,11 @@
 
       recognition.onend = () => {
         if (isRecording) {
-          // Restart if closed prematurely before user stops or timer ends
           try { recognition.start(); } catch(e) {}
         }
       };
 
-      recognition.onerror = (e) => {
-        console.error("Speech recognition error:", e);
-      };
+      recognition.onerror = (e) => console.error("Speech recognition error:", e);
     }
 
     function toggleMicRecording() {
@@ -737,12 +1310,11 @@
         return;
       }
       if (!ws || ws.readyState !== WebSocket.OPEN) {
-        alert("Please click Connect to join the GD room first!");
+        alert("Please wait for WebSocket connection!");
         return;
       }
 
       if (!isRecording) {
-        // Start 60s continuous recording
         isRecording = true;
         accumulatedUserSpeech = "";
         micSecondsRemaining = 60;
@@ -757,7 +1329,6 @@
 
         recognition.start();
 
-        // 60-second countdown timer
         micTimerInterval = setInterval(() => {
           micSecondsRemaining--;
           document.getElementById('micStatus').innerText = `Recording (${micSecondsRemaining}s)... Click to Send`;
@@ -801,7 +1372,6 @@
     function submitUserSpeechTurn(text) {
       if (!ws || ws.readyState !== WebSocket.OPEN) return;
 
-      // Count filler words (um, uh, like, basically, you know, etc.)
       const matches = text.match(fillerWordsRegex);
       const turnFillerCount = matches ? matches.length : 0;
       sessionUserFillerCount += turnFillerCount;
@@ -821,18 +1391,20 @@
       accumulatedUserSpeech = "";
     }
 
-    function connectWebSocket() {
-      const url = "ws://127.0.0.1:8000/gd/ws/room_demo_101";
+    function connectAndStartGD() {
+      const url = "ws://127.0.0.1:8000/gd/ws/room_demo_101?topic=" + encodeURIComponent(currentTopic);
 
-      updateTellerStatus(`Connecting to WebSocket server...`);
+      updateTellerStatus(`Connecting to GD WebSocket...`);
 
       try {
         ws = new WebSocket(url);
 
         ws.onopen = () => {
-          startSessionTimer();
-          updateTellerStatus(`Connected! Waiting for Moderator welcome...`);
-          document.getElementById('btnConnect').innerText = 'Connected';
+          updateTellerStatus(`Connected! Starting Member Introductions...`);
+          start20MinGDTimer();
+
+          // Trigger Introductions round
+          ws.send(JSON.stringify({ event: 'START_INTRODUCTIONS' }));
         };
 
         ws.onmessage = (event) => {
@@ -857,13 +1429,13 @@
         };
 
         ws.onclose = () => {
-          updateTellerStatus(`WebSocket connection closed.`);
-          if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+          updateTellerStatus(`GD session closed.`);
+          if (gdTimerInterval) clearInterval(gdTimerInterval);
         };
 
         ws.onerror = (err) => {
           console.error("WS Error:", err);
-          updateTellerStatus(`Error connecting to Python server at ws://127.0.0.1:8000`);
+          updateTellerStatus(`Error connecting to Python backend server.`);
         };
 
       } catch (err) {
@@ -873,21 +1445,29 @@
 
     function endSession() {
       if (!ws || ws.readyState !== WebSocket.OPEN) {
-        alert("Please click Connect first!");
+        alert("Please connect first!");
         return;
       }
-      updateTellerStatus(`Requesting GD evaluation scorecard...`);
+      updateTellerStatus(`Requesting GD winner determination & evaluation report...`);
       ws.send(JSON.stringify({ event: 'END_SESSION' }));
     }
 
     function showScorecardModal(card) {
       if (!card) return;
+
+      document.getElementById('winnerName').innerText = card.winner_candidate || "User (Participant)";
+      document.getElementById('winnerReason').innerText = card.winner_reasoning || "Delivered well-structured arguments and active listening throughout the debate.";
+
       document.getElementById('scoreOverall').innerText = `${card.overall_score || 82}%`;
       document.getElementById('scoreClarity').innerText = `${card.clarity_and_articulation || 8}/10`;
       document.getElementById('scoreLogic').innerText = `${card.argument_strength || 7}/10`;
       document.getElementById('scoreCollab').innerText = `${card.listening_and_collaboration || 9}/10`;
       document.getElementById('scoreFluency').innerText = `${card.fluency_and_pace || 8}/10`;
       document.getElementById('scoreFillers').innerText = `${card.filler_words_count || sessionUserFillerCount}`;
+
+      const areas = card.areas_for_improvement || ["Reduce hesitation fillers during long turns", "Address counter-arguments directly"];
+      document.getElementById('weaknessText').innerHTML = "<ul>" + areas.map(a => `<li>${a}</li>`).join('') + "</ul>";
+
       document.getElementById('feedbackText').innerText = card.summary_feedback || 'Good overall participation in the discussion.';
 
       document.getElementById('scorecardModal').style.display = 'flex';

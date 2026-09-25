@@ -19,19 +19,6 @@ async def group_discussion_ws(websocket: WebSocket, room_id: str):
         "roomId": room_id
     })
 
-    # Send initial welcome message if room is new
-    if not session.transcript:
-        welcome_msg = f"Welcome everyone to the Group Discussion! Today's topic is: '{session.topic}'. Please share your thoughts to start."
-        session.transcript.append({"speaker": "Moderator (Kavita)", "text": welcome_msg})
-        welcome_audio = await generate_neural_audio_b64(welcome_msg, "en-IN-NeerjaNeural")
-        await websocket.send_json({
-            "event": "AGENT_SPEAKING",
-            "sender": "Moderator (Kavita)",
-            "text": welcome_msg,
-            "audio": welcome_audio,
-            "turnState": "USER_TURN"
-        })
-
     try:
         while True:
             raw_data = await websocket.receive_text()
@@ -46,11 +33,24 @@ async def group_discussion_ws(websocket: WebSocket, room_id: str):
                 await websocket.send_json({"event": "PONG"})
                 continue
 
+            elif event_type == "START_INTRODUCTIONS":
+                # Stream the 4 persona member introductions
+                intro_turns = await session.generate_introductions_list()
+                for turn in intro_turns:
+                    await websocket.send_json({
+                        "event": "AGENT_SPEAKING",
+                        "sender": turn["speaker"],
+                        "text": turn["text"],
+                        "audio": turn["audio"],
+                        "turnState": turn["turnState"]
+                    })
+                    await asyncio.sleep(0.5)
+
             elif event_type == "END_SESSION":
                 await websocket.send_json({
                     "event": "AGENT_SPEAKING",
                     "sender": "System",
-                    "text": "Evaluating your GD performance, speech fluency, filler words, and pause metrics...",
+                    "text": "Evaluating your GD performance, speech delivery, winner candidate, and weak points...",
                     "turnState": "EVALUATING"
                 })
                 scorecard = await session.evaluate_session()
