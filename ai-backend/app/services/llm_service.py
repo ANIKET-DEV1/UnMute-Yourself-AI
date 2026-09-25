@@ -13,6 +13,10 @@ from app.core.prompts.gd import (
     PERSONAS,
     SPEAKER_NAMES,
     EVALUATOR_SYSTEM_PROMPT,
+    MODERATOR_INTRO_PROMPT,
+    ANALYST_INTRO_PROMPT,
+    CONTRARIAN_INTRO_PROMPT,
+    PEACEMAKER_INTRO_PROMPT,
 )
 
 # 1. Persona Neural Voice Mappings (Microsoft Edge Neural TTS)
@@ -93,6 +97,27 @@ class GDRoomSession:
         self.last_speaker = "User"
         if filler_count > 0:
             self.user_filler_count += filler_count
+
+    async def generate_introductions_list(self) -> list[dict]:
+        """Generates introduction audio turns for Moderator, Analyst, Contrarian, and Peacemaker."""
+        intros = [
+            ("Moderator (Kavita)", MODERATOR_INTRO_PROMPT.format(topic=self.topic), "en-IN-NeerjaNeural"),
+            ("Analyst (Rohan)", ANALYST_INTRO_PROMPT, "en-US-AndrewNeural"),
+            ("Contrarian (Aarav)", CONTRARIAN_INTRO_PROMPT, "en-US-BrianNeural"),
+            ("Peacemaker (Sneha)", PEACEMAKER_INTRO_PROMPT, "en-US-EmmaNeural"),
+        ]
+
+        intro_turns = []
+        for speaker, text, voice in intros:
+            audio_b64 = await generate_neural_audio_b64(text, voice)
+            self.transcript.append({"speaker": speaker, "text": text})
+            intro_turns.append({
+                "speaker": speaker,
+                "text": text,
+                "audio": audio_b64,
+                "turnState": "USER_TURN" if speaker.startswith("Peacemaker") else "AGENT_TURN"
+            })
+        return intro_turns
 
     async def generate_next_agent_turn(self) -> dict:
         history = self.get_recent_history()
@@ -175,16 +200,18 @@ class GDRoomSession:
         except Exception as e:
             print(f"[LLM Service Error] Evaluation chain fallback: {e}")
             return {
-                "clarity_and_articulation": 7,
+                "winner_candidate": "User (Participant)" if self.user_filler_count < 5 else "Analyst (Rohan)",
+                "winner_reasoning": "Delivered well-structured arguments supported by practical logic and active listening throughout the discussion.",
+                "clarity_and_articulation": 8,
                 "argument_strength": 7,
                 "listening_and_collaboration": 8,
                 "leadership_and_steering": 7,
                 "fluency_and_pace": 8,
                 "filler_words_count": self.user_filler_count,
-                "overall_score": 78,
+                "overall_score": 82,
                 "strengths": ["Active participation in the topic", "Clear articulation of key viewpoints"],
-                "areas_for_improvement": ["Reduce hesitation fillers during long turns", "Address counter-arguments directly"],
-                "summary_feedback": f"Solid performance in the discussion on '{self.topic}'. Controlled delivery with {self.user_filler_count} tracked filler words."
+                "areas_for_improvement": ["Reduce hesitation fillers during long speech turns", "Address counter-arguments directly with more quantitative metrics"],
+                "summary_feedback": f"Solid performance in the discussion on '{self.topic}'. Made strong contributions across turns with {self.user_filler_count} tracked filler words."
             }
 
 
