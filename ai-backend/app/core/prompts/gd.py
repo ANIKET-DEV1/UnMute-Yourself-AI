@@ -77,7 +77,13 @@ Tone & Style:
 - Keep your statement strictly under 2 warm spoken sentences.
 """
 
-# 4. Speaker Display Names Mapping
+# 4. Persona Introductions Prompts
+MODERATOR_INTRO_PROMPT = "Welcome everyone to today's Group Discussion on '{topic}'. I am Kavita, your Moderator. Let's start with quick introductions around the room before opening the debate."
+ANALYST_INTRO_PROMPT = "Hi everyone, I'm Rohan. I'll be focusing on empirical data, market realities, and logical analysis during today's discussion."
+CONTRARIAN_INTRO_PROMPT = "Hello all, I'm Aarav. My role today is to challenge assumptions and highlight blind spots that we might otherwise overlook."
+PEACEMAKER_INTRO_PROMPT = "Hi everyone, I'm Sneha. I'll be focusing on human impact, ethical balance, and synthesizing our different viewpoints."
+
+# 5. Speaker Display Names Mapping
 SPEAKER_NAMES = {
     "Moderator": "Moderator (Kavita)",
     "Analyst": "Analyst (Rohan)",
@@ -85,7 +91,6 @@ SPEAKER_NAMES = {
     "Peacemaker": "Peacemaker (Sneha)"
 }
 
-# 5. Lookup Dictionary for fast access
 PERSONAS = {
     "Moderator": MODERATOR_PROMPT,
     "Analyst": ANALYST_PROMPT,
@@ -95,30 +100,29 @@ PERSONAS = {
 
 # 6. Pydantic schema for GD Evaluation Scorecard
 class GDEvaluationScorecard(BaseModel):
-    clarity_and_articulation: int = Field(description="Score from 1 to 10 for clarity, articulation, and vocabulary.")
-    argument_strength: int = Field(description="Score from 1 to 10 for quality, logic, and factual backing of arguments.")
-    listening_and_collaboration: int = Field(description="Score from 1 to 10 for addressing previous points and collaborative tone.")
-    leadership_and_steering: int = Field(description="Score from 1 to 10 for steering the discussion and adding value.")
-    fluency_and_pace: int = Field(description="Score from 1 to 10 evaluating speech delivery, pauses, and filler word avoidance.")
-    filler_words_count: int = Field(description="Tracked or estimated count of filler words (um, uh, like, basically, you know).")
-    overall_score: int = Field(description="Overall composite score from 1 to 100.")
+    winner_candidate: str = Field(description="Name of the candidate who won the GD (e.g. User, Analyst Rohan, Contrarian Aarav, Peacemaker Sneha, or Moderator Kavita).")
+    winner_reasoning: str = Field(description="Clear explanation of why this specific participant won the Group Discussion.")
+    clarity_and_articulation: int = Field(description="User score from 1 to 10 for clarity, articulation, and vocabulary.")
+    argument_strength: int = Field(description="User score from 1 to 10 for quality, logic, and factual backing of arguments.")
+    listening_and_collaboration: int = Field(description="User score from 1 to 10 for addressing previous points and collaborative tone.")
+    leadership_and_steering: int = Field(description="User score from 1 to 10 for steering the discussion and adding value.")
+    fluency_and_pace: int = Field(description="User score from 1 to 10 evaluating speech delivery, pauses, and filler word avoidance.")
+    filler_words_count: int = Field(description="Tracked count of filler words (um, uh, like, basically, you know).")
+    overall_score: int = Field(description="Overall composite user score from 1 to 100.")
     strengths: list[str] = Field(description="List of 2-3 specific strengths displayed by the User.")
-    areas_for_improvement: list[str] = Field(description="List of 2-3 actionable areas for user improvement including speech delivery.")
-    summary_feedback: str = Field(description="Executive summary of user performance, argument quality, speech fluency, and pause control.")
+    areas_for_improvement: list[str] = Field(description="List of 3-4 actionable areas for user improvement including weaknesses, filler words, and pause control.")
+    summary_feedback: str = Field(description="Executive summary of overall GD winner, user performance, weaknesses, and delivery feedback.")
 
 # 7. GD Evaluator Prompt
 EVALUATOR_SYSTEM_PROMPT = """
 You are an expert Group Discussion Assessor and Executive Communications Coach.
 Analyze the following transcript of a Group Discussion on the topic: "{topic}".
 
-Focus specifically on evaluating the performance of the speaker identified as "User".
+Your Task:
+1. Determine WHICH CANDIDATE WON the Group Discussion based on argument strength, leadership, collaboration, and delivery (Options: User, Analyst Rohan, Contrarian Aarav, Peacemaker Sneha, Moderator Kavita).
+2. Evaluate the User's specific performance, highlighting their key weaknesses and points to improve.
+3. Assess speech delivery (fluency, filler words like um/uh/like/basically, hesitations, and pause control).
 
 Transcript & Speech Analytics:
 {chat_history}
-
-Provide a comprehensive, objective evaluation based on:
-1. Argument Logic & Evidence
-2. Listening & Collaboration
-3. Leadership & Steering
-4. Speech Delivery (Fluency, filler words like 'um/uh/like/basically', hesitations, and pause control)
 """
