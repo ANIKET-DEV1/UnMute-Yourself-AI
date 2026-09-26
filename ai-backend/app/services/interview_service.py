@@ -46,7 +46,16 @@ class InterviewSession:
         self.current_phase = "INTRODUCTION"
         self.question_count = 0
         self.user_filler_count = 0
-        self.interviewer_voice = "en-US-GuyNeural" if language == "English" else "hi-IN-MadhurNeural"
+        
+        # Select professional neural voice with clear accent
+        lang_clean = str(language).lower()
+        if "us" in lang_clean or "american" in lang_clean:
+            self.interviewer_voice = "en-US-GuyNeural"
+        elif "uk" in lang_clean or "british" in lang_clean:
+            self.interviewer_voice = "en-GB-RyanNeural"
+        else:
+            # Default to clear, articulate Indian English neural voice
+            self.interviewer_voice = "en-IN-PrabhatNeural"
 
     def get_recent_history(self, k: int = 6) -> str:
         recent = self.transcript[-k:]
@@ -56,22 +65,15 @@ class InterviewSession:
         return "\n".join([f"{entry['speaker']}: {entry['text']}" for entry in self.transcript])
 
     async def generate_opening_turn(self) -> dict:
-        """Generates the initial warm greeting and introductory question."""
+        """Generates the initial warm greeting and introductory question in pure English."""
         candidate_name = self.resume.candidate_name if self.resume.candidate_name != "Candidate" else "there"
-        project_snippet = f" like {self.resume.key_projects[0]}" if self.resume.key_projects else ""
+        project_snippet = f", such as {self.resume.key_projects[0]}" if self.resume.key_projects else ""
 
-        if self.language.lower().startswith("hi") or "hinglish" in self.language.lower():
-            text = (
-                f"Hello {candidate_name}! Welcome to your technical interview for the {self.target_role} role. "
-                f"Maine aapka resume dekha, especially your projects{project_snippet}. "
-                f"To start off, could you briefly introduce yourself and walk me through your background?"
-            )
-        else:
-            text = (
-                f"Hello {candidate_name}, welcome to your technical mock interview for the {self.target_role} position. "
-                f"I had a chance to review your resume and background{project_snippet}. "
-                f"To kick things off, could you give a brief introduction of yourself and share what you've been working on recently?"
-            )
+        text = (
+            f"Hello {candidate_name}, welcome to your technical interview for the {self.target_role} position. "
+            f"I have reviewed your resume and background{project_snippet}. "
+            f"To start off, could you briefly introduce yourself and walk me through what you have been working on recently?"
+        )
 
         audio_b64 = await generate_neural_audio_b64(text, self.interviewer_voice)
         self.transcript.append({"speaker": "Interviewer (Alex)", "text": text})

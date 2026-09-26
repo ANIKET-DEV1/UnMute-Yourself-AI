@@ -33,16 +33,49 @@ frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..
 if os.path.exists(os.path.join(frontend_dir, "avatars")):
     app.mount("/avatars", StaticFiles(directory=os.path.join(frontend_dir, "avatars")), name="avatars")
 
+# Direct HTML page routes
 @app.get("/")
-def read_root():
+@app.get("/index.html")
+def serve_index():
     index_file = os.path.join(frontend_dir, "index.html")
     if os.path.exists(index_file):
         return FileResponse(index_file)
-    return {
-        "status": "online",
-        "service": settings.PROJECT_NAME,
-        "ws_endpoints": ["/gd/ws/{room_id}", "/interview/ws/{room_id}"]
-    }
+    return {"status": "online", "service": settings.PROJECT_NAME}
+
+@app.get("/interview.html")
+@app.get("/mock-interview")
+def serve_interview():
+    interview_file = os.path.join(frontend_dir, "interview.html")
+    if os.path.exists(interview_file):
+        return FileResponse(interview_file)
+    return {"error": "interview.html not found"}
+
+@app.get("/gd.html")
+@app.get("/gd-room")
+def serve_gd():
+    gd_file = os.path.join(frontend_dir, "gd.html")
+    if os.path.exists(gd_file):
+        return FileResponse(gd_file)
+    return {"error": "gd.html not found"}
+
+@app.get("/debate.html")
+@app.get("/debate-room")
+def serve_debate():
+    debate_file = os.path.join(frontend_dir, "debate.html")
+    if os.path.exists(debate_file):
+        return FileResponse(debate_file)
+    return {"error": "debate.html not found"}
+
+@app.get("/test_gd_websocket.html")
+def serve_test_gd():
+    test_file = os.path.join(frontend_dir, "test_gd_websocket.html")
+    if os.path.exists(test_file):
+        return FileResponse(test_file)
+    return {"error": "test_gd_websocket.html not found"}
+
+# Mount frontend directory as static fallback
+if os.path.exists(frontend_dir):
+    app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
 
 @app.get("/health")
 def health_check():
