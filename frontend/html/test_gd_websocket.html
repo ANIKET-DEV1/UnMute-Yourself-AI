@@ -3,34 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UnMute-Yourself AI | GD, Debate & Interview Platform</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>UnMute-Yourself AI | GD, Debate & Mock Interview Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #f8fafc;
+      --bg-main: #f8fafc;
       --bg-surface: #ffffff;
-      --bg-card: #f1f5f9;
-      --border-color: #cbd5e1;
+      --bg-glass: rgba(255, 255, 255, 0.88);
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --border-glow: #cbd5e1;
 
       --accent-cyan: #0284c7;
+      --accent-cyan-glow: rgba(2, 132, 199, 0.25);
       --accent-blue: #2563eb;
+      --accent-blue-glow: rgba(37, 99, 235, 0.25);
       --accent-purple: #7e22ce;
+      --accent-purple-glow: rgba(126, 34, 206, 0.25);
       --accent-red: #dc2626;
       --accent-green: #16a34a;
+      --accent-amber: #d97706;
 
       --text-main: #0f172a;
       --text-muted: #64748b;
+      --font-tech: 'Space Grotesk', sans-serif;
+      --font-primary: 'Plus Jakarta Sans', sans-serif;
+      --font-display: 'Outfit', sans-serif;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: var(--font-primary);
     }
 
     body {
-      background-color: var(--bg-dark);
+      background-color: var(--bg-main);
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(37, 99, 235, 0.05) 0px, transparent 50%),
+        radial-gradient(at 90% 90%, rgba(126, 34, 206, 0.05) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(2, 132, 199, 0.04) 0px, transparent 60%),
+        linear-gradient(to right, rgba(226, 232, 240, 0.4) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(226, 232, 240, 0.4) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
       color: var(--text-main);
       height: 100vh;
       display: flex;
@@ -38,16 +54,18 @@
       overflow: hidden;
     }
 
-    /* Top Navigation Header */
+    /* Cinematic Header Navigation */
     header {
-      background: var(--bg-surface);
-      border-bottom: 1px solid var(--border-color);
-      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      padding: 10px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 60px;
+      height: 64px;
       z-index: 20;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
 
     .brand {
@@ -58,15 +76,55 @@
     }
 
     .brand-logo {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-      border-radius: 10px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+      font-size: 22px;
+      box-shadow: 0 4px 16px var(--accent-blue-glow);
+      position: relative;
+    }
+
+    .brand-text-main {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #0f172a 30%, #334155 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-hud-badge {
+      font-family: var(--font-tech);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(2, 132, 199, 0.08);
+      border: 1px solid rgba(2, 132, 199, 0.2);
+      padding: 2px 8px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    .topic-banner {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      padding: 6px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      max-width: 500px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .header-actions {
@@ -76,29 +134,36 @@
     }
 
     .btn-header {
-      background: rgba(239, 68, 68, 0.15);
+      background: rgba(220, 38, 38, 0.08);
       color: var(--accent-red);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      padding: 8px 16px;
+      border: 1px solid rgba(220, 38, 38, 0.25);
+      padding: 8px 18px;
       border-radius: 12px;
+      font-family: var(--font-tech);
       font-weight: 700;
       font-size: 13px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.05);
     }
-    .btn-header:hover { background: rgba(239, 68, 68, 0.3); }
+    .btn-header:hover {
+      background: rgba(220, 38, 38, 0.18);
+      transform: translateY(-1px);
+    }
 
     .timer-pill {
-      background: rgba(6, 182, 212, 0.15);
+      background: rgba(2, 132, 199, 0.08);
       color: var(--accent-cyan);
-      border: 1px solid rgba(6, 182, 212, 0.3);
+      border: 1px solid rgba(2, 132, 199, 0.25);
       padding: 6px 16px;
       border-radius: 20px;
-      font-weight: 800;
+      font-family: var(--font-tech);
+      font-weight: 700;
       font-size: 13px;
+      letter-spacing: 0.04em;
     }
 
-    /* Views Container */
+    /* Screen Management */
     .view-screen {
       flex: 1;
       display: none;
@@ -106,7 +171,7 @@
       overflow: hidden;
     }
 
-    #screenHome, #screenPrep {
+    #screenHome, #screenPrep, #screenInterviewSetup {
       overflow-y: auto;
       scroll-behavior: smooth;
     }
@@ -115,7 +180,7 @@
       display: flex;
     }
 
-    /* VIEW 1: HOME MODULE SELECTION SCREEN */
+    /* SCREEN 1: HERO HOME */
     .home-hero {
       min-height: 100%;
       flex: 1;
@@ -124,96 +189,132 @@
       align-items: center;
       justify-content: center;
       padding: 40px 20px;
-      background: radial-gradient(circle at center, #151e33 0%, #080c14 90%);
       text-align: center;
+      position: relative;
+    }
+
+    .hero-hud-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(37, 99, 235, 0.06);
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: 30px;
+      font-family: var(--font-tech);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
     }
 
     .home-title {
-      font-size: 36px;
-      font-weight: 800;
-      margin-bottom: 12px;
-      background: linear-gradient(135deg, #fff, var(--text-muted));
+      font-family: var(--font-display);
+      font-size: 44px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #0f172a 20%, #2563eb 60%, #7e22ce 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      max-width: 800px;
     }
 
     .home-subtitle {
       font-size: 16px;
       color: var(--text-muted);
-      max-width: 600px;
-      margin-bottom: 40px;
+      max-width: 620px;
+      margin-bottom: 44px;
+      line-height: 1.6;
     }
 
     .modules-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      max-width: 1050px;
+      gap: 28px;
+      max-width: 1100px;
       width: 100%;
     }
 
     .module-card {
-      background: var(--bg-surface);
-      border: 2px solid var(--border-color);
-      border-radius: 20px;
-      padding: 32px 24px;
+      background: var(--bg-card);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 24px;
+      padding: 36px 28px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.02);
       position: relative;
+      overflow: hidden;
     }
 
     .module-card:hover {
-      transform: translateY(-8px) scale(1.02);
+      transform: translateY(-10px);
       border-color: var(--accent-cyan);
-      box-shadow: 0 0 35px rgba(6, 182, 212, 0.3);
+      box-shadow: 0 20px 40px rgba(2, 132, 199, 0.12), 0 4px 12px rgba(0,0,0,0.04);
     }
 
     .module-icon {
-      width: 72px;
-      height: 72px;
-      border-radius: 20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
-      margin-bottom: 20px;
+      font-size: 40px;
+      margin-bottom: 24px;
+      position: relative;
     }
 
-    .icon-gd { background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.3); }
-    .icon-debate { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); }
-    .icon-interview { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .icon-gd { background: linear-gradient(135deg, rgba(2, 132, 199, 0.1), rgba(37, 99, 235, 0.15)); border: 1px solid rgba(2, 132, 199, 0.25); }
+    .icon-debate { background: linear-gradient(135deg, rgba(126, 34, 206, 0.1), rgba(168, 85, 247, 0.15)); border: 1px solid rgba(126, 34, 206, 0.25); }
+    .icon-interview { background: linear-gradient(135deg, rgba(22, 163, 74, 0.1), rgba(34, 197, 94, 0.15)); border: 1px solid rgba(22, 163, 74, 0.25); }
 
     .module-name {
-      font-size: 20px;
+      font-family: var(--font-display);
+      font-size: 22px;
       font-weight: 800;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      color: var(--text-main);
     }
 
     .module-desc {
       font-size: 13px;
       color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 24px;
+      line-height: 1.6;
+      margin-bottom: 28px;
     }
 
     .btn-launch {
       margin-top: auto;
-      padding: 10px 24px;
-      border-radius: 12px;
+      width: 100%;
+      padding: 12px 24px;
+      border-radius: 14px;
+      font-family: var(--font-tech);
       font-weight: 700;
       font-size: 14px;
-      background: linear-gradient(135deg, var(--accent-blue), #2563eb);
+      letter-spacing: 0.02em;
+      background: linear-gradient(135deg, var(--accent-blue), #1d4ed8);
       color: white;
       border: none;
       cursor: pointer;
+      box-shadow: 0 6px 18px var(--accent-blue-glow);
+      transition: all 0.25s ease;
+    }
+    .btn-launch:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
     }
 
-    /* VIEW 2: TOPIC DRAW & 15-MIN PREPARATION SCREEN */
+    /* SCREEN 2: GD PREP */
     .prep-stage {
       min-height: 100%;
       flex: 1;
@@ -222,451 +323,370 @@
       align-items: center;
       justify-content: center;
       padding: 40px 20px 60px 20px;
-      background: radial-gradient(circle at center, #151e33 0%, #080c14 90%);
       text-align: center;
     }
 
     .slot-box {
-      background: var(--bg-surface);
+      background: var(--bg-card);
       border: 2px solid var(--accent-cyan);
-      border-radius: 24px;
-      padding: 24px 40px;
-      box-shadow: 0 0 40px rgba(6, 182, 212, 0.3);
-      margin-bottom: 30px;
-      max-width: 700px;
+      border-radius: 28px;
+      padding: 24px 36px;
+      box-shadow: 0 15px 45px rgba(2, 132, 199, 0.15);
+      margin-bottom: 24px;
+      max-width: 760px;
       width: 100%;
     }
 
     .topic-reel {
-      font-size: 24px;
+      font-family: var(--font-display);
+      font-size: 22px;
       font-weight: 800;
       color: var(--accent-cyan);
-      min-height: 60px;
+      min-height: 54px;
       display: flex;
       align-items: center;
       justify-content: center;
+      line-height: 1.4;
+    }
+
+    .topic-selection-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 20px 24px;
+      max-width: 760px;
+      width: 100%;
+      margin-bottom: 24px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.03);
+      text-align: left;
+    }
+
+    .topic-opt-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .topic-opt-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .topic-select, .form-select-custom {
+      flex: 1;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
       transition: all 0.2s;
     }
 
+    .custom-topic-input {
+      flex: 1;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .btn-action-topic {
+      background: linear-gradient(135deg, var(--accent-blue), #1d4ed8);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 13px;
+      border-radius: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-subtle {
+      background: #f1f5f9;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
     .prep-timer-box {
-      font-size: 48px;
+      font-family: var(--font-tech);
+      font-size: 52px;
       font-weight: 800;
       color: var(--accent-purple);
-      margin: 16px 0;
-      letter-spacing: 0.05em;
+      margin: 18px 0;
+      letter-spacing: 0.06em;
     }
 
     .notes-textarea {
       width: 100%;
-      max-width: 700px;
+      max-width: 760px;
       height: 140px;
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 16px;
-      color: white;
+      border-radius: 18px;
+      padding: 18px;
+      color: var(--text-main);
       font-size: 14px;
       outline: none;
       margin-bottom: 24px;
       resize: none;
     }
 
-    /* VIEW 3: LIVE CIRCULAR GD ARENA - 2D REDESIGN */
-    .app-workspace {
+    /* MOCK INTERVIEW SETUP */
+    .interview-setup-stage {
+      min-height: 100%;
       flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 360px;
-      height: calc(100vh - 60px);
-      overflow: hidden;
-      background: #050914;
-    }
-
-    .table-stage {
-      position: relative;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 16px;
-      overflow: hidden;
-      background: radial-gradient(circle at 50% 40%, #0d172e 0%, #050914 90%);
+      padding: 40px 20px 60px 20px;
+      max-width: 860px;
+      margin: 0 auto;
       width: 100%;
-      height: 100%;
     }
 
-    /* 2D Canvas matching Bg.png aspect ratio */
-    .gd-2d-canvas {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      max-width: 1280px;
-      max-height: 720px;
-      aspect-ratio: 16 / 9;
-      background: url('avatars/Bg.png') no-repeat center center;
-      background-size: cover;
-      border-radius: 20px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 0 60px rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      overflow: hidden;
-    }
-
-    /* Top Floating 2D HUD Bar */
-    .gd-2d-header {
-      position: absolute;
-      top: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(10, 16, 30, 0.82);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(6, 182, 212, 0.4);
-      border-radius: 30px;
-      padding: 8px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      z-index: 50;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(6, 182, 212, 0.2);
-    }
-
-    .gd-header-badge {
+    .setup-hud-pill {
       font-family: var(--font-tech);
       font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      color: var(--accent-cyan);
-      background: rgba(6, 182, 212, 0.15);
-      padding: 3px 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(6, 182, 212, 0.3);
-      white-space: nowrap;
-    }
-
-    .teller-status {
-      font-size: 13px;
-      font-weight: 700;
-      color: #f8fafc;
-      white-space: nowrap;
-    }
-
-    .header-eq-wave {
-      display: flex;
-      gap: 3px;
-      height: 16px;
-      align-items: flex-end;
-    }
-    .header-eq-wave .eq-bar {
-      width: 3px;
-      border-radius: 2px;
-      background: var(--accent-cyan);
-      animation: eqBounce 0.6s infinite alternate;
-    }
-    .header-eq-wave .bar-1 { height: 40%; background: #a855f7; animation-delay: 0.1s; }
-    .header-eq-wave .bar-2 { height: 90%; background: #06b6d4; animation-delay: 0.3s; }
-    .header-eq-wave .bar-3 { height: 60%; background: #ef4444; animation-delay: 0.2s; }
-    .header-eq-wave .bar-4 { height: 100%; background: #10b981; animation-delay: 0.4s; }
-
-    @keyframes eqBounce {
-      0% { height: 25%; }
-      100% { height: 100%; }
-    }
-
-    /* 2D Participant Seat Overlay Hotspots */
-    .participant-seat-2d {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transform: translate(-50%, -50%);
-      z-index: 20;
-      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    /* 2D Positions matching 2D avatars in Bg.png */
-    .seat-rohan  { left: 20%; top: 35.6%; }
-    .seat-kavita { left: 39%; top: 37.5%; }
-    .seat-aarav  { left: 60.7%; top: 37.5%; }
-    .seat-sneha  { left: 79.7%; top: 35.6%; }
-    .seat-user   { left: 50%; top: 76%; }
-
-    /* Voice Glow Rings around Avatar Heads in Bg.png */
-    .voice-glow-ring {
-      width: 105px;
-      height: 105px;
-      border-radius: 50%;
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 3px solid transparent;
-      pointer-events: none;
-      transition: all 0.4s ease;
-      opacity: 0;
-    }
-
-    .participant-seat-2d.active-speaker .voice-glow-ring {
-      opacity: 1;
-      animation: ringPulse 1.4s infinite ease-out;
-    }
-
-    .ring-purple { border-color: #a855f7; box-shadow: 0 0 45px rgba(168, 85, 247, 0.8), inset 0 0 25px rgba(168, 85, 247, 0.4); }
-    .ring-cyan   { border-color: #06b6d4; box-shadow: 0 0 45px rgba(6, 182, 212, 0.8), inset 0 0 25px rgba(6, 182, 212, 0.4); }
-    .ring-red    { border-color: #ef4444; box-shadow: 0 0 45px rgba(239, 68, 68, 0.8), inset 0 0 25px rgba(239, 68, 68, 0.4); }
-    .ring-green  { border-color: #10b981; box-shadow: 0 0 45px rgba(16, 185, 129, 0.8), inset 0 0 25px rgba(16, 185, 129, 0.4); }
-    .ring-gold   { border-color: #f59e0b; box-shadow: 0 0 45px rgba(245, 158, 11, 0.8), inset 0 0 25px rgba(245, 158, 11, 0.4); }
-
-    @keyframes ringPulse {
-      0% { transform: translateX(-50%) scale(0.92); opacity: 0.95; }
-      50% { transform: translateX(-50%) scale(1.22); opacity: 0.5; }
-      100% { transform: translateX(-50%) scale(0.92); opacity: 0.95; }
-    }
-
-    /* Floating Voice Icon & Equalizer Pill */
-    .voice-icon-badge {
-      position: absolute;
-      top: -38px;
-      left: 50%;
-      transform: translateX(-50%) scale(0.85);
-      background: rgba(15, 23, 42, 0.92);
-      backdrop-filter: blur(12px);
-      padding: 5px 12px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      border: 1.5px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-      opacity: 0.7;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .participant-seat-2d.active-speaker .voice-icon-badge {
-      opacity: 1;
-      transform: translateX(-50%) scale(1.1);
-    }
-
-    .badge-purple { border-color: #a855f7; box-shadow: 0 0 20px rgba(168, 85, 247, 0.6); }
-    .badge-cyan   { border-color: #06b6d4; box-shadow: 0 0 20px rgba(6, 182, 212, 0.6); }
-    .badge-red    { border-color: #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
-    .badge-green  { border-color: #10b981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
-    .badge-gold   { border-color: #f59e0b; box-shadow: 0 0 20px rgba(245, 158, 11, 0.6); }
-
-    .mic-icon { font-size: 13px; line-height: 1; }
-
-    .voice-bars {
-      display: flex;
-      gap: 2.5px;
-      height: 12px;
-      align-items: flex-end;
-    }
-    .voice-bars span {
-      width: 2.5px;
-      background: #e2e8f0;
-      border-radius: 2px;
-      height: 25%;
-      transition: height 0.2s ease;
-    }
-
-    .participant-seat-2d.active-speaker .voice-bars span {
-      animation: voiceBarBounce 0.5s infinite alternate;
-    }
-    .participant-seat-2d.active-speaker .badge-purple .voice-bars span { background: #c084fc; }
-    .participant-seat-2d.active-speaker .badge-cyan .voice-bars span { background: #22d3ee; }
-    .participant-seat-2d.active-speaker .badge-red .voice-bars span { background: #f87171; }
-    .participant-seat-2d.active-speaker .badge-green .voice-bars span { background: #34d399; }
-    .participant-seat-2d.active-speaker .badge-gold .voice-bars span { background: #fbbf24; }
-
-    .voice-bars span:nth-child(1) { animation-delay: 0.1s !important; }
-    .voice-bars span:nth-child(2) { animation-delay: 0.3s !important; }
-    .voice-bars span:nth-child(3) { animation-delay: 0.2s !important; }
-    .voice-bars span:nth-child(4) { animation-delay: 0.4s !important; }
-
-    @keyframes voiceBarBounce {
-      0% { height: 20%; }
-      100% { height: 100%; }
-    }
-
-    /* 2D Floating Name Tags below Avatars */
-    .seat-tag-2d {
-      margin-top: 65px;
-      background: rgba(15, 23, 42, 0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 14px;
+      font-weight: 800;
+      color: var(--accent-green);
+      background: rgba(22, 163, 74, 0.08);
+      border: 1px solid rgba(22, 163, 74, 0.25);
       padding: 4px 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
-      white-space: nowrap;
-      transition: all 0.3s ease;
-    }
-
-    .participant-seat-2d.active-speaker .seat-tag-2d {
-      transform: scale(1.08);
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    .seat-name {
-      font-size: 12px;
-      font-weight: 800;
-      color: #f8fafc;
-      letter-spacing: 0.02em;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-    }
-
-    .seat-role {
-      font-family: var(--font-tech);
-      font-size: 9px;
-      font-weight: 800;
-      text-transform: uppercase;
-      padding: 1px 7px;
-      border-radius: 8px;
-      letter-spacing: 0.05em;
-    }
-
-    .role-purple { background: rgba(168, 85, 247, 0.25); color: #e9d5ff; border: 1px solid rgba(168, 85, 247, 0.5); }
-    .role-cyan   { background: rgba(6, 182, 212, 0.25); color: #cffaff; border: 1px solid rgba(6, 182, 212, 0.5); }
-    .role-red    { background: rgba(239, 68, 68, 0.25); color: #fecdd3; border: 1px solid rgba(239, 68, 68, 0.5); }
-    .role-green  { background: rgba(16, 185, 129, 0.25); color: #d1fae5; border: 1px solid rgba(16, 185, 129, 0.5); }
-    .role-gold   { background: rgba(245, 158, 11, 0.25); color: #fef3c7; border: 1px solid rgba(245, 158, 11, 0.5); }
-
-    /* Right Transcript Panel & Mic Button */
-    .transcript-panel {
-      background: var(--bg-surface);
-      border-left: 1px solid var(--border-color);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    .panel-title {
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border-color);
-      font-weight: 800;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-
-    .transcript-feed {
-      flex: 1;
-      padding: 16px;
-      overflow-y: scroll;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      min-height: 0;
-    }
-
-    .transcript-feed::-webkit-scrollbar { width: 6px; }
-    .transcript-feed::-webkit-scrollbar-track { background: var(--bg-dark); }
-    .transcript-feed::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-    .transcript-feed::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
-
-    .feed-bubble {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .feed-speaker { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--accent-cyan); margin-bottom: 4px; }
-
-    .mic-control-box {
-      background: rgba(16, 23, 38, 0.95);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid var(--border-color);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .mic-diamond-btn {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, var(--accent-blue), #2563eb);
-      border: 2px solid rgba(255,255,255,0.2);
-      transform: rotate(45deg);
-      border-radius: 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .mic-diamond-btn:hover { transform: rotate(45deg) scale(1.06); }
-    .mic-diamond-btn.recording {
-      background: linear-gradient(135deg, var(--accent-red), #dc2626);
-      box-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
-      animation: pulseMic 1.2s infinite alternate;
-    }
-    @keyframes pulseMic { 0% { transform: rotate(45deg) scale(1.0); } 100% { transform: rotate(45deg) scale(1.1); } }
-
-    .mic-icon-inner { transform: rotate(-45deg); font-size: 22px; color: white; }
-    .mic-status-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center; }
-
-    .input-fallback-row { width: 100%; display: flex; gap: 8px; }
-    .input-fallback-row input { flex: 1; background: var(--bg-dark); border: 1px solid var(--border-color); color: white; padding: 8px 12px; border-radius: 8px; font-size: 13px; outline: none; }
-
-    /* Scorecard Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(8, 12, 20, 0.88);
-      backdrop-filter: blur(16px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 20px;
-    }
-
-    .modal-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
       border-radius: 20px;
-      width: 100%;
-      max-width: 680px;
-      padding: 28px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-      max-height: 90vh;
-      overflow-y: auto;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
     }
 
-    .winner-banner {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
-      border: 2px solid var(--accent-green);
-      border-radius: 16px;
-      padding: 16px 20px;
-      margin: 16px 0;
+    .setup-header-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
       text-align: center;
     }
 
-    .winner-name { font-size: 22px; font-weight: 800; color: var(--accent-green); }
-    .winner-reason { font-size: 13px; color: var(--text-main); margin-top: 4px; }
-
-    .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
-    .score-box { background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; text-align: center; }
-    .score-val { font-size: 20px; font-weight: 800; color: var(--accent-cyan); margin-top: 4px; }
-
-    .weakness-box {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 13px;
-      line-height: 1.5;
-      margin-top: 12px;
+    .setup-header-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 32px;
+      max-width: 580px;
     }
+
+    .setup-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 28px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      margin-bottom: 24px;
+    }
+
+    .setup-section-title {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: var(--text-main);
+    }
+
+    .setup-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .field-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: block;
+      text-transform: uppercase;
+    }
+
+    .resume-dropzone {
+      border: 2px dashed #94a3b8;
+      background: #f8fafc;
+      border-radius: 18px;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .resume-dropzone:hover, .resume-dropzone.dragover {
+      border-color: var(--accent-green);
+      background: rgba(22, 163, 74, 0.04);
+    }
+
+    .dropzone-icon { font-size: 40px; margin-bottom: 12px; }
+    .dropzone-text-main { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+    .dropzone-text-sub { font-size: 12px; color: var(--text-muted); }
+
+    .profile-preview-box {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 16px;
+      background: #f0fdf4;
+      border: 1px solid rgba(22, 163, 74, 0.3);
+      display: none;
+    }
+
+    .candidate-name-badge { font-family: var(--font-display); font-weight: 800; font-size: 16px; color: #15803d; }
+    .extracted-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .extracted-chip { background: white; border: 1px solid rgba(22, 163, 74, 0.25); color: #166534; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 12px; }
+
+    .reupload-banner {
+      background: rgba(220, 38, 38, 0.08);
+      border: 1px solid rgba(220, 38, 38, 0.3);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-top: 16px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    /* 1-ON-1 INTERVIEW ARENA */
+    .interview-workspace {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      height: calc(100vh - 64px);
+      overflow: hidden;
+      background: #080d1a;
+    }
+
+    .interview-stage {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px;
+      background: radial-gradient(circle at 50% 30%, #111c38 0%, #060913 90%);
+      overflow-y: auto;
+    }
+
+    .phase-tracker-hud {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 6px 16px;
+      z-index: 10;
+    }
+
+    .phase-step {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-tech);
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+    .phase-step.active {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    }
+    .phase-step-divider { color: #334155; font-size: 10px; }
+
+    .interviewer-hero-card { display: flex; flex-direction: column; align-items: center; text-align: center; margin: auto 0; }
+    .interviewer-avatar-wrapper { position: relative; width: 140px; height: 140px; margin-bottom: 18px; }
+    .interviewer-avatar-circle { width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #1e293b, #0f172a); border: 3px solid #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 64px; box-shadow: 0 0 35px rgba(56, 189, 248, 0.35); position: relative; z-index: 2; }
+    
+    .interviewer-pulse-ring {
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 2px solid rgba(56, 189, 248, 0.4);
+      opacity: 0;
+      animation: pulseAvatar 2s infinite ease-out;
+      z-index: 1;
+    }
+    @keyframes pulseAvatar { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.35); opacity: 0; } }
+
+    .interviewer-avatar-wrapper.speaking .interviewer-pulse-ring { border-color: #22c55e; animation-duration: 1.2s; }
+    .interviewer-name { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: white; margin-bottom: 4px; }
+    .interviewer-role-pill { font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.25); padding: 2px 10px; border-radius: 12px; text-transform: uppercase; margin-bottom: 16px; }
+
+    .coaching-hint-bubble { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 16px; padding: 12px 18px; max-width: 620px; width: 100%; color: #e2e8f0; font-size: 13px; display: flex; align-items: center; gap: 10px; backdrop-filter: blur(8px); margin-top: 16px; }
+
+    .interview-sidebar { background: #ffffff; border-left: 1px solid var(--border-color); display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+    .panel-title { padding: 14px 20px; border-bottom: 1px solid var(--border-color); font-family: var(--font-tech); font-weight: 700; font-size: 13px; text-transform: uppercase; color: var(--text-main); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+
+    .transcript-feed { flex: 1; padding: 18px; overflow-y: scroll; display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+    .feed-bubble { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; font-size: 13px; line-height: 1.5; }
+    .feed-bubble.interviewer { background: #f0fdf4; border-color: rgba(34, 197, 94, 0.3); }
+    .feed-bubble.candidate { background: #eff6ff; border-color: rgba(59, 130, 246, 0.3); }
+    .feed-speaker { font-family: var(--font-tech); font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+    .feed-speaker.interviewer { color: #16a34a; }
+    .feed-speaker.candidate { color: #2563eb; }
+    .feed-speaker.system { color: #64748b; }
+
+    .mic-control-box { background: rgba(255, 255, 255, 0.98); border-top: 1px solid var(--border-color); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; align-items: center; flex-shrink: 0; }
+    .mic-diamond-btn { width: 60px; height: 60px; background: linear-gradient(135deg, var(--accent-blue), #1d4ed8); border: 2px solid rgba(255,255,255,0.6); transform: rotate(45deg); border-radius: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px var(--accent-blue-glow); transition: all 0.25s ease; }
+    .mic-diamond-btn:hover { transform: rotate(45deg) scale(1.08); }
+    .mic-diamond-btn.recording { background: linear-gradient(135deg, var(--accent-red), #b91c1c); animation: pulseMic 1.2s infinite alternate; }
+    @keyframes pulseMic { 0% { transform: rotate(45deg) scale(1.0); } 100% { transform: rotate(45deg) scale(1.12); } }
+    .mic-icon-inner { transform: rotate(-45deg); font-size: 22px; color: white; }
+    .mic-status-label { font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center; }
+    .input-fallback-row { width: 100%; display: flex; gap: 8px; }
+    .input-fallback-row input { flex: 1; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(16px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+    .modal-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 24px; width: 100%; max-width: 740px; padding: 32px; box-shadow: 0 25px 60px rgba(0,0,0,0.25); max-height: 90vh; overflow-y: auto; }
+    .verdict-banner { border-radius: 18px; padding: 20px; margin: 18px 0; text-align: center; }
+    .verdict-banner.strong-hire { background: #f0fdf4; border: 2px solid #22c55e; }
+    .verdict-banner.hire { background: #f0fdfa; border: 2px solid #0d9488; }
+    .verdict-banner.leaning-hire { background: #fffbeb; border: 2px solid #f59e0b; }
+    .verdict-banner.no-hire { background: #fef2f2; border: 2px solid #ef4444; }
+    .verdict-title { font-family: var(--font-display); font-size: 26px; font-weight: 900; }
+    .verdict-title.strong-hire { color: #16a34a; }
+    .verdict-title.hire { color: #0d9488; }
+    .verdict-title.leaning-hire { color: #d97706; }
+    .verdict-title.no-hire { color: #dc2626; }
+    .verdict-reason { font-size: 14px; color: var(--text-main); margin-top: 6px; line-height: 1.5; }
+    .score-grid-6col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0; }
+    .score-box { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; }
+    .score-box-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .score-val { font-family: var(--font-tech); font-size: 22px; font-weight: 800; color: var(--accent-cyan); margin-top: 4px; }
+    .feedback-section { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-top: 14px; font-size: 13px; line-height: 1.6; }
+    .feedback-section h4 { font-family: var(--font-tech); font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
   </style>
 </head>
 <body>
@@ -676,13 +696,17 @@
     <div class="brand" onclick="navToHome()">
       <div class="brand-logo">🎙️</div>
       <div>
-        <div style="font-weight: 800; font-size: 15px;">UnMute-Yourself AI</div>
-        <div style="font-size: 10px; color: var(--text-muted);">GD, Debate & Interview Platform</div>
+        <div class="brand-text-main">UnMute-Yourself AI</div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span class="brand-hud-badge">v2.0 Neural Engine</span>
+          <span style="font-size: 10px; color: var(--text-muted);">| GD & Mock Interview Platform</span>
+        </div>
       </div>
     </div>
 
     <div id="headerTopicBox" class="topic-banner" style="display: none;">
-      Topic: <span id="topicText">Will AI Replace Software Engineers?</span>
+      <span style="font-family: var(--font-tech); color: var(--accent-cyan); font-size: 11px; margin-right: 6px;">[TOPIC]</span>
+      <span id="topicText">Will AI Replace Software Engineers in the Upcoming Era?</span>
     </div>
 
     <div class="header-actions">
@@ -691,11 +715,12 @@
     </div>
   </header>
 
-  <!-- SCREEN 1: HOME MODULE SELECTION -->
+  <!-- SCREEN 1: HERO HOME -->
   <div id="screenHome" class="view-screen active">
     <div class="home-hero">
-      <h1 class="home-title">Master Group Discussions & Debates with AI</h1>
-      <p class="home-subtitle">Select a module below to begin your real-time AI practice session.</p>
+      <div class="hero-hud-chip">⚡ Real-time Multi-Agent AI Platform</div>
+      <h1 class="home-title">Master Group Discussions & Mock Interviews with AI</h1>
+      <p class="home-subtitle">Sharpen your communication, technical articulation, and quick thinking with realistic AI personas in immersive, timed simulation rooms.</p>
 
       <div class="modules-grid">
         <!-- 1. Group Discussion -->
@@ -703,7 +728,7 @@
           <div class="module-icon icon-gd">👥</div>
           <div class="module-name">Group Discussion</div>
           <div class="module-desc">Real-time 5-member circular GD arena with AI personas (Moderator, Analyst, Contrarian, Peacemaker). Features topic draw, 15m prep, and 20m debate.</div>
-          <button class="btn-launch">Start GD Session</button>
+          <button class="btn-launch">Start GD Session 🚀</button>
         </div>
 
         <!-- 2. 1v1 Debate -->
@@ -711,610 +736,493 @@
           <div class="module-icon icon-debate">⚔️</div>
           <div class="module-name">1v1 AI Debate</div>
           <div class="module-desc">Head-to-head competitive debate against an aggressive AI adversary with timed cross-examinations and rebuttals.</div>
-          <button class="btn-launch" style="background: linear-gradient(135deg, var(--accent-purple), #7e22ce);">Launch Debate</button>
+          <button class="btn-launch" style="background: linear-gradient(135deg, var(--accent-purple), #6b21a8);">Launch Debate ⚔️</button>
         </div>
 
         <!-- 3. Mock Interview -->
         <div class="module-card" onclick="selectModule('interview')">
           <div class="module-icon icon-interview">💼</div>
-          <div class="module-name">Mock Interview</div>
-          <div class="module-desc">Technical & behavioral interview simulator with real-time feedback on confidence, clarity, and body language.</div>
-          <button class="btn-launch" style="background: linear-gradient(135deg, var(--accent-green), #059669);">Start Interview</button>
+          <div class="module-name">1-on-1 Mock Interview</div>
+          <div class="module-desc">Upload your resume, select your target role & language, and enter a 15–20 min adaptive interview from intro to tough system design.</div>
+          <button class="btn-launch" style="background: linear-gradient(135deg, var(--accent-green), #15803d);">Start Interview 💼</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- SCREEN 2: TOPIC DRAW & 15-MIN PREPARATION -->
+  <!-- SCREEN 2: GD PREPARATION -->
   <div id="screenPrep" class="view-screen">
     <div class="prep-stage">
-      <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 8px;">🎲 Drawing Group Discussion Topic...</h2>
-      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Your topic is being randomly generated for this session.</p>
+      <div style="font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: var(--accent-cyan); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">[STAGE 1: TOPIC SELECTION & PREPARATION]</div>
+      <h2 style="font-family: var(--font-display); font-size: 28px; font-weight: 800; margin-bottom: 8px;">🎲 Select or Draw Your GD Topic</h2>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Choose from curated study topics, draw randomly, or enter a custom academic topic.</p>
 
       <div class="slot-box">
         <div id="topicReel" class="topic-reel">Spinning Topic Reels...</div>
       </div>
 
+      <div class="topic-selection-card">
+        <div class="topic-opt-row">
+          <label class="topic-opt-label">📚 Select from Curated Study Topics:</label>
+          <div style="display: flex; gap: 10px; width: 100%;">
+            <select id="topicDropdown" class="topic-select" onchange="onTopicDropdownChange(this.value)">
+              <option value="" disabled selected>-- Choose a Study / Technical Topic --</option>
+              <option value="Will AI Replace Software Engineers in the Upcoming Era?">Will AI Replace Software Engineers in the Upcoming Era?</option>
+              <option value="Monolithic Architecture vs Microservices for High Scalability Systems">Monolithic Architecture vs Microservices for High Scalability Systems</option>
+              <option value="Designing Fault-Tolerant Scalable Systems: CAP Theorem & Consistency Trade-offs">Designing Fault-Tolerant Scalable Systems: CAP Theorem & Consistency Trade-offs</option>
+            </select>
+            <button class="btn-subtle" onclick="startTopicDraw()">🎲 Random Draw</button>
+          </div>
+        </div>
+      </div>
+
       <div id="prepTimerBox" class="prep-timer-box" style="display: none;">15:00</div>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Use this 15-minute preparation window to organize your core points.</p>
-
       <textarea id="notesArea" class="notes-textarea" placeholder="Jot down your key arguments, statistics, and opening points here..."></textarea>
-
-      <button id="btnPrepared" class="btn-launch" style="padding: 14px 36px; font-size: 16px;" onclick="finishPrepAndStartGD()">I'm Prepared - Start GD Now 🚀</button>
+      <button id="btnPrepared" class="btn-launch" style="padding: 16px 40px; font-size: 16px; max-width: 400px;" onclick="finishPrepAndStartGD()">I'm Prepared - Start GD Now 🚀</button>
     </div>
   </div>
 
-  <!-- SCREEN 3: LIVE CIRCULAR GD ARENA -->
-  <div id="screenArena" class="view-screen">
-    <div class="app-workspace">
-      
-      <!-- Center Stage: 2D GD Arena with Bg.png -->
-      <div class="table-stage">
-        <div class="gd-2d-canvas">
-          
-          <!-- Top Floating 2D Status HUD -->
-          <div class="gd-2d-header">
-            <div class="gd-header-badge">LIVE 2D GD ARENA</div>
-            <div id="tellerStatus" class="teller-status">Connecting to GD room...</div>
-            <div class="header-eq-wave">
-              <span class="eq-bar bar-1"></span>
-              <span class="eq-bar bar-2"></span>
-              <span class="eq-bar bar-3"></span>
-              <span class="eq-bar bar-4"></span>
-            </div>
-          </div>
+  <!-- SCREEN 3: MOCK INTERVIEW PRE-SETUP & RESUME UPLOAD -->
+  <div id="screenInterviewSetup" class="view-screen">
+    <div class="interview-setup-stage">
+      <span class="setup-hud-pill">💼 Step 1: Pre-Interview Configuration</span>
+      <h2 class="setup-header-title">Configure Your 1-on-1 Mock Interview</h2>
+      <p class="setup-header-desc">Select your target engineering role, interview language, and upload your resume for tailored technical and behavioral questioning.</p>
 
-          <!-- 1. Analyst Rohan (Purple Sparkle Head) -->
-          <div id="seat-Rohan" class="participant-seat-2d seat-rohan speaker-rohan">
-            <div class="voice-glow-ring ring-purple"></div>
-            <div class="voice-icon-badge badge-purple">
-              <span class="mic-icon">🎙️</span>
-              <div class="voice-bars"><span></span><span></span><span></span><span></span></div>
-            </div>
-            <div class="seat-tag-2d">
-              <span class="seat-name">Rohan S.</span>
-              <span class="seat-role role-purple">Analyst</span>
-            </div>
+      <div class="setup-card">
+        <div class="setup-section-title"><span>🎯</span> 1. Select Target Role & Language</div>
+        <div class="setup-grid-2col">
+          <div>
+            <label class="field-label">Target Role / Specialization</label>
+            <select id="interviewRoleSelect" class="form-select-custom" style="width: 100%;">
+              <option value="Frontend Developer" selected>Frontend Developer (React, TypeScript, CSS, Web Vitals)</option>
+              <option value="Backend Engineer">Backend Engineer (Node.js, Python/Go, Databases, Microservices)</option>
+              <option value="Full-Stack Engineer">Full-Stack Engineer (System Design, REST/GraphQL, Cloud)</option>
+              <option value="AI / Machine Learning Engineer">AI / ML Engineer (PyTorch, LLMs, RAG, LangChain)</option>
+              <option value="DevOps & Cloud Engineer">DevOps & Cloud Architect (Kubernetes, Docker, CI/CD, AWS)</option>
+              <option value="Data Engineer">Data Engineer (SQL, Spark, Kafka, ETL Pipelines)</option>
+            </select>
           </div>
-
-          <!-- 2. Moderator Kavita (Cyan Mesh Head) -->
-          <div id="seat-Kavita" class="participant-seat-2d seat-kavita speaker-kavita">
-            <div class="voice-glow-ring ring-cyan"></div>
-            <div class="voice-icon-badge badge-cyan">
-              <span class="mic-icon">🎙️</span>
-              <div class="voice-bars"><span></span><span></span><span></span><span></span></div>
-            </div>
-            <div class="seat-tag-2d">
-              <span class="seat-name">Kavita R.</span>
-              <span class="seat-role role-cyan">Moderator</span>
-            </div>
+          <div>
+            <label class="field-label">Interview Language & Dialect</label>
+            <select id="interviewLangSelect" class="form-select-custom" style="width: 100%;">
+              <option value="English" selected>English (Global Standard Professional)</option>
+              <option value="Hinglish">Hinglish / Hindi (Conversational Mix)</option>
+            </select>
           </div>
-
-          <!-- 3. Contrarian Aarav (Orange Sunburst Head) -->
-          <div id="seat-Aarav" class="participant-seat-2d seat-aarav speaker-aarav">
-            <div class="voice-glow-ring ring-red"></div>
-            <div class="voice-icon-badge badge-red">
-              <span class="mic-icon">🎙️</span>
-              <div class="voice-bars"><span></span><span></span><span></span><span></span></div>
-            </div>
-            <div class="seat-tag-2d">
-              <span class="seat-name">Aarav M.</span>
-              <span class="seat-role role-red">Contrarian</span>
-            </div>
-          </div>
-
-          <!-- 4. Peacemaker Sneha (Green Swirl Head) -->
-          <div id="seat-Sneha" class="participant-seat-2d seat-sneha speaker-sneha">
-            <div class="voice-glow-ring ring-green"></div>
-            <div class="voice-icon-badge badge-green">
-              <span class="mic-icon">🎙️</span>
-              <div class="voice-bars"><span></span><span></span><span></span><span></span></div>
-            </div>
-            <div class="seat-tag-2d">
-              <span class="seat-name">Sneha P.</span>
-              <span class="seat-role role-green">Peacemaker</span>
-            </div>
-          </div>
-
-          <!-- 5. User Seat (Foreground Executive Chair) -->
-          <div id="seat-User" class="participant-seat-2d seat-user speaker-user">
-            <div class="voice-glow-ring ring-gold"></div>
-            <div class="voice-icon-badge badge-gold">
-              <span class="mic-icon">🎙️</span>
-              <div class="voice-bars"><span></span><span></span><span></span><span></span></div>
-            </div>
-            <div class="seat-tag-2d">
-              <span class="seat-name">USER (YOU)</span>
-              <span class="seat-role role-gold">Candidate</span>
-            </div>
-          </div>
-
         </div>
       </div>
 
-      <!-- Right Panel: Persistent Transcript Feed & Mic Button -->
-      <div class="transcript-panel">
-        <div class="panel-title">📜 Discussion Transcript</div>
+      <div class="setup-card">
+        <div class="setup-section-title"><span>📄</span> 2. Upload Candidate Resume</div>
+        <div id="resumeDropzone" class="resume-dropzone" onclick="document.getElementById('resumeFileInput').click()">
+          <input type="file" id="resumeFileInput" accept=".pdf,.txt,.docx" style="display: none;" onchange="handleResumeFileSelected(this.files[0])" />
+          <div class="dropzone-icon">📤</div>
+          <div class="dropzone-text-main" id="dropzoneMainText">Drag & Drop Resume PDF / TXT here or click to browse</div>
+          <div class="dropzone-text-sub">Supported formats: .pdf, .txt, .docx (Max 10MB)</div>
+        </div>
 
-        <div id="transcriptFeed" class="transcript-feed">
-          <div class="feed-bubble">
-            <div class="feed-speaker">System</div>
-            <div>GD session initialized. Introductions starting...</div>
+        <div id="resumeParseSpinner" style="display: none; align-items: center; justify-content: center; gap: 10px; margin-top: 16px; font-weight: 700; color: var(--accent-cyan);">
+          <span>⏳ Extracting candidate skills, experience, and project data...</span>
+        </div>
+
+        <div id="resumeProfilePreview" class="profile-preview-box">
+          <div class="profile-preview-header">
+            <div>
+              <span style="font-size: 11px; font-weight: 800; color: #15803d; text-transform: uppercase;">✅ Resume Parsed Successfully</span>
+              <div id="parsedCandidateName" class="candidate-name-badge">Candidate Name</div>
+            </div>
+            <button class="btn-subtle" style="padding: 6px 12px; font-size: 12px;" onclick="resetResumeUpload()">🔄 Replace Resume</button>
+          </div>
+          <div style="font-size: 12px; color: #334155; margin-bottom: 6px;">
+            <strong>Target Match:</strong> <span id="parsedMatchScore">85% Match</span> | <span id="parsedExpYears">2+ years experience</span>
+          </div>
+          <div>
+            <span style="font-size: 11px; font-weight: 700; color: #475569;">Extracted Skills & Focus Areas:</span>
+            <div id="parsedSkillsChips" class="extracted-chips"></div>
+          </div>
+          <div style="margin-top: 10px;">
+            <span style="font-size: 11px; font-weight: 700; color: #475569;">Key Projects Detected:</span>
+            <div id="parsedProjectsChips" class="extracted-chips"></div>
           </div>
         </div>
 
+        <div id="reuploadAlert" class="reupload-banner">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 20px;">⚠️</span>
+            <span style="font-size: 13px; color: var(--accent-red); font-weight: 600;" id="reuploadAlertMsg">No resume uploaded. Upload a resume for personalized project deep-dives.</span>
+          </div>
+          <button class="btn-action-topic" style="background: var(--accent-red); padding: 6px 14px; font-size: 12px;" onclick="document.getElementById('resumeFileInput').click()">Re-upload Resume</button>
+        </div>
+      </div>
+
+      <button id="btnEnterInterview" class="btn-launch" style="padding: 16px 40px; font-size: 16px; width: 100%; max-width: 500px; background: linear-gradient(135deg, var(--accent-green), #15803d);" onclick="startInterviewSession()">Enter 1-on-1 Interview Room (15-20 Min) 💼</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: LIVE INTERVIEW ARENA -->
+  <div id="screenInterviewArena" class="view-screen">
+    <div class="interview-workspace">
+      <div class="interview-stage">
+        <div class="phase-tracker-hud">
+          <div id="step-intro" class="phase-step active"><span>1</span> Intro</div>
+          <span class="phase-step-divider">→</span>
+          <div id="step-easy" class="phase-step"><span>2</span> Fundamentals</div>
+          <span class="phase-step-divider">→</span>
+          <div id="step-medium" class="phase-step"><span>3</span> Project Deep-Dive</div>
+          <span class="phase-step-divider">→</span>
+          <div id="step-hard" class="phase-step"><span>4</span> Hard Scenario</div>
+          <span class="phase-step-divider">→</span>
+          <div id="step-closing" class="phase-step"><span>5</span> Wrap-up</div>
+        </div>
+
+        <div class="interviewer-hero-card">
+          <div id="interviewerAvatarWrap" class="interviewer-avatar-wrapper">
+            <div class="interviewer-pulse-ring"></div>
+            <div class="interviewer-avatar-circle">👨‍💼</div>
+          </div>
+          <div class="interviewer-name">Alex Miller</div>
+          <div class="interviewer-role-pill">Lead Technical Interviewer</div>
+        </div>
+
+        <div id="coachingHintBox" class="coaching-hint-bubble">
+          <span style="font-size: 18px;">💡</span>
+          <span id="coachingHintText">Welcome! Take a breath, listen carefully to each question, and structure your responses with real-world examples.</span>
+        </div>
+      </div>
+
+      <div class="interview-sidebar">
+        <div class="panel-title">
+          <span>📝 Live Interview Feed</span>
+          <span id="interviewQCountBadge" style="font-family: var(--font-tech); font-size: 11px; color: var(--accent-cyan); background: #f0fdf4; border: 1px solid rgba(22, 163, 74, 0.3); padding: 2px 8px; border-radius: 6px;">Q #1</span>
+        </div>
+        <div id="interviewTranscript" class="transcript-feed"></div>
         <div class="mic-control-box">
-          <div id="btnMic" class="mic-diamond-btn" onclick="toggleMicRecording()">
-            <div class="mic-icon-inner">🎙️</div>
+          <div id="btnInterviewMic" class="mic-diamond-btn" onclick="toggleInterviewMic()">
+            <span class="mic-icon-inner">🎙️</span>
           </div>
-          <div id="micStatus" class="mic-status-label">Click Mic to Speak (up to 1m)</div>
-
+          <div id="interviewMicStatus" class="mic-status-label">Click Mic to Speak (up to 60s)</div>
           <div class="input-fallback-row">
-            <input type="text" id="userInput" placeholder="Or type argument here..." onkeydown="handleKeyPress(event)" />
-            <button class="btn-header" style="background: var(--accent-blue); color: white; border: none;" onclick="sendTextInput()">Send</button>
+            <input type="text" id="interviewUserInput" placeholder="Or type your technical answer here..." onkeydown="handleInterviewKeyPress(event)" />
+            <button class="btn-action-topic" onclick="sendInterviewTextInput()">Send</button>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- Scorecard Evaluation Modal -->
-  <div id="scorecardModal" class="modal-overlay">
+  <!-- MODALS -->
+  <div id="interviewScorecardModal" class="modal-overlay">
     <div class="modal-card">
-      <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">🏆 GD Evaluation & Winner Announcement</h2>
-      <p style="font-size: 13px; color: var(--text-muted);">Assessor evaluation with candidate rankings, weak points, and speech delivery analytics.</p>
-
-      <div class="winner-banner">
-        <div style="font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 0.08em; color: var(--accent-cyan);">👑 Winner Candidate</div>
-        <div id="winnerName" class="winner-name">Analyst (Rohan)</div>
-        <div id="winnerReason" class="winner-reason">Delivered well-structured arguments supported by data and active listening throughout the debate.</div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <span style="font-family: var(--font-tech); font-size: 11px; font-weight: 800; color: var(--accent-green); text-transform: uppercase;">Technical Interview Scorecard</span>
+          <h2 style="font-family: var(--font-display); font-size: 26px; font-weight: 900;">Hiring Assessment Report</h2>
+        </div>
+        <button class="btn-subtle" onclick="closeInterviewScorecardModal()">✕ Close</button>
       </div>
 
-      <div class="score-grid">
-        <div class="score-box"><div style="font-size: 11px; color: var(--text-muted);">Overall Score</div><div id="scoreOverall" class="score-val">--%</div></div>
-        <div class="score-box"><div style="font-size: 11px; color: var(--text-muted);">Clarity</div><div id="scoreClarity" class="score-val">--/10</div></div>
-        <div class="score-box"><div style="font-size: 11px; color: var(--text-muted);">Logic</div><div id="scoreLogic" class="score-val">--/10</div></div>
-        <div class="score-box"><div style="font-size: 11px; color: var(--text-muted);">Collaboration</div><div id="scoreCollab" class="score-val">--/10</div></div>
-        <div class="score-box"><div style="font-size: 11px; color: var(--text-muted);">Fluency & Pace</div><div id="scoreFluency" class="score-val">--/10</div></div>
-        <div class="score-box"><div style="font-size: 11px; color: var(--text-muted);">Fillers Tracked</div><div id="scoreFillers" class="score-val" style="color: var(--accent-red);">0</div></div>
+      <div id="verdictBanner" class="verdict-banner strong-hire">
+        <div id="verdictTitle" class="verdict-title strong-hire">STRONG HIRE</div>
+        <div id="verdictReason" class="verdict-reason">Candidate exhibited outstanding technical depth, clean problem-solving strategies, and structured STAR methodology.</div>
       </div>
 
-      <div class="weakness-box">
-        <strong style="color: var(--accent-red); display: block; margin-bottom: 4px;">User Weak Points & Areas to Improve:</strong>
-        <div id="weaknessText">Evaluating...</div>
+      <div class="score-grid-6col">
+        <div class="score-box"><div class="score-box-label">Technical Depth</div><div id="scoreTechDepth" class="score-val">9/10</div></div>
+        <div class="score-box"><div class="score-box-label">Problem Solving</div><div id="scoreProbSolving" class="score-val">8/10</div></div>
+        <div class="score-box"><div class="score-box-label">STAR Method</div><div id="scoreStarMethod" class="score-val">9/10</div></div>
+        <div class="score-box"><div class="score-box-label">Communication</div><div id="scoreCommClarity" class="score-val">9/10</div></div>
+        <div class="score-box"><div class="score-box-label">Confidence</div><div id="scoreConfidence" class="score-val">8/10</div></div>
+        <div class="score-box"><div class="score-box-label">Filler Words</div><div id="scoreFillerWords" class="score-val" style="color: var(--accent-amber);">2</div></div>
       </div>
 
-      <div style="background: var(--bg-dark); padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 13px; line-height: 1.5; margin-top: 10px;">
-        <strong style="color: var(--accent-cyan); display: block; margin-bottom: 4px;">Assessor Feedback:</strong>
-        <div id="feedbackText">Evaluating...</div>
-      </div>
+      <div class="feedback-section"><h4>🌟 Key Candidate Strengths</h4><div id="interviewStrengthsList"></div></div>
+      <div class="feedback-section" style="border-color: rgba(220, 38, 38, 0.25); background: rgba(220, 38, 38, 0.03);"><h4 style="color: var(--accent-red);">⚠️ Areas for Improvement & Growth</h4><div id="interviewWeaknessList"></div></div>
+      <div class="feedback-section"><h4>💬 Lead Interviewer Summary</h4><p id="interviewSummaryFeedback"></p></div>
 
-      <div style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 10px;">
-        <button class="btn-header" style="background: var(--accent-blue); color: white; border: none;" onclick="closeScorecardModal(); navToHome();">Back to Home</button>
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button class="btn-launch" style="flex: 1;" onclick="navToHome()">Return to Dashboard 🏠</button>
       </div>
     </div>
   </div>
 
   <script>
-    let currentTopic = "Will AI Replace Software Engineers?";
+    let currentModule = 'gd';
+    let currentTopic = "Will AI Replace Software Engineers in the Upcoming Era?";
     let ws = null;
-    let recognition = null;
-    let isRecording = false;
-
-    let speechQueue = [];
-    let isSpeaking = false;
-
-    // Timers
+    let interviewWs = null;
     let prepSeconds = 15 * 60;
     let prepTimerInterval = null;
-
-    let gdSeconds = 20 * 60;
-    let gdTimerInterval = null;
-
-    let micTimerInterval = null;
+    let sessionTimerInterval = null;
+    let sessionSeconds = 20 * 60;
+    let isInterviewRecording = false;
+    let interviewRecognition = null;
+    let accumulatedInterviewSpeech = "";
+    let interviewMicTimerInterval = null;
     let micSecondsRemaining = 60;
-    let accumulatedUserSpeech = "";
+    let parsedResumeData = null;
     let sessionUserFillerCount = 0;
+    let audioQueue = [];
+    let isAudioPlaying = false;
+    let currentAudioElement = null;
+    const fillerWordsRegex = /\b(um|uh|like|you know|basically|actually|literally|sort of|kind of|i mean)\b/gi;
 
-    const fillerWordsRegex = /\b(um|uh|like|basically|actually|you know|sort of|kind of|i mean|right)\b/gi;
+    function enqueueAudio(audioB64, onStartCallback, onEndCallback) {
+      if (!audioB64) {
+        if (onStartCallback) onStartCallback();
+        if (onEndCallback) setTimeout(onEndCallback, 2500);
+        return;
+      }
+      audioQueue.push({ audioB64, onStartCallback, onEndCallback });
+      processAudioQueue();
+    }
 
-    const sampleTopics = [
-      "Will AI Replace Software Engineers in the Upcoming Era?",
-      "Monolithic Architecture vs Microservices for High Scalability Systems",
-      "Impact of Generative AI & Autonomous Coding Agents on Core Programming Skills",
-      "Designing Fault-Tolerant Scalable Systems: CAP Theorem & Consistency Trade-offs",
-      "AI Code Generation vs Manual Code Reviews: Security & Vulnerability Risks",
-      "Low-Code/No-Code AI Platforms vs Traditional Full-Stack Engineering",
-      "The Future of DevOps: Autonomous Infrastructure as Code vs Human Reliability Engineers"
-    ];
+    function processAudioQueue() {
+      if (isAudioPlaying || audioQueue.length === 0) return;
+      const item = audioQueue.shift();
+      isAudioPlaying = true;
+      try {
+        currentAudioElement = new Audio("data:audio/mp3;base64," + item.audioB64);
+        if (item.onStartCallback) item.onStartCallback();
+        currentAudioElement.onended = () => { isAudioPlaying = false; if (item.onEndCallback) item.onEndCallback(); processAudioQueue(); };
+        currentAudioElement.onerror = () => { isAudioPlaying = false; if (item.onEndCallback) item.onEndCallback(); processAudioQueue(); };
+        currentAudioElement.play().catch(e => { isAudioPlaying = false; if (item.onEndCallback) item.onEndCallback(); processAudioQueue(); });
+      } catch (e) {
+        isAudioPlaying = false;
+        if (item.onEndCallback) item.onEndCallback();
+        processAudioQueue();
+      }
+    }
 
     function showScreen(screenId) {
       document.querySelectorAll('.view-screen').forEach(s => s.classList.remove('active'));
       const screenEl = document.getElementById(screenId);
-      if (screenEl) {
-        screenEl.classList.add('active');
-        screenEl.scrollTop = 0;
-      }
+      if (screenEl) { screenEl.classList.add('active'); screenEl.scrollTop = 0; }
     }
 
     function navToHome() {
       if (ws) ws.close();
-      if (prepTimerInterval) clearInterval(prepTimerInterval);
-      if (gdTimerInterval) clearInterval(gdTimerInterval);
+      if (interviewWs) interviewWs.close();
+      if (sessionTimerInterval) clearInterval(sessionTimerInterval);
       document.getElementById('headerTopicBox').style.display = 'none';
       document.getElementById('btnHeaderEval').style.display = 'none';
       document.getElementById('gdTimer').style.display = 'none';
       showScreen('screenHome');
     }
 
-
-
     function selectModule(moduleType) {
-      if (moduleType === 'gd') {
-        startTopicDraw();
+      currentModule = moduleType;
+      if (moduleType === 'interview') {
+        showScreen('screenInterviewSetup');
+        resetResumeUpload();
       } else {
-        alert(`${moduleType.toUpperCase()} module is available. Launching GD session...`);
-        startTopicDraw();
+        showScreen('screenPrep');
       }
     }
 
-    function startTopicDraw() {
-      showScreen('screenPrep');
-      const reel = document.getElementById('topicReel');
-      let count = 0;
-      const spinInterval = setInterval(() => {
-        reel.innerText = sampleTopics[count % sampleTopics.length];
-        count++;
-        if (count > 12) {
-          clearInterval(spinInterval);
-          currentTopic = sampleTopics[Math.floor(Math.random() * sampleTopics.length)];
-          reel.innerText = "🎯 Topic Drawn: " + currentTopic;
-          startPrepCountdown();
-        }
-      }, 150);
+    function resetResumeUpload() {
+      parsedResumeData = null;
+      document.getElementById('resumeFileInput').value = '';
+      document.getElementById('dropzoneMainText').innerText = 'Drag & Drop Resume PDF / TXT here or click to browse';
+      document.getElementById('resumeProfilePreview').style.display = 'none';
+      document.getElementById('reuploadAlert').style.display = 'none';
+      document.getElementById('resumeParseSpinner').style.display = 'none';
     }
 
-    function startPrepCountdown() {
-      document.getElementById('prepTimerBox').style.display = 'block';
-      prepSeconds = 15 * 60;
-      if (prepTimerInterval) clearInterval(prepTimerInterval);
+    async function handleResumeFileSelected(file) {
+      if (!file) return;
+      document.getElementById('dropzoneMainText').innerText = `📄 Uploading ${file.name}...`;
+      document.getElementById('resumeParseSpinner').style.display = 'flex';
+      document.getElementById('reuploadAlert').style.display = 'none';
 
-      setTimeout(() => {
-        const btnPrep = document.getElementById('btnPrepared');
-        if (btnPrep) {
-          btnPrep.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 400);
+      const role = document.getElementById('interviewRoleSelect').value;
+      const language = document.getElementById('interviewLangSelect').value;
 
-      prepTimerInterval = setInterval(() => {
-        prepSeconds--;
-        const mins = String(Math.floor(prepSeconds / 60)).padStart(2, '0');
-        const secs = String(prepSeconds % 60).padStart(2, '0');
-        document.getElementById('prepTimerBox').innerText = `${mins}:${secs}`;
-        if (prepSeconds <= 0) {
-          clearInterval(prepTimerInterval);
-          finishPrepAndStartGD();
+      const formData = new FormData();
+      formData.append('resume_file', file);
+      formData.append('target_role', role);
+      formData.append('language', language);
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/interview/upload-resume', { method: 'POST', body: formData });
+        const data = await response.json();
+        document.getElementById('resumeParseSpinner').style.display = 'none';
+
+        if (data.success && data.data) {
+          parsedResumeData = data.data;
+          document.getElementById('parsedCandidateName').innerText = data.data.candidate_name || "Candidate";
+          document.getElementById('parsedMatchScore').innerText = `${data.data.role_match_score || 85}% Role Match`;
+          document.getElementById('parsedExpYears').innerText = `${data.data.experience_years || 2}+ Yrs Experience`;
+          
+          const skillsChips = document.getElementById('parsedSkillsChips');
+          skillsChips.innerHTML = '';
+          (data.data.primary_skills || []).forEach(s => {
+            const chip = document.createElement('span'); chip.className = 'extracted-chip'; chip.innerText = `⚡ ${s}`; skillsChips.appendChild(chip);
+          });
+          const projectsChips = document.getElementById('parsedProjectsChips');
+          projectsChips.innerHTML = '';
+          (data.data.key_projects || []).forEach(p => {
+            const chip = document.createElement('span'); chip.className = 'extracted-chip'; chip.innerText = `🚀 ${p}`; projectsChips.appendChild(chip);
+          });
+          document.getElementById('resumeProfilePreview').style.display = 'block';
+        } else {
+          document.getElementById('reuploadAlertMsg').innerText = data.error || "Failed to parse resume. Please re-upload.";
+          document.getElementById('reuploadAlert').style.display = 'flex';
         }
-      }, 1000);
+      } catch (err) {
+        document.getElementById('resumeParseSpinner').style.display = 'none';
+        document.getElementById('reuploadAlertMsg').innerText = "Backend connection error.";
+        document.getElementById('reuploadAlert').style.display = 'flex';
+      }
     }
 
-    function finishPrepAndStartGD() {
-      if (prepTimerInterval) clearInterval(prepTimerInterval);
+    function startInterviewSession() {
+      const role = document.getElementById('interviewRoleSelect').value;
+      const language = document.getElementById('interviewLangSelect').value;
+      const roomId = 'room_interview_' + Date.now();
 
-      document.getElementById('topicText').innerText = currentTopic;
+      showScreen('screenInterviewArena');
       document.getElementById('headerTopicBox').style.display = 'flex';
+      document.getElementById('topicText').innerText = `1-on-1 Interview: ${role} (${language})`;
       document.getElementById('btnHeaderEval').style.display = 'block';
+      document.getElementById('btnHeaderEval').innerText = "🛑 End Interview & Score";
       document.getElementById('gdTimer').style.display = 'block';
 
-      showScreen('screenArena');
-      connectAndStartGD();
+      const feed = document.getElementById('interviewTranscript');
+      feed.innerHTML = '';
+      appendInterviewTranscript('System', `🚀 Connecting to 1-on-1 Interview Studio for ${role}...`, 'system');
+
+      startInterview20MinTimer();
+      connectInterviewWebSocket(roomId, role, language);
     }
 
-    function start20MinGDTimer() {
-      if (gdTimerInterval) clearInterval(gdTimerInterval);
-      gdSeconds = 20 * 60;
+    function connectInterviewWebSocket(roomId, role, language) {
+      const url = `ws://127.0.0.1:8000/interview/ws/${roomId}?role=${encodeURIComponent(role)}&language=${encodeURIComponent(language)}`;
+      try {
+        interviewWs = new WebSocket(url);
+        interviewWs.onopen = () => {
+          interviewWs.send(JSON.stringify({
+            event: 'INIT_INTERVIEW',
+            resumeData: parsedResumeData || { candidate_name: "Candidate", target_role: role, primary_skills: ["Core Principles"], key_projects: ["Recent Engineering Project"] }
+          }));
+        };
 
-      gdTimerInterval = setInterval(() => {
-        gdSeconds--;
-        const mins = String(Math.floor(gdSeconds / 60)).padStart(2, '0');
-        const secs = String(gdSeconds % 60).padStart(2, '0');
-        document.getElementById('gdTimer').innerText = `⏱️ ${mins}:${secs}`;
+        interviewWs.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.event === 'INTERVIEWER_SPEAKING') {
+              updateInterviewPhaseHUD(data.phase || 'INTRODUCTION');
+              if (data.questionNumber) document.getElementById('interviewQCountBadge').innerText = `Q #${data.questionNumber}`;
+              if (data.feedbackTip) document.getElementById('coachingHintText').innerText = data.feedbackTip;
+              appendInterviewTranscript(data.sender || 'Alex (Interviewer)', data.text, 'interviewer');
 
-        if (gdSeconds <= 0) {
-          clearInterval(gdTimerInterval);
-          endSession();
-        }
+              const avatarWrap = document.getElementById('interviewerAvatarWrap');
+              enqueueAudio(data.audio, () => { if (avatarWrap) avatarWrap.classList.add('speaking'); }, () => { if (avatarWrap) avatarWrap.classList.remove('speaking'); });
+            } else if (data.event === 'INTERVIEW_COMPLETED') {
+              showInterviewScorecardModal(data.scorecard);
+            }
+          } catch (e) { console.error(e); }
+        };
+      } catch (err) { alert("Failed to connect: " + err.message); }
+    }
+
+    function updateInterviewPhaseHUD(phase) {
+      ['intro', 'easy', 'medium', 'hard', 'closing'].forEach(s => {
+        const el = document.getElementById(`step-${s}`); if (el) el.classList.remove('active');
+      });
+      let activeStep = 'intro';
+      if (phase === 'EASY_TECHNICAL') activeStep = 'easy';
+      else if (phase === 'MEDIUM_PROJECT') activeStep = 'medium';
+      else if (phase === 'HARD_SCENARIO') activeStep = 'hard';
+      else if (phase === 'CLOSING' || phase === 'EVALUATION') activeStep = 'closing';
+      const activeEl = document.getElementById(`step-${activeStep}`);
+      if (activeEl) activeEl.classList.add('active');
+    }
+
+    function appendInterviewTranscript(speaker, text, type) {
+      const feed = document.getElementById('interviewTranscript');
+      if (!feed) return;
+      const bubble = document.createElement('div'); bubble.className = `feed-bubble ${type}`;
+      bubble.innerHTML = `<div class="feed-speaker ${type}">${speaker}</div><div>${text}</div>`;
+      feed.appendChild(bubble);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    function startInterview20MinTimer() {
+      sessionSeconds = 20 * 60;
+      if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+      const timerPill = document.getElementById('gdTimer');
+      sessionTimerInterval = setInterval(() => {
+        sessionSeconds--;
+        const mins = Math.floor(sessionSeconds / 60); const secs = sessionSeconds % 60;
+        timerPill.innerText = `⏱️ ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        if (sessionSeconds <= 0) { clearInterval(sessionTimerInterval); endSession(); }
       }, 1000);
     }
 
-    function updateTellerStatus(text) {
-      document.getElementById('tellerStatus').innerHTML = text;
-    }
-
-    function updateActiveSeatUI(speakerName) {
-      document.querySelectorAll('.participant-seat-2d, .participant-seat').forEach(s => s.classList.remove('active-speaker'));
-
-      if (!speakerName) return;
-
-      if (speakerName.includes('Kavita') || speakerName.includes('Moderator')) {
-        document.getElementById('seat-Kavita').classList.add('active-speaker');
-      } else if (speakerName.includes('Rohan') || speakerName.includes('Analyst')) {
-        document.getElementById('seat-Rohan').classList.add('active-speaker');
-      } else if (speakerName.includes('Aarav') || speakerName.includes('Contrarian')) {
-        document.getElementById('seat-Aarav').classList.add('active-speaker');
-      } else if (speakerName.includes('Sneha') || speakerName.includes('Peacemaker')) {
-        document.getElementById('seat-Sneha').classList.add('active-speaker');
-      } else if (speakerName.includes('You') || speakerName.includes('User')) {
-        document.getElementById('seat-User').classList.add('active-speaker');
-      }
-    }
-
-    function appendTranscript(speaker, text) {
-      const container = document.getElementById('transcriptFeed');
-      const bubble = document.createElement('div');
-      bubble.className = 'feed-bubble';
-      bubble.innerHTML = `
-        <div class="feed-speaker">${speaker}</div>
-        <div>${text}</div>
-      `;
-      container.appendChild(bubble);
-      container.scrollTop = container.scrollHeight;
-    }
-
-    function enqueueMessage(sender, text, turnState, audio) {
-      speechQueue.push({ sender, text, turnState, audio });
-      processSpeechQueue();
-    }
-
-    function processSpeechQueue() {
-      if (isSpeaking || speechQueue.length === 0) return;
-
-      isSpeaking = true;
-      const item = speechQueue.shift();
-
-      updateActiveSeatUI(item.sender);
-      updateTellerStatus(`🔊 <strong>${item.sender}</strong> is speaking...`);
-      appendTranscript(item.sender, item.text);
-
-      if (item.audio) {
-        try {
-          const audioObj = new Audio("data:audio/mp3;base64," + item.audio);
-          audioObj.onended = () => handleSpeechEnd(item);
-          audioObj.onerror = () => handleSpeechEnd(item);
-          audioObj.play().catch(e => {
-            console.warn("Audio fallback:", e);
-            handleSpeechEnd(item);
-          });
-          return;
-        } catch (e) {
-          console.warn("Audio error:", e);
-        }
-      }
-
-      handleSpeechEnd(item);
-    }
-
-    function handleSpeechEnd(item) {
-      updateTellerStatus(`⏳ Pause before next turn...`);
-
-      setTimeout(() => {
-        isSpeaking = false;
-        updateActiveSeatUI(null);
-
-        if (speechQueue.length > 0) {
-          processSpeechQueue();
-        } else {
-          if (item.turnState === 'USER_TURN') {
-            updateTellerStatus(`🎙️ <strong>Your turn!</strong> Introduce yourself or present your argument.`);
-          } else {
-            updateTellerStatus(`Live 20m GD Debate active`);
-          }
-        }
-      }, 2000);
-    }
-
-    // Continuous Speech Recognition setup
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-
-      recognition.onresult = (event) => {
-        let currentTranscript = "";
-        for (let i = 0; i < event.results.length; i++) {
-          currentTranscript += event.results[i][0].transcript + " ";
-        }
-        accumulatedUserSpeech = currentTranscript.trim();
-        document.getElementById('userInput').value = accumulatedUserSpeech;
-      };
-
-      recognition.onend = () => {
-        if (isRecording) {
-          try { recognition.start(); } catch(e) {}
-        }
-      };
-
-      recognition.onerror = (e) => console.error("Speech recognition error:", e);
-    }
-
-    function toggleMicRecording() {
-      if (!recognition) {
-        alert("Speech Recognition API is not supported in this browser. Please use Chrome/Edge or type your text.");
-        return;
-      }
-      if (!ws || ws.readyState !== WebSocket.OPEN) {
-        alert("Please wait for WebSocket connection!");
-        return;
-      }
-
-      if (!isRecording) {
-        isRecording = true;
-        accumulatedUserSpeech = "";
-        micSecondsRemaining = 60;
-        document.getElementById('userInput').value = "";
-
-        updateActiveSeatUI('You');
-        updateTellerStatus(`🔴 <strong>Listening to You...</strong> (Click Mic when done)`);
-
-        const btnMic = document.getElementById('btnMic');
-        btnMic.classList.add('recording');
-        document.getElementById('micStatus').innerText = `Recording (60s)... Click to Send`;
-
-        recognition.start();
-
-        micTimerInterval = setInterval(() => {
-          micSecondsRemaining--;
-          document.getElementById('micStatus').innerText = `Recording (${micSecondsRemaining}s)... Click to Send`;
-          if (micSecondsRemaining <= 0) {
-            stopMicRecordingAndSend();
-          }
-        }, 1000);
-
+    function toggleInterviewMic() {
+      const btn = document.getElementById('btnInterviewMic');
+      if (!isInterviewRecording) {
+        isInterviewRecording = true;
+        btn.classList.add('recording');
+        document.getElementById('interviewMicStatus').innerText = `Recording... Click to Send`;
       } else {
-        stopMicRecordingAndSend();
+        isInterviewRecording = false;
+        btn.classList.remove('recording');
+        document.getElementById('interviewMicStatus').innerText = `Click Mic to Speak (up to 60s)`;
+        const text = document.getElementById('interviewUserInput').value.trim();
+        if (text) submitCandidateAnswer(text);
       }
     }
 
-    function stopMicRecordingAndSend() {
-      if (!isRecording) return;
-
-      isRecording = false;
-      if (micTimerInterval) clearInterval(micTimerInterval);
-
-      const btnMic = document.getElementById('btnMic');
-      btnMic.classList.remove('recording');
-      document.getElementById('micStatus').innerText = `Click Mic to Speak (up to 1m)`;
-
-      try { recognition.stop(); } catch(e) {}
-
-      updateActiveSeatUI(null);
-
-      const textToSend = accumulatedUserSpeech || document.getElementById('userInput').value.trim();
-      if (textToSend) {
-        submitUserSpeechTurn(textToSend);
-      } else {
-        updateTellerStatus(`No speech detected. Click Mic to try again.`);
-      }
+    function sendInterviewTextInput() {
+      const text = document.getElementById('interviewUserInput').value.trim();
+      if (text) submitCandidateAnswer(text);
     }
 
-    function sendTextInput() {
-      const text = document.getElementById('userInput').value.trim();
-      if (text) submitUserSpeechTurn(text);
-    }
+    function handleInterviewKeyPress(e) { if (e.key === 'Enter') sendInterviewTextInput(); }
 
-    function submitUserSpeechTurn(text) {
-      if (!ws || ws.readyState !== WebSocket.OPEN) return;
-
+    function submitCandidateAnswer(text) {
+      if (!interviewWs || interviewWs.readyState !== WebSocket.OPEN) return;
       const matches = text.match(fillerWordsRegex);
       const turnFillerCount = matches ? matches.length : 0;
       sessionUserFillerCount += turnFillerCount;
 
-      updateActiveSeatUI('You');
-      updateTellerStatus(`📝 Speech sent. AI participants are debating...`);
-      appendTranscript('You', text + (turnFillerCount > 0 ? ` <span style="font-size: 11px; color: var(--accent-red);">(Fillers: ${turnFillerCount})</span>` : ''));
-
-      ws.send(JSON.stringify({
-        event: 'USER_SPEECH',
-        text: text,
-        filler_count: turnFillerCount,
-        timestamp: new Date().toISOString()
-      }));
-
-      document.getElementById('userInput').value = '';
-      accumulatedUserSpeech = "";
-    }
-
-    function connectAndStartGD() {
-      const url = "ws://127.0.0.1:8000/gd/ws/room_demo_101?topic=" + encodeURIComponent(currentTopic);
-
-      updateTellerStatus(`Connecting to GD WebSocket...`);
-
-      try {
-        ws = new WebSocket(url);
-
-        ws.onopen = () => {
-          updateTellerStatus(`Connected! Starting Member Introductions...`);
-          start20MinGDTimer();
-
-          // Trigger Introductions round
-          ws.send(JSON.stringify({ event: 'START_INTRODUCTIONS' }));
-        };
-
-        ws.onmessage = (event) => {
-          try {
-            const data = JSON.parse(event.data);
-            const sender = data.sender || 'AI';
-
-            if (data.event === 'CONNECTED') {
-              appendTranscript('System', `🎉 ${data.message}`);
-            } else if (data.event === 'AGENT_SPEAKING') {
-              enqueueMessage(sender, data.text, data.turnState, data.audio);
-            } else if (data.event === 'USER_SPEECH_ACK') {
-              appendTranscript('System', `📝 ${data.message}`);
-            } else if (data.event === 'SESSION_COMPLETED') {
-              showScorecardModal(data.scorecard);
-            } else {
-              appendTranscript(sender, JSON.stringify(data));
-            }
-          } catch (e) {
-            appendTranscript('Server (Raw)', event.data);
-          }
-        };
-
-        ws.onclose = () => {
-          updateTellerStatus(`GD session closed.`);
-          if (gdTimerInterval) clearInterval(gdTimerInterval);
-        };
-
-        ws.onerror = (err) => {
-          console.error("WS Error:", err);
-          updateTellerStatus(`Error connecting to Python backend server.`);
-        };
-
-      } catch (err) {
-        alert("Failed to create WebSocket: " + err.message);
-      }
+      appendInterviewTranscript('You (Candidate)', text + (turnFillerCount > 0 ? ` <span style="font-size:11px;color:var(--accent-amber);">(Fillers: ${turnFillerCount})</span>` : ''), 'candidate');
+      interviewWs.send(JSON.stringify({ event: 'USER_ANSWER', text: text, filler_count: turnFillerCount }));
+      document.getElementById('interviewUserInput').value = '';
     }
 
     function endSession() {
-      if (!ws || ws.readyState !== WebSocket.OPEN) {
-        alert("Please connect first!");
-        return;
+      if (currentModule === 'interview' && interviewWs && interviewWs.readyState === WebSocket.OPEN) {
+        appendInterviewTranscript('System', `📊 Generating technical scorecard and hiring assessment...`, 'system');
+        interviewWs.send(JSON.stringify({ event: 'END_INTERVIEW' }));
       }
-      updateTellerStatus(`Requesting GD winner determination & evaluation report...`);
-      ws.send(JSON.stringify({ event: 'END_SESSION' }));
     }
 
-    function showScorecardModal(card) {
+    function showInterviewScorecardModal(card) {
       if (!card) return;
+      const verdict = card.hiring_decision || "HIRE";
+      const vClass = verdict.toLowerCase().replace('_', '-');
+      document.getElementById('verdictBanner').className = `verdict-banner ${vClass}`;
+      document.getElementById('verdictTitle').className = `verdict-title ${vClass}`;
+      document.getElementById('verdictTitle').innerText = verdict.replace('_', ' ');
+      document.getElementById('verdictReason').innerText = card.hiring_reasoning || "Strong candidate performance across foundational engineering and system design.";
+      document.getElementById('scoreTechDepth').innerText = `${card.technical_depth || 8}/10`;
+      document.getElementById('scoreProbSolving').innerText = `${card.problem_solving || 8}/10`;
+      document.getElementById('scoreStarMethod').innerText = `${card.star_methodology || 7}/10`;
+      document.getElementById('scoreCommClarity').innerText = `${card.communication_clarity || 8}/10`;
+      document.getElementById('scoreConfidence').innerText = `${card.confidence_and_delivery || 8}/10`;
+      document.getElementById('scoreFillerWords').innerText = `${card.filler_word_count || sessionUserFillerCount}`;
 
-      document.getElementById('winnerName').innerText = card.winner_candidate || "User (Participant)";
-      document.getElementById('winnerReason').innerText = card.winner_reasoning || "Delivered well-structured arguments and active listening throughout the debate.";
-
-      document.getElementById('scoreOverall').innerText = `${card.overall_score || 82}%`;
-      document.getElementById('scoreClarity').innerText = `${card.clarity_and_articulation || 8}/10`;
-      document.getElementById('scoreLogic').innerText = `${card.argument_strength || 7}/10`;
-      document.getElementById('scoreCollab').innerText = `${card.listening_and_collaboration || 9}/10`;
-      document.getElementById('scoreFluency').innerText = `${card.fluency_and_pace || 8}/10`;
-      document.getElementById('scoreFillers').innerText = `${card.filler_words_count || sessionUserFillerCount}`;
-
-      const areas = card.areas_for_improvement || ["Reduce hesitation fillers during long turns", "Address counter-arguments directly"];
-      document.getElementById('weaknessText').innerHTML = "<ul>" + areas.map(a => `<li>${a}</li>`).join('') + "</ul>";
-
-      document.getElementById('feedbackText').innerText = card.summary_feedback || 'Good overall participation in the discussion.';
-
-      document.getElementById('scorecardModal').style.display = 'flex';
+      document.getElementById('interviewStrengthsList').innerHTML = "<ul>" + (card.key_strengths || []).map(s => `<li>${s}</li>`).join('') + "</ul>";
+      document.getElementById('interviewWeaknessList').innerHTML = "<ul>" + (card.areas_for_improvement || []).map(w => `<li>${w}</li>`).join('') + "</ul>";
+      document.getElementById('interviewSummaryFeedback').innerText = card.detailed_feedback_summary || "Good overall demonstration of core technical knowledge.";
+      document.getElementById('interviewScorecardModal').style.display = 'flex';
     }
 
-    function closeScorecardModal() {
-      document.getElementById('scorecardModal').style.display = 'none';
-    }
-
-    function handleKeyPress(e) {
-      if (e.key === 'Enter') sendTextInput();
+    function closeInterviewScorecardModal() {
+      document.getElementById('interviewScorecardModal').style.display = 'none';
     }
   </script>
 </body>

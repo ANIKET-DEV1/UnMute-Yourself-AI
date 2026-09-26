@@ -1,7 +1,8 @@
+"""WebSocket Route Handler for Group Discussion (GD) Rooms."""
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import json
 import asyncio
-from app.services.llm_service import get_or_create_room, generate_neural_audio_b64
+from app.services.gd_service import get_or_create_room
 
 gd = APIRouter(prefix="/gd")
 
@@ -9,9 +10,11 @@ gd = APIRouter(prefix="/gd")
 async def group_discussion_ws(websocket: WebSocket, room_id: str):
     await websocket.accept()
 
+    # Extract topic from query parameters or use default
     topic = websocket.query_params.get("topic", "Will AI Replace Software Engineers?")
     session = get_or_create_room(room_id, topic=topic)
 
+    # 1. Connection acknowledgment
     await websocket.send_json({
         "event": "CONNECTED",
         "sender": "System",
@@ -29,12 +32,13 @@ async def group_discussion_ws(websocket: WebSocket, room_id: str):
 
             event_type = data.get("event", "USER_SPEECH")
 
+            # Heartbeat ping
             if event_type == "PING":
                 await websocket.send_json({"event": "PONG"})
                 continue
 
+            # Stage: Introduction Round
             elif event_type == "START_INTRODUCTIONS":
-                # Stream the 4 persona member introductions
                 intro_turns = await session.generate_introductions_list()
                 for turn in intro_turns:
                     await websocket.send_json({
@@ -46,6 +50,7 @@ async def group_discussion_ws(websocket: WebSocket, room_id: str):
                     })
                     await asyncio.sleep(0.5)
 
+            # Stage: End & Evaluation Request
             elif event_type == "END_SESSION":
                 await websocket.send_json({
                     "event": "AGENT_SPEAKING",
@@ -62,6 +67,7 @@ async def group_discussion_ws(websocket: WebSocket, room_id: str):
                 })
                 break
 
+            # Stage: User Speech Turn
             elif event_type == "USER_SPEECH":
                 user_text = data.get("text", "").strip()
                 filler_count = data.get("filler_count", 0)
@@ -75,7 +81,7 @@ async def group_discussion_ws(websocket: WebSocket, room_id: str):
                     "message": "User speech recorded. AI participants are debating..."
                 })
 
-                # Stream 2 AI agent turns with realistic neural speech audio:
+                # Stream 2 sequential AI peer turns
                 num_turns = 2
                 for i in range(num_turns):
                     ai_response = await session.generate_next_agent_turn()

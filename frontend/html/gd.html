@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Group Discussion Simulation | UnMute-Yourself AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --border-glow: #cbd5e1;
+
+      --accent-cyan: #0284c7;
+      --accent-blue: #2563eb;
+      --accent-purple: #7e22ce;
+      --accent-red: #dc2626;
+      --accent-green: #16a34a;
+
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --font-tech: 'Space Grotesk', sans-serif;
+      --font-primary: 'Plus Jakarta Sans', sans-serif;
+      --font-display: 'Outfit', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-primary); }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Header */
+    header {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      z-index: 20;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+    .brand-logo { width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25); }
+    .brand-text-main { font-family: var(--font-display); font-weight: 800; font-size: 16px; }
+    .brand-hud-badge { font-family: var(--font-tech); font-size: 10px; font-weight: 700; color: var(--accent-cyan); background: rgba(2, 132, 199, 0.08); border: 1px solid rgba(2, 132, 199, 0.2); padding: 2px 8px; border-radius: 6px; text-transform: uppercase; }
+
+    .topic-banner { background: rgba(255,255,255,0.9); border: 1px solid var(--border-color); border-radius: 30px; padding: 6px 20px; font-size: 13px; font-weight: 700; max-width: 480px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+    .btn-nav-link { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+    .btn-nav-link:hover { background: #e2e8f0; }
+
+    .btn-header { background: rgba(220, 38, 38, 0.08); color: var(--accent-red); border: 1px solid rgba(220, 38, 38, 0.25); padding: 8px 18px; border-radius: 12px; font-family: var(--font-tech); font-weight: 700; font-size: 13px; cursor: pointer; }
+    .timer-pill { background: rgba(2, 132, 199, 0.08); color: var(--accent-cyan); border: 1px solid rgba(2, 132, 199, 0.25); padding: 6px 16px; border-radius: 20px; font-family: var(--font-tech); font-weight: 700; font-size: 13px; }
+
+    /* Screen Views */
+    .view-screen { flex: 1; display: none; flex-direction: column; overflow: hidden; }
+    .view-screen.active { display: flex; }
+    #screenPrep { overflow-y: auto; scroll-behavior: smooth; }
+
+    /* PREP SCREEN */
+    .prep-stage { min-height: 100%; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px 60px 20px; text-align: center; }
+    .slot-box { background: var(--bg-card); border: 2px solid var(--accent-cyan); border-radius: 28px; padding: 24px 36px; box-shadow: 0 15px 45px rgba(2, 132, 199, 0.15); margin-bottom: 24px; max-width: 760px; width: 100%; }
+    .topic-reel { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--accent-cyan); min-height: 54px; display: flex; align-items: center; justify-content: center; line-height: 1.4; }
+
+    .topic-selection-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px 24px; max-width: 760px; width: 100%; margin-bottom: 24px; text-align: left; }
+    .topic-opt-row { display: flex; flex-direction: column; gap: 8px; }
+    .topic-opt-label { font-size: 13px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+    .topic-select { flex: 1; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; outline: none; }
+    .custom-topic-input { flex: 1; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 12px 16px; border-radius: 12px; font-size: 13px; outline: none; }
+
+    .btn-action-topic { background: linear-gradient(135deg, var(--accent-blue), #1d4ed8); color: white; border: none; padding: 12px 20px; font-weight: 700; font-size: 13px; border-radius: 12px; cursor: pointer; white-space: nowrap; }
+    .btn-subtle { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border-color); padding: 12px 18px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .prep-timer-box { font-family: var(--font-tech); font-size: 52px; font-weight: 800; color: var(--accent-purple); margin: 18px 0; letter-spacing: 0.06em; }
+    .notes-textarea { width: 100%; max-width: 760px; height: 140px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; color: var(--text-main); font-size: 14px; outline: none; margin-bottom: 24px; resize: none; }
+    .btn-launch { width: 100%; padding: 14px 28px; border-radius: 14px; font-family: var(--font-tech); font-weight: 700; font-size: 15px; background: linear-gradient(135deg, var(--accent-blue), #1d4ed8); color: white; border: none; cursor: pointer; box-shadow: 0 6px 18px rgba(37, 99, 235, 0.25); transition: all 0.2s; }
+
+    /* GD ARENA */
+    .app-workspace { flex: 1; display: grid; grid-template-columns: 1fr 380px; height: calc(100vh - 64px); overflow: hidden; background: #050914; }
+    .table-stage { position: relative; display: flex; align-items: center; justify-content: center; padding: 16px; overflow: hidden; background: radial-gradient(circle at 50% 40%, #0d172e 0%, #050914 90%); width: 100%; height: 100%; }
+    .gd-2d-canvas { position: relative; width: 100%; height: 100%; max-width: 1280px; max-height: 720px; aspect-ratio: 16/9; background: url('avatars/Bg.png') no-repeat center center; background-size: cover; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
+    .gd-2d-header { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); background: rgba(10, 16, 30, 0.82); backdrop-filter: blur(16px); border: 1px solid rgba(6, 182, 212, 0.4); border-radius: 30px; padding: 8px 24px; display: flex; align-items: center; gap: 16px; z-index: 50; }
+    .gd-header-badge { font-family: var(--font-tech); font-size: 11px; font-weight: 900; color: var(--accent-cyan); }
+    .teller-status { font-size: 13px; font-weight: 600; color: #f8fafc; }
+
+    .participant-seat-2d { position: absolute; }
+    .seat-rohan { left: 16%; top: 32%; }
+    .seat-kavita { left: 38%; top: 18%; }
+    .seat-aarav { right: 16%; top: 32%; }
+    .seat-sneha { right: 28%; top: 58%; }
+    .seat-user { left: 28%; top: 58%; }
+    .seat-tag-2d { background: rgba(15,23,42,0.85); border-radius: 12px; padding: 6px 14px; color: white; font-size: 12px; font-weight: 700; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+
+    .interview-sidebar { background: #ffffff; border-left: 1px solid var(--border-color); display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+    .panel-title { padding: 14px 20px; border-bottom: 1px solid var(--border-color); font-family: var(--font-tech); font-weight: 700; font-size: 13px; text-transform: uppercase; color: var(--text-main); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .transcript-feed { flex: 1; padding: 18px; overflow-y: scroll; display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+    .feed-bubble { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; font-size: 13px; line-height: 1.5; }
+    .feed-speaker { font-family: var(--font-tech); font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent-cyan); margin-bottom: 4px; }
+
+    .mic-control-box { background: rgba(255, 255, 255, 0.98); border-top: 1px solid var(--border-color); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; align-items: center; flex-shrink: 0; }
+    .mic-diamond-btn { width: 60px; height: 60px; background: linear-gradient(135deg, var(--accent-blue), #1d4ed8); border: 2px solid rgba(255,255,255,0.6); transform: rotate(45deg); border-radius: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(37, 99, 235, 0.25); transition: all 0.25s ease; }
+    .mic-diamond-btn.recording { background: linear-gradient(135deg, var(--accent-red), #b91c1c); animation: pulseMic 1.2s infinite alternate; }
+    @keyframes pulseMic { 0% { transform: rotate(45deg) scale(1.0); } 100% { transform: rotate(45deg) scale(1.12); } }
+    .mic-icon-inner { transform: rotate(-45deg); font-size: 22px; color: white; }
+    .mic-status-label { font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center; }
+    .input-fallback-row { width: 100%; display: flex; gap: 8px; }
+    .input-fallback-row input { flex: 1; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(16px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+    .modal-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 24px; width: 100%; max-width: 700px; padding: 32px; max-height: 90vh; overflow-y: auto; }
+    .verdict-banner { background: #f0fdf4; border: 2px solid #22c55e; border-radius: 18px; padding: 18px; margin: 16px 0; text-align: center; }
+    .verdict-title { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: #16a34a; }
+    .verdict-reason { font-size: 14px; color: var(--text-main); margin-top: 6px; }
+    .score-grid-6col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0; }
+    .score-box { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; }
+    .score-box-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .score-val { font-family: var(--font-tech); font-size: 22px; font-weight: 800; color: var(--accent-cyan); margin-top: 4px; }
+    .feedback-section { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-top: 14px; font-size: 13px; line-height: 1.6; }
+    .feedback-section h4 { font-family: var(--font-tech); font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <a class="brand" href="index.html">
+      <div class="brand-logo">👥</div>
+      <div>
+        <div class="brand-text-main">UnMute-Yourself AI</div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span class="brand-hud-badge">GD Arena</span>
+          <span style="font-size: 10px; color: var(--text-muted);">| 5-Member Simulation</span>
+        </div>
+      </div>
+    </a>
+
+    <div id="headerTopicBox" class="topic-banner" style="display: none;">
+      <span style="font-family: var(--font-tech); color: var(--accent-cyan); font-size: 11px; margin-right: 6px;">[TOPIC]</span>
+      <span id="topicText">Will AI Replace Software Engineers in the Upcoming Era?</span>
+    </div>
+
+    <div class="header-actions">
+      <a href="index.html" class="btn-nav-link">🏠 Dashboard</a>
+      <a href="interview.html" class="btn-nav-link">💼 Mock Interview</a>
+      <button id="btnHeaderEval" class="btn-header" style="display: none;" onclick="endGDSession()">🛑 End GD & Evaluate</button>
+      <div id="gdTimerPill" class="timer-pill" style="display: none;">⏱️ 20:00</div>
+    </div>
+  </header>
+
+  <!-- SCREEN 1: TOPIC SELECTION & 15-MIN PREPARATION -->
+  <div id="screenPrep" class="view-screen active">
+    <div class="prep-stage">
+      <div style="font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: var(--accent-cyan); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">[STAGE 1: TOPIC SELECTION & PREPARATION]</div>
+      <h1 style="font-family: var(--font-display); font-size: 32px; font-weight: 800; margin-bottom: 8px;">🎲 Select or Draw Your GD Topic</h1>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Choose from curated study topics, draw randomly, or enter a custom academic topic.</p>
+
+      <div class="slot-box">
+        <div id="topicReel" class="topic-reel">Spinning Topic Reels...</div>
+      </div>
+
+      <div class="topic-selection-card">
+        <div class="topic-opt-row">
+          <label class="topic-opt-label">📚 Select from Curated Study Topics:</label>
+          <div style="display: flex; gap: 10px; width: 100%;">
+            <select id="topicDropdown" class="topic-select" onchange="onTopicDropdownChange(this.value)">
+              <option value="" disabled selected>-- Choose a Study / Technical Topic --</option>
+              <option value="Will AI Replace Software Engineers in the Upcoming Era?">Will AI Replace Software Engineers in the Upcoming Era?</option>
+              <option value="Monolithic Architecture vs Microservices for High Scalability Systems">Monolithic Architecture vs Microservices for High Scalability Systems</option>
+              <option value="Designing Fault-Tolerant Scalable Systems: CAP Theorem & Consistency Trade-offs">Designing Fault-Tolerant Scalable Systems: CAP Theorem & Consistency Trade-offs</option>
+              <option value="Zero Trust Security Architecture vs Traditional Perimeter Defense">Zero Trust Security Architecture vs Traditional Perimeter Defense</option>
+              <option value="Impact of Remote Work & Hybrid Models on Team Innovation & Productivity">Impact of Remote Work & Hybrid Models on Team Innovation & Productivity</option>
+            </select>
+            <button class="btn-subtle" onclick="startTopicDraw()">🎲 Random Draw</button>
+          </div>
+        </div>
+
+        <div class="topic-opt-row" style="margin-top: 16px;">
+          <label class="topic-opt-label">✍️ Or Enter Custom Study Topic:</label>
+          <div style="display: flex; gap: 10px; width: 100%;">
+            <input type="text" id="customTopicInput" class="custom-topic-input" placeholder="e.g. Distributed Consensus in Blockchain, Deep Learning in Robotics..." onkeydown="if(event.key==='Enter') setCustomTopic()" />
+            <button class="btn-action-topic" onclick="setCustomTopic()">Set Topic</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="prepTimerBox" class="prep-timer-box" style="display: none;">15:00</div>
+      <textarea id="notesArea" class="notes-textarea" placeholder="Jot down your key arguments, statistics, and opening points here..."></textarea>
+      <button id="btnPrepared" class="btn-launch" style="padding: 16px 40px; font-size: 16px; max-width: 400px;" onclick="finishPrepAndStartGD()">I'm Prepared - Start GD Now 🚀</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: LIVE CIRCULAR GD ARENA -->
+  <div id="screenArena" class="view-screen">
+    <div class="app-workspace">
+      <div class="table-stage">
+        <div class="gd-2d-canvas">
+          <div class="gd-2d-header">
+            <div class="gd-header-badge">LIVE 2D GD ARENA</div>
+            <div id="tellerStatus" class="teller-status">Connecting to GD arena...</div>
+          </div>
+
+          <div id="seat-Rohan" class="participant-seat-2d seat-rohan">
+            <div class="seat-tag-2d" style="border-color: #a855f7;">Rohan S. (Analyst)</div>
+          </div>
+          <div id="seat-Kavita" class="participant-seat-2d seat-kavita">
+            <div class="seat-tag-2d" style="border-color: #38bdf8;">Kavita R. (Moderator)</div>
+          </div>
+          <div id="seat-Aarav" class="participant-seat-2d seat-aarav">
+            <div class="seat-tag-2d" style="border-color: #ef4444;">Aarav M. (Contrarian)</div>
+          </div>
+          <div id="seat-Sneha" class="participant-seat-2d seat-sneha">
+            <div class="seat-tag-2d" style="border-color: #22c55e;">Sneha P. (Peacemaker)</div>
+          </div>
+          <div id="seat-User" class="participant-seat-2d seat-user">
+            <div class="seat-tag-2d" style="border-color: #f59e0b;">You (Participant)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="interview-sidebar">
+        <div class="panel-title">
+          <span>📝 GD Live Transcript</span>
+        </div>
+        <div id="transcriptFeed" class="transcript-feed"></div>
+        <div class="mic-control-box">
+          <div id="btnMic" class="mic-diamond-btn" onclick="toggleMic()">
+            <span class="mic-icon-inner">🎙️</span>
+          </div>
+          <div id="micStatus" class="mic-status-label">Click Mic to Speak (up to 1m)</div>
+          <div class="input-fallback-row">
+            <input type="text" id="userInput" placeholder="Or type your GD argument here..." onkeydown="handleKeyPress(event)" />
+            <button class="btn-action-topic" onclick="sendTextInput()">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVALUATION SCORECARD MODAL -->
+  <div id="scorecardModal" class="modal-overlay">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-family: var(--font-display); font-size: 24px; font-weight: 800;">🏆 GD Evaluation & Winner Scorecard</h3>
+        <button class="btn-subtle" onclick="closeScorecardModal()">✕ Close</button>
+      </div>
+
+      <div class="verdict-banner">
+        <div id="winnerName" class="verdict-title">Candidate</div>
+        <div id="winnerReason" class="verdict-reason">Outstanding articulation and structured debate points.</div>
+      </div>
+
+      <div class="score-grid-6col">
+        <div class="score-box"><div class="score-box-label">Overall Score</div><div id="scoreOverall" class="score-val">85%</div></div>
+        <div class="score-box"><div class="score-box-label">Clarity</div><div id="scoreClarity" class="score-val">8/10</div></div>
+        <div class="score-box"><div class="score-box-label">Logic</div><div id="scoreLogic" class="score-val">8/10</div></div>
+        <div class="score-box"><div class="score-box-label">Collaboration</div><div id="scoreCollab" class="score-val">9/10</div></div>
+        <div class="score-box"><div class="score-box-label">Fluency</div><div id="scoreFluency" class="score-val">8/10</div></div>
+        <div class="score-box"><div class="score-box-label">Fillers</div><div id="scoreFillers" class="score-val">3</div></div>
+      </div>
+
+      <div class="feedback-section">
+        <h4>⚠️ Areas for Improvement</h4>
+        <div id="weaknessText"></div>
+      </div>
+
+      <div class="feedback-section">
+        <h4>💬 Summary Feedback</h4>
+        <p id="feedbackText"></p>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <a href="index.html" class="btn-launch" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">Return to Dashboard 🏠</a>
+        <button class="btn-subtle" onclick="location.reload()">🔄 Practice Another Topic</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentTopic = "Will AI Replace Software Engineers in the Upcoming Era?";
+    let ws = null;
+    let prepSeconds = 15 * 60;
+    let prepTimerInterval = null;
+    let sessionTimerInterval = null;
+    let sessionSeconds = 20 * 60;
+    let isRecording = false;
+    let audioQueue = [];
+    let isAudioPlaying = false;
+    let currentAudioElement = null;
+
+    const sampleTopics = [
+      "Will AI Replace Software Engineers in the Upcoming Era?",
+      "Monolithic Architecture vs Microservices for High Scalability Systems",
+      "Designing Fault-Tolerant Scalable Systems: CAP Theorem & Consistency Trade-offs",
+      "Zero Trust Security Architecture vs Traditional Perimeter Defense",
+      "Impact of Remote Work & Hybrid Models on Team Innovation & Productivity"
+    ];
+
+    function enqueueAudio(audioB64) {
+      if (!audioB64) return;
+      audioQueue.push(audioB64);
+      processAudioQueue();
+    }
+
+    function processAudioQueue() {
+      if (isAudioPlaying || audioQueue.length === 0) return;
+      const b64 = audioQueue.shift();
+      isAudioPlaying = true;
+      try {
+        currentAudioElement = new Audio("data:audio/mp3;base64," + b64);
+        currentAudioElement.onended = () => { isAudioPlaying = false; processAudioQueue(); };
+        currentAudioElement.onerror = () => { isAudioPlaying = false; processAudioQueue(); };
+        currentAudioElement.play().catch(e => { isAudioPlaying = false; processAudioQueue(); });
+      } catch(e) { isAudioPlaying = false; processAudioQueue(); }
+    }
+
+    function showScreen(screenId) {
+      document.querySelectorAll('.view-screen').forEach(s => s.classList.remove('active'));
+      const screenEl = document.getElementById(screenId);
+      if (screenEl) { screenEl.classList.add('active'); screenEl.scrollTop = 0; }
+    }
+
+    function onTopicDropdownChange(val) {
+      if (!val) return;
+      currentTopic = val;
+      document.getElementById('topicReel').innerText = "🎯 Selected Topic: " + val;
+      startPrepCountdown();
+    }
+
+    function setCustomTopic() {
+      const input = document.getElementById('customTopicInput');
+      const val = input.value.trim();
+      if (!val) return;
+      currentTopic = val;
+      document.getElementById('topicReel').innerText = "✍️ Custom Topic: " + val;
+      startPrepCountdown();
+    }
+
+    function startTopicDraw() {
+      const reel = document.getElementById('topicReel');
+      let count = 0;
+      const spinInterval = setInterval(() => {
+        reel.innerText = sampleTopics[count % sampleTopics.length];
+        count++;
+        if (count > 10) {
+          clearInterval(spinInterval);
+          currentTopic = sampleTopics[Math.floor(Math.random() * sampleTopics.length)];
+          reel.innerText = "🎯 Topic Drawn: " + currentTopic;
+          const dropdown = document.getElementById('topicDropdown');
+          if (dropdown) dropdown.value = currentTopic;
+          startPrepCountdown();
+        }
+      }, 140);
+    }
+
+    function startPrepCountdown() {
+      document.getElementById('prepTimerBox').style.display = 'block';
+      prepSeconds = 15 * 60;
+      if (prepTimerInterval) clearInterval(prepTimerInterval);
+      prepTimerInterval = setInterval(() => {
+        prepSeconds--;
+        const mins = Math.floor(prepSeconds / 60); const secs = prepSeconds % 60;
+        document.getElementById('prepTimerBox').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        if (prepSeconds <= 0) { clearInterval(prepTimerInterval); finishPrepAndStartGD(); }
+      }, 1000);
+    }
+
+    function finishPrepAndStartGD() {
+      if (prepTimerInterval) clearInterval(prepTimerInterval);
+      showScreen('screenArena');
+      document.getElementById('headerTopicBox').style.display = 'flex';
+      document.getElementById('topicText').innerText = currentTopic;
+      document.getElementById('btnHeaderEval').style.display = 'block';
+      document.getElementById('gdTimerPill').style.display = 'block';
+      connectAndStartGD();
+    }
+
+    function connectAndStartGD() {
+      const url = "ws://127.0.0.1:8000/gd/ws/room_demo_101?topic=" + encodeURIComponent(currentTopic);
+      document.getElementById('tellerStatus').innerText = "Connecting to GD arena...";
+      try {
+        ws = new WebSocket(url);
+        ws.onopen = () => {
+          document.getElementById('tellerStatus').innerText = "Connected! GD session in progress.";
+          startGD20MinTimer();
+          ws.send(JSON.stringify({ event: 'START_INTRODUCTIONS' }));
+        };
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.event === 'AGENT_SPEAKING') {
+              appendGDTranscript(data.sender || 'AI', data.text);
+              enqueueAudio(data.audio);
+            } else if (data.event === 'SESSION_COMPLETED') {
+              showScorecardModal(data.scorecard);
+            }
+          } catch(e) { console.error(e); }
+        };
+      } catch(err) { alert("Failed to connect GD: " + err.message); }
+    }
+
+    function startGD20MinTimer() {
+      sessionSeconds = 20 * 60;
+      if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+      const timerPill = document.getElementById('gdTimerPill');
+      sessionTimerInterval = setInterval(() => {
+        sessionSeconds--;
+        const mins = Math.floor(sessionSeconds / 60); const secs = sessionSeconds % 60;
+        timerPill.innerText = `⏱️ ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        if (sessionSeconds <= 0) { clearInterval(sessionTimerInterval); endGDSession(); }
+      }, 1000);
+    }
+
+    function appendGDTranscript(speaker, text) {
+      const feed = document.getElementById('transcriptFeed');
+      if (!feed) return;
+      const bubble = document.createElement('div');
+      bubble.className = 'feed-bubble';
+      bubble.innerHTML = `<div class="feed-speaker">${speaker}</div><div>${text}</div>`;
+      feed.appendChild(bubble);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    let gdRecognition = null;
+    let finalGDSpeech = "";
+    let interimGDSpeech = "";
+
+    function setupGDSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return;
+      gdRecognition = new SpeechRecognition();
+      gdRecognition.continuous = true;
+      gdRecognition.interimResults = true;
+      gdRecognition.lang = 'en-IN';
+
+      gdRecognition.onresult = (event) => {
+        interimGDSpeech = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const seg = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalGDSpeech += seg + ' ';
+          } else {
+            interimGDSpeech += seg;
+          }
+        }
+        document.getElementById('userInput').value = (finalGDSpeech + interimGDSpeech).trim();
+      };
+
+      gdRecognition.onend = () => {
+        if (isRecording) {
+          try { gdRecognition.start(); } catch(e){}
+        }
+      };
+    }
+    setupGDSpeechRecognition();
+
+    function toggleMic() {
+      const btn = document.getElementById('btnMic');
+      if (!isRecording) {
+        isRecording = true;
+        finalGDSpeech = "";
+        interimGDSpeech = "";
+        btn.classList.add('recording');
+        document.getElementById('micStatus').innerText = "🎙️ Recording... Click to Send";
+        if (gdRecognition) {
+          try { gdRecognition.start(); } catch(e){}
+        }
+      } else {
+        isRecording = false;
+        btn.classList.remove('recording');
+        document.getElementById('micStatus').innerText = "Click Mic to Speak (up to 1m)";
+        if (gdRecognition) {
+          try { gdRecognition.stop(); } catch(e){}
+        }
+        const text = document.getElementById('userInput').value.trim() || (finalGDSpeech + interimGDSpeech).trim();
+        if (text) sendTextInput();
+      }
+    }
+
+    function sendTextInput() {
+      const text = document.getElementById('userInput').value.trim() || (finalGDSpeech + interimGDSpeech).trim();
+      if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
+      appendGDTranscript('You', text);
+      ws.send(JSON.stringify({ event: 'USER_SPEECH', text: text, filler_count: 0 }));
+      document.getElementById('userInput').value = '';
+      finalGDSpeech = '';
+      interimGDSpeech = '';
+    }
+
+    function handleKeyPress(e) { if (e.key === 'Enter') sendTextInput(); }
+
+    function endGDSession() {
+      if (!ws || ws.readyState !== WebSocket.OPEN) return;
+      ws.send(JSON.stringify({ event: 'END_SESSION' }));
+    }
+
+    function showScorecardModal(card) {
+      if (!card) return;
+      document.getElementById('winnerName').innerText = card.winner_candidate || "You (Participant)";
+      document.getElementById('winnerReason').innerText = card.winner_reasoning || "Delivered structured arguments throughout.";
+      document.getElementById('scoreOverall').innerText = `${card.overall_score || 82}%`;
+      document.getElementById('scoreClarity').innerText = `${card.clarity_and_articulation || 8}/10`;
+      document.getElementById('scoreLogic').innerText = `${card.argument_strength || 8}/10`;
+      document.getElementById('scoreCollab').innerText = `${card.listening_and_collaboration || 9}/10`;
+      document.getElementById('scoreFluency').innerText = `${card.fluency_and_pace || 8}/10`;
+      document.getElementById('scoreFillers').innerText = `${card.filler_words_count || 0}`;
+      document.getElementById('feedbackText').innerText = card.summary_feedback || 'Good participation.';
+      document.getElementById('scorecardModal').style.display = 'flex';
+    }
+
+    function closeScorecardModal() { document.getElementById('scorecardModal').style.display = 'none'; }
+  </script>
+</body>
+</html>
