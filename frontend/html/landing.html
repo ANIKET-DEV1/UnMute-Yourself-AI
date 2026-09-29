@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnMute-Yourself AI | Master Communication & Interviews</title>
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1e104a 0%, #3e269e 50%, #6e46eb 100%);
+            --text-main: #1a1532;
+            --text-secondary: #6b7280;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+            --grid-color: rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --accent-color: #5c35de;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center center;
+            min-height: 100vh;
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Navbar Styles */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 48px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(110, 70, 235, 0.25);
+        }
+
+        .logo-text-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-title {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+        }
+
+        .logo-subtitle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            margin-top: 2px;
+        }
+        
+        .engine-badge {
+            background: #eef2ff;
+            color: #4f46e5;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border: 1px solid #c7d2fe;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .engine-badge i {
+            color: #fbbf24;
+        }
+
+        .logo-desc {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+
+        .nav-links li a:hover {
+            color: var(--accent-color);
+        }
+        
+        .nav-links i {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        
+        .nav-links li a:hover i {
+            color: var(--accent-color);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--border-color);
+            background: transparent;
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            background: #f9fafb;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(110, 70, 235, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(110, 70, 235, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 900px;
+            margin: 80px auto 60px;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #eef2ff;
+            color: #4f46e5;
+            padding: 8px 20px;
+            border-radius: 24px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            border: 1px solid #c7d2fe;
+            margin-bottom: 28px;
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            color: var(--text-main);
+            letter-spacing: -1.5px;
+        }
+        
+        .hero h1 span {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 650px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        /* Cards Section */
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto 100px;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 40px 32px;
+            width: 360px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 28px;
+            font-size: 36px;
+        }
+        
+        /* Card variations from the screenshot */
+        .card-gd .card-icon-wrapper {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+        
+        .card-debate .card-icon-wrapper {
+            background: #f5f3ff;
+            color: #7c3aed;
+        }
+        
+        .card-mock .card-icon-wrapper {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+
+        .feature-card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 32px;
+            flex-grow: 1;
+        }
+        
+        .card-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            color: white;
+            transition: opacity 0.2s, transform 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .card-gd .card-btn {
+            background: #4f46e5;
+        }
+        
+        .card-debate .card-btn {
+            background: #7c3aed;
+        }
+        
+        .card-mock .card-btn {
+            background: #059669;
+        }
+        
+        .card-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .card-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 42px;
+            }
+            .feature-card {
+                width: 100%;
+                max-width: 400px;
+            }
+            nav {
+                padding: 16px 24px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+            .auth-buttons {
+                width: 100%;
+            }
+            .auth-buttons .btn {
+                flex: 1;
+            }
+            .hero {
+                margin: 50px auto 40px;
+            }
+            .hero h1 {
+                font-size: 36px;
+            }
+            .hero p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Area -->
+    <nav>
+        <div class="nav-left">
+            <div class="logo-icon">
+                <i class="fa-solid fa-microphone-lines"></i>
+            </div>
+            <div class="logo-text-group">
+                <div class="logo-title">UnMute-Yourself AI</div>
+                <div class="logo-subtitle">
+                    <div class="engine-badge">
+                        <i class="fa-solid fa-bolt"></i> V2.0 NEURAL ENGINE
+                    </div>
+                    <span class="logo-desc">| Communication & Interview Hub</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-right">
+            <!-- These links match the screenshot -->
+            <ul class="nav-links">
+                <li><a href="#"><i class="fa-solid fa-users"></i> GD Arena</a></li>
+                <li><a href="#"><i class="fa-solid fa-khanda"></i> 1v1 Debate</a></li>
+                <li><a href="#"><i class="fa-solid fa-briefcase"></i> Mock Interview</a></li>
+            </ul>
+            
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-outline">Log in</a>
+                <a href="register.html" class="btn btn-primary">Sign up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-pill">
+            <i class="fa-solid fa-bolt"></i> REAL-TIME MULTI-AGENT AI PLATFORM
+        </div>
+        <h1>Master Communication & Technical<br><span>Interviews with AI</span></h1>
+        <p>Sharpen your communication, articulation, and quick thinking with realistic AI personas in immersive, timed simulation rooms.</p>
+    </div>
+
+    <!-- Feature Cards based on Image -->
+    <div class="cards-container">
+        <!-- Group Discussion -->
+        <div class="feature-card card-gd">
+            <div class="card-icon-wrapper">
+                <i class="fa-solid fa-user-group"></i>
+            </div>
+            <h3>Group Discussion</h3>
+            <p>Real-time 5-member circular GD arena with AI personas (Moderator, Analyst, Contrarian, Peacemaker). Features topic draw, 15m prep, and 20m debate.</p>
+            <a href="login.html" class="card-btn">Enter GD Arena</a>
+        </div>
+
+        <!-- 1v1 Debate -->
+        <div class="feature-card card-debate">
+            <div class="card-icon-wrapper">
+                <i class="fa-solid fa-khanda"></i>
+            </div>
+            <h3>1v1 AI Debate</h3>
+            <p>Head-to-head competitive debate against an aggressive AI adversary with timed cross-examinations and rebuttals.</p>
+            <a href="login.html" class="card-btn">Start 1v1 Debate</a>
+        </div>
+
+        <!-- Mock Interview -->
+        <div class="feature-card card-mock">
+            <div class="card-icon-wrapper">
+                <i class="fa-solid fa-briefcase"></i>
+            </div>
+            <h3>1-on-1 Mock Interview</h3>
+            <p>Select role & language, upload resume with smart extraction, and enter a 15-20 min adaptive interview from intro to tough system design.</p>
+            <a href="login.html" class="card-btn">Start Mock Interview</a>
+        </div>
+    </div>
+
+</body>
+</html>

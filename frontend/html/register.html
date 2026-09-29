@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - UnMute-Yourself AI</title>
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1e104a 0%, #3e269e 50%, #6e46eb 100%);
+            --text-main: #1a1532;
+            --text-secondary: #6b7280;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+            --grid-color: rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --accent-color: #5c35de;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            padding: 20px;
+        }
+
+        .register-container {
+            background: var(--card-bg);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 520px;
+            padding: 48px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            position: relative;
+            transition: box-shadow 0.3s ease;
+            margin: 40px 0;
+        }
+        
+        .register-container:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .engine-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #eef2ff;
+            color: #4f46e5;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border: 1px solid #c7d2fe;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            white-space: nowrap;
+        }
+        
+        .engine-badge i {
+            color: #fbbf24;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            margin-top: 10px;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-gradient);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 8px 16px rgba(110, 70, 235, 0.25);
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .register-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .register-header p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            color: #9ca3af;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-main);
+            background-color: #f9fafb;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input::placeholder {
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent-color);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(92, 53, 222, 0.1);
+        }
+
+        .form-group input:focus + i {
+            color: var(--accent-color);
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 8px 16px rgba(110, 70, 235, 0.2);
+            margin-top: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(110, 70, 235, 0.3);
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 28px 0;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .divider:not(:empty)::before {
+            margin-right: 16px;
+        }
+
+        .divider:not(:empty)::after {
+            margin-left: 16px;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn-social {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-social:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .btn-social img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .login-prompt {
+            text-align: center;
+            margin-top: 32px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .login-prompt a {
+            color: var(--accent-color);
+            font-weight: 700;
+            text-decoration: none;
+            margin-left: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .login-prompt a:hover {
+            color: #3e269e;
+            text-decoration: underline;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .form-group.error input {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+        }
+        
+        .form-group.error input:focus {
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+        }
+        
+        .form-group.error input + i {
+            color: #ef4444;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 40px 24px 32px;
+            }
+            .social-login {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        <!-- Floating badge from the reference theme -->
+        <div class="engine-badge">
+            <i class="fa-solid fa-bolt"></i> V2.0 NEURAL ENGINE
+        </div>
+
+        <div class="logo-area">
+            <div class="logo-icon">
+                <i class="fa-solid fa-microphone-lines"></i>
+            </div>
+            <div class="logo-text">UnMute-Yourself AI</div>
+        </div>
+
+        <div class="register-header">
+            <h1>Create an Account</h1>
+            <p>Join our platform and start mastering your communication skills.</p>
+        </div>
+
+        <form id="registerForm">
+            <div class="form-group" id="nameGroup">
+                <label for="fullName">Full Name</label>
+                <div class="input-wrapper">
+                    <input type="text" id="fullName" placeholder="John Doe" autocomplete="name">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+                <div class="error-message" id="nameError">Please enter your full name.</div>
+            </div>
+
+            <div class="form-group" id="emailGroup">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <input type="email" id="email" placeholder="name@example.com" autocomplete="email">
+                    <i class="fa-regular fa-envelope"></i>
+                </div>
+                <div class="error-message" id="emailError">Please enter a valid email address.</div>
+            </div>
+
+            <div class="form-group" id="passwordGroup">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" placeholder="••••••••" autocomplete="new-password">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div class="error-message" id="passwordError">Password must be at least 6 characters.</div>
+            </div>
+            
+            <div class="form-group" id="confirmPasswordGroup">
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="confirmPassword" placeholder="••••••••" autocomplete="new-password">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div class="error-message" id="confirmPasswordError">Passwords do not match.</div>
+            </div>
+
+            <button type="submit" class="btn-register" id="registerBtn">
+                <span id="btnText">Sign Up</span>
+                <div class="spinner" id="btnSpinner"></div>
+                <i class="fa-solid fa-arrow-right" id="btnIcon"></i>
+            </button>
+        </form>
+
+        <div class="divider">OR SIGN UP WITH</div>
+
+        <div class="social-login">
+            <button class="btn-social" type="button">
+                <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="Google Logo">
+                Google
+            </button>
+            <button class="btn-social" type="button">
+                <img src="https://cdn-icons-png.flaticon.com/512/732/732221.png" alt="Microsoft Logo" style="width: 18px; height: 18px;">
+                Microsoft
+            </button>
+        </div>
+
+        <div class="login-prompt">
+            Already have an account? <a href="login.html">Log in</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const registerForm = document.getElementById('registerForm');
+            
+            const nameInput = document.getElementById('fullName');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            
+            const nameGroup = document.getElementById('nameGroup');
+            const emailGroup = document.getElementById('emailGroup');
+            const passwordGroup = document.getElementById('passwordGroup');
+            const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
+            
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const btnIcon = document.getElementById('btnIcon');
+            const registerBtn = document.getElementById('registerBtn');
+
+            // Validation functions
+            const isValidEmail = (email) => {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            };
+
+            // Clear errors on input
+            const setupInputListeners = (input, group, errorId) => {
+                input.addEventListener('input', () => {
+                    group.classList.remove('error');
+                    document.getElementById(errorId).style.display = 'none';
+                });
+            };
+
+            setupInputListeners(nameInput, nameGroup, 'nameError');
+            setupInputListeners(emailInput, emailGroup, 'emailError');
+            setupInputListeners(passwordInput, passwordGroup, 'passwordError');
+            setupInputListeners(confirmPasswordInput, confirmPasswordGroup, 'confirmPasswordError');
+
+            // Handle form submission
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let hasError = false;
+
+                const name = nameInput.value.trim();
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                // Validate Name
+                if (!name || name.length < 2) {
+                    nameGroup.classList.add('error');
+                    document.getElementById('nameError').style.display = 'block';
+                    hasError = true;
+                }
+
+                // Validate Email
+                if (!email || !isValidEmail(email)) {
+                    emailGroup.classList.add('error');
+                    document.getElementById('emailError').style.display = 'block';
+                    hasError = true;
+                }
+
+                // Validate Password
+                if (!password || password.length < 6) {
+                    passwordGroup.classList.add('error');
+                    document.getElementById('passwordError').style.display = 'block';
+                    hasError = true;
+                }
+
+                // Validate Confirm Password
+                if (password !== confirmPassword) {
+                    confirmPasswordGroup.classList.add('error');
+                    document.getElementById('confirmPasswordError').style.display = 'block';
+                    hasError = true;
+                }
+
+                // If no errors, simulate registration request
+                if (!hasError) {
+                    // Update button state to loading
+                    btnText.style.display = 'none';
+                    btnIcon.style.display = 'none';
+                    btnSpinner.style.display = 'block';
+                    registerBtn.style.pointerEvents = 'none';
+                    registerBtn.style.opacity = '0.9';
+
+                    // Simulate API delay
+                    setTimeout(() => {
+                        // Reset button
+                        btnText.style.display = 'block';
+                        btnIcon.style.display = 'block';
+                        btnSpinner.style.display = 'none';
+                        registerBtn.style.pointerEvents = 'auto';
+                        registerBtn.style.opacity = '1';
+                        
+                        alert('Registration successful! Welcome to UnMute-Yourself AI.');
+                        // In a real app, you would redirect here:
+                        // window.location.href = 'login.html';
+                    }, 1500);
+                }
+            });
+            
+            // Icon color changes on focus
+            const inputs = document.querySelectorAll('.form-group input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    const icon = this.parentElement.querySelector('i');
+                    if (icon && !this.parentElement.parentElement.classList.contains('error')) {
+                        icon.style.color = 'var(--accent-color)';
+                    }
+                });
+                
+                input.addEventListener('blur', function() {
+                    const icon = this.parentElement.querySelector('i');
+                    if (icon) {
+                        if(this.parentElement.parentElement.classList.contains('error')) {
+                            icon.style.color = '#ef4444';
+                        } else {
+                            icon.style.color = '#9ca3af';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
