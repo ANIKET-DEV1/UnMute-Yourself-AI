@@ -53,7 +53,7 @@ class DebateSession:
         self.transcript: list[dict] = []
         self.current_phase = "OPENING"
         self.user_filler_count = 0
-        self.adversary_voice = "en-IN-MadhurNeural"
+        self.adversary_voice = "en-US-ChristopherNeural"
 
     def get_recent_history(self, k: int = 6) -> str:
         recent = self.transcript[-k:]

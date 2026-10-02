@@ -9,7 +9,7 @@ PERSONA_VOICES = {
     "Contrarian": "en-US-BrianNeural",
     "Peacemaker": "en-US-EmmaNeural",
     "Interviewer": "en-US-GuyNeural",
-    "Debater": "en-IN-MadhurNeural"
+    "Debater": "en-US-ChristopherNeural"
 }
 
 async def generate_neural_audio_b64(text: str, voice: str) -> str:
