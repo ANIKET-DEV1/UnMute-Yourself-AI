@@ -82,3 +82,39 @@ async def parse_candidate_resume(file_bytes: bytes, filename: str, target_role: 
                 "raw_text_preview": raw_text[:300] + "..."
             }
         }
+
+async def parse_resume_from_text(raw_text: str, target_role: str = "Software Engineer") -> dict:
+    """Parses raw text or a brief user description to extract candidate profile & skills."""
+    if not raw_text or len(raw_text.strip()) < 15:
+        return {
+            "success": False,
+            "error": "Please enter a valid resume text or brief professional description (at least 15 characters)."
+        }
+    try:
+        parsed: ParsedResumeData = await resume_chain.ainvoke({
+            "resume_text": raw_text[:4000]
+        })
+        result = parsed.model_dump()
+        result["raw_text_preview"] = raw_text[:300] + "..."
+        if target_role:
+            result["target_role"] = target_role
+        return {
+            "success": True,
+            "data": result
+        }
+    except Exception as e:
+        print(f"[Resume Text LLM Extraction Warning] Fallback: {e}")
+        return {
+            "success": True,
+            "data": {
+                "candidate_name": "Candidate",
+                "target_role": target_role,
+                "years_experience": "1-2 years",
+                "skills": ["Software Engineering", "System Architecture", "Problem Solving", "Web Development"],
+                "key_projects": ["Portfolio Project", "Hands-on Development"],
+                "education": "Technical Degree / CS Background",
+                "summary": raw_text[:300],
+                "raw_text_preview": raw_text[:300] + "..."
+            }
+        }
+

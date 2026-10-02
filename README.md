@@ -10,7 +10,7 @@
 The system features real-time voice-and-text interactive environments powered by Google Gemini 2.0 Flash LLM, Edge Neural Text-to-Speech (TTS), and Web Speech API:
 - **Group Discussion (GD Studio):** Interactive 2D round table with 4 distinct AI personas (Rohan S. - The Analyst, Kavita R. - The Moderator, Sneha P. - The Peacemaker, Aarav M. - The Contrarian) with automated turn-taking, inter-speaker pauses, position badges, and animated talking indicators.
 - **1-on-1 AI Debate Arena:** A structured, high-stakes 1v1 debate simulator against **Vikram (The Opposer)** powered by realistic neural voice (`en-US-ChristopherNeural`), featuring topic shuffle reels, timer tracking, and automated argument evaluation.
-- **Adaptive Mock Interview:** Tailored interview simulator supporting PDF resume parsing, domain-specific job role customization, and STAR framework-based feedback scoring.
+- **Adaptive Mock Interview:** Tailored interview simulator supporting brief professional summary / resume text copy-pasting and PDF parsing, domain-specific job role customization, and STAR framework-based feedback scoring.
 - **Continuous Speech Recognition & Input Flow:** Real-time speech transcription continuously fills the message input box without auto-sending, allowing users to edit or refine before dispatching.
 - **Automated Audio Cleaning & TTS:** Regex-based stage direction filtering (`clean_pause_text`) strips annotations like `(pause)` or `[sigh]` to ensure crystal-clear neural speech synthesis.
 - **Lucide SVG UI Design System:** Clean, modern interface powered by Lucide icons and vibrant responsive CSS.

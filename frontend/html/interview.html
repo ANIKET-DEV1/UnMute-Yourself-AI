@@ -708,7 +708,7 @@
     <div class="setup-stage">
       <span class="setup-hud-pill" style="display: inline-flex; align-items: center; gap: 6px;"><i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> Step 1: Pre-Interview Configuration</span>
       <h1 class="setup-header-title">1-on-1 AI Mock Interview Setup</h1>
-      <p class="setup-header-desc">Select your target engineering role, interview language, and upload your resume for adaptive technical and behavioral questioning from intro to tough system design.</p>
+      <p class="setup-header-desc">Select your target engineering role, interview language, and provide a brief description of your resume or copy-paste your resume text to tailor your technical mock interview.</p>
 
       <!-- Role & Language Selection Card -->
       <div class="setup-card">
@@ -738,15 +738,31 @@
         </div>
       </div>
 
-      <!-- Resume Upload Card -->
+      <!-- Candidate Resume / Background Description Card -->
       <div class="setup-card">
-        <div class="setup-section-title"><i data-lucide="file-text" style="width: 18px; height: 18px; color: var(--accent-green);"></i> 2. Upload Candidate Resume</div>
+        <div class="setup-section-title"><i data-lucide="file-text" style="width: 18px; height: 18px; color: var(--accent-green);"></i> 2. Candidate Resume / Background Description</div>
         
-        <div id="resumeDropzone" class="resume-dropzone" onclick="document.getElementById('resumeFileInput').click()">
-          <input type="file" id="resumeFileInput" accept=".pdf,.txt,.docx" style="display: none;" onchange="handleResumeFileSelected(this.files[0])" />
-          <div class="dropzone-icon"><i data-lucide="file-up" style="width: 36px; height: 36px; color: var(--accent-green);"></i></div>
-          <div class="dropzone-text-main" id="dropzoneMainText">Drag & Drop Resume PDF / TXT here or click to browse</div>
-          <div class="dropzone-text-sub">Supported formats: .pdf, .txt, .docx (Max 10MB)</div>
+        <label class="field-label" style="margin-bottom: 8px;">Brief Professional Summary or Copy-Paste Resume Text</label>
+        <textarea id="resumeTextArea" rows="6" class="form-select-custom" style="resize: vertical; font-family: var(--font-primary); font-size: 13px; line-height: 1.5; padding: 14px; background: #f8fafc;" placeholder="Describe your technical background, experience, key skills, and major projects, or copy-paste your plain resume text here...&#10;&#10;Example:&#10;- Experience: 2+ years in Software Development&#10;- Skills: React, Node.js, Python, PostgreSQL, System Design&#10;- Projects: Built a real-time analytics platform and microservices API for e-commerce."></textarea>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; gap: 12px; flex-wrap: wrap;">
+          <button id="btnAnalyzeResumeText" class="btn-send" style="background: linear-gradient(135deg, var(--accent-green), #15803d); padding: 10px 22px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;" onclick="handleAnalyzeResumeText()">
+            <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i> Analyze Profile & Extract Skills
+          </button>
+          
+          <button class="btn-subtle" style="display: inline-flex; align-items: center; gap: 6px;" onclick="toggleFileUploadZone()">
+            <i data-lucide="file-up" style="width: 14px; height: 14px;"></i> Or Upload Resume File (.pdf / .txt)
+          </button>
+        </div>
+
+        <!-- Optional PDF File Dropzone (Collapsible) -->
+        <div id="fileUploadContainer" style="display: none; margin-top: 16px;">
+          <div id="resumeDropzone" class="resume-dropzone" onclick="document.getElementById('resumeFileInput').click()">
+            <input type="file" id="resumeFileInput" accept=".pdf,.txt,.docx" style="display: none;" onchange="handleResumeFileSelected(this.files[0])" />
+            <div class="dropzone-icon"><i data-lucide="file-up" style="width: 32px; height: 32px; color: var(--accent-green);"></i></div>
+            <div class="dropzone-text-main" id="dropzoneMainText">Drag & Drop Resume PDF / TXT here or click to browse</div>
+            <div class="dropzone-text-sub">Supported formats: .pdf, .txt, .docx (Max 10MB)</div>
+          </div>
         </div>
 
         <!-- Loading spinner -->
@@ -759,11 +775,11 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
             <div>
               <span style="font-size: 11px; font-weight: 800; color: #15803d; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px;">
-                <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> Resume Parsed Successfully
+                <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> Profile Analyzed Successfully
               </span>
-              <div id="parsedCandidateName" class="candidate-name-badge">Candidate Name</div>
+              <div id="parsedCandidateName" class="candidate-name-badge">Candidate Profile</div>
             </div>
-            <button class="btn-subtle" onclick="resetResumeUpload()"><i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> Replace Resume</button>
+            <button class="btn-subtle" onclick="resetResumeUpload()"><i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> Reset / Edit</button>
           </div>
           <div style="font-size: 12px; color: #334155; margin-bottom: 6px;">
             <strong>Target Match:</strong> <span id="parsedMatchScore">85% Match</span> | <span id="parsedExpYears">2+ years experience</span>
@@ -773,7 +789,7 @@
             <div id="parsedSkillsChips" class="extracted-chips"></div>
           </div>
           <div style="margin-top: 10px;">
-            <span style="font-size: 11px; font-weight: 700; color: #475569;">Key Projects Detected:</span>
+            <span style="font-size: 11px; font-weight: 700; color: #475569;">Key Projects / Experience Detected:</span>
             <div id="parsedProjectsChips" class="extracted-chips"></div>
           </div>
         </div>
@@ -782,9 +798,8 @@
         <div id="reuploadAlert" class="reupload-banner">
           <div style="display: flex; align-items: center; gap: 8px;">
             <i data-lucide="alert-triangle" style="width: 18px; height: 18px; color: var(--accent-red);"></i>
-            <span style="font-size: 13px; color: var(--accent-red); font-weight: 600;" id="reuploadAlertMsg">No resume uploaded. Upload a resume for personalized project deep-dives.</span>
+            <span style="font-size: 13px; color: var(--accent-red); font-weight: 600;" id="reuploadAlertMsg">Please enter a description or resume text.</span>
           </div>
-          <button class="btn-send" style="background: var(--accent-red); padding: 6px 14px; font-size: 12px;" onclick="document.getElementById('resumeFileInput').click()">Re-upload Resume</button>
         </div>
       </div>
 
@@ -1045,14 +1060,64 @@
       }
     }
 
-    /* Resume Upload Handlers */
+    /* Resume & Description Handlers */
     function resetResumeUpload() {
       parsedResumeData = null;
-      document.getElementById('resumeFileInput').value = '';
+      const textEl = document.getElementById('resumeTextArea');
+      if (textEl) textEl.value = '';
+      const fileEl = document.getElementById('resumeFileInput');
+      if (fileEl) fileEl.value = '';
       document.getElementById('dropzoneMainText').innerText = 'Drag & Drop Resume PDF / TXT here or click to browse';
       document.getElementById('resumeProfilePreview').style.display = 'none';
       document.getElementById('reuploadAlert').style.display = 'none';
       document.getElementById('resumeParseSpinner').style.display = 'none';
+    }
+
+    function toggleFileUploadZone() {
+      const container = document.getElementById('fileUploadContainer');
+      if (container) {
+        container.style.display = container.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+
+    async function handleAnalyzeResumeText() {
+      const textInput = document.getElementById('resumeTextArea').value.trim();
+      const role = document.getElementById('interviewRoleSelect').value;
+      const language = document.getElementById('interviewLangSelect').value;
+
+      if (!textInput || textInput.length < 10) {
+        showReuploadAlert("Please enter a brief summary or copy-paste your resume text (at least 10 characters).");
+        return;
+      }
+
+      document.getElementById('resumeParseSpinner').style.display = 'flex';
+      document.getElementById('reuploadAlert').style.display = 'none';
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/interview/parse-resume-text', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            resume_text: textInput,
+            target_role: role,
+            language: language
+          })
+        });
+
+        const data = await response.json();
+        document.getElementById('resumeParseSpinner').style.display = 'none';
+
+        if (data.success && data.data) {
+          parsedResumeData = data.data;
+          displayParsedResume(data.data);
+        } else {
+          showReuploadAlert(data.error || "Failed to analyze your description. Please try adding more technical details.");
+        }
+      } catch (err) {
+        console.error("Text analysis error:", err);
+        document.getElementById('resumeParseSpinner').style.display = 'none';
+        showReuploadAlert("Connection error to AI backend. Make sure Python server is running.");
+      }
     }
 
     const dropzone = document.getElementById('resumeDropzone');
@@ -1112,6 +1177,7 @@
       document.getElementById('reuploadAlert').style.display = 'flex';
     }
 
+
     function displayParsedResume(data) {
       document.getElementById('reuploadAlert').style.display = 'none';
       document.getElementById('parsedCandidateName').innerText = data.candidate_name || "Candidate";
@@ -1145,6 +1211,12 @@
     async function startInterviewSession() {
       const role = document.getElementById('interviewRoleSelect').value;
       const language = document.getElementById('interviewLangSelect').value;
+      const textInput = document.getElementById('resumeTextArea') ? document.getElementById('resumeTextArea').value.trim() : '';
+
+      // If user typed a summary/resume text but hasn't clicked "Analyze Profile", auto-analyze it now
+      if (!parsedResumeData && textInput.length >= 10) {
+        await handleAnalyzeResumeText();
+      }
 
       const urlParams = new URLSearchParams(window.location.search);
       let sessionId = urlParams.get('sessionId');
@@ -1177,6 +1249,7 @@
       startInterviewTimer();
       connectInterviewWebSocket(sessionId, role, language);
     }
+
 
     function connectInterviewWebSocket(roomId, role, language) {
       const host = window.location.hostname || '127.0.0.1';
@@ -1219,7 +1292,7 @@
               console.log("Primary WS failed, connecting fallback route...");
               connectWS(fallbackUrl);
             } else {
-              appendInterviewTranscript('System', `⚠️ Error connecting to interview server.`, 'system');
+              appendInterviewTranscript('System', ` Error connecting to interview server.`, 'system');
             }
           };
 

@@ -2,10 +2,35 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, UploadFile, File, Form
 import json
 import asyncio
-from app.services.resume_service import parse_candidate_resume
+from pydantic import BaseModel
+from app.services.resume_service import parse_candidate_resume, parse_resume_from_text
 from app.services.interview_service import get_or_create_interview_session
 
 interview_router = APIRouter(prefix="/interview")
+
+class ResumeTextRequest(BaseModel):
+    resume_text: str
+    target_role: str = "Frontend Developer"
+    language: str = "English"
+
+@interview_router.post("/parse-resume-text")
+async def parse_resume_text(req: ResumeTextRequest):
+    """
+    Endpoint to analyze and extract candidate details directly from pasted resume text
+    or brief professional description.
+    """
+    try:
+        result = await parse_resume_from_text(
+            raw_text=req.resume_text,
+            target_role=req.target_role
+        )
+        return result
+    except Exception as e:
+        print(f"[Resume Text Parse Error] {e}")
+        return {
+            "success": False,
+            "error": f"Failed to analyze profile: {str(e)}"
+        }
 
 @interview_router.post("/upload-resume")
 async def upload_and_parse_resume(
@@ -13,6 +38,7 @@ async def upload_and_parse_resume(
     target_role: str = Form("Frontend Developer"),
     language: str = Form("English")
 ):
+
     """
     Endpoint to upload and extract candidate details from resume PDF/TXT.
     If parsing fails or file is empty, prompts the client to re-upload.
