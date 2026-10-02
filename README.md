@@ -1,41 +1,48 @@
 # 🎙️ UnMute-Yourself AI
-> **An intelligent, real-time multi-agent communication training platform for Group Discussions (GD), Debates, and Mock Interviews.**
+> **An intelligent, real-time multi-agent communication training platform for Group Discussions (GD), 1v1 Debates, and Adaptive Mock Interviews.**
 
 ---
 
 ## 📌 1. Project Overview & Vision
 
-**UnMute-Yourself AI** is built to help students and professionals conquer public speaking anxiety and master verbal communication. The platform simulates realistic 15–20 minute interactive voice-and-text sessions with AI personas:
-- **Group Discussion (GD):** A live room featuring 1 User, 2–3 diverse AI peers (the Analyst, the Contrarian, the Peacemaker), and 1 AI Moderator steering the debate.
-- **1-on-1 AI Debate:** A structured debate arena where the AI takes the opposing stance, challenges logical fallacies, and delivers rebuttals.
-- **Adaptive Mock Interview:** Dynamic domain-specific or HR interviews that ask contextual follow-up questions and grade answers using the STAR framework.
-- **Comprehensive Post-Session Analytics:** Instant feedback on filler words (*um, like, actually*), speaking pace (WPM), confidence, clarity, argument strength, and vocabulary.
+**UnMute-Yourself AI** is an advanced AI-powered communication and public speaking training platform designed to eliminate speaking anxiety, hone debate strategy, and prepare candidates for high-stakes interviews and GD rounds.
+
+The system features real-time voice-and-text interactive environments powered by Google Gemini 2.0 Flash LLM, Edge Neural Text-to-Speech (TTS), and Web Speech API:
+- **Group Discussion (GD Studio):** Interactive 2D round table with 4 distinct AI personas (Rohan S. - The Analyst, Kavita R. - The Moderator, Sneha P. - The Peacemaker, Aarav M. - The Contrarian) with automated turn-taking, inter-speaker pauses, position badges, and animated talking indicators.
+- **1-on-1 AI Debate Arena:** A structured, high-stakes 1v1 debate simulator against **Vikram (The Opposer)** powered by realistic neural voice (`en-US-ChristopherNeural`), featuring topic shuffle reels, timer tracking, and automated argument evaluation.
+- **Adaptive Mock Interview:** Tailored interview simulator supporting PDF resume parsing, domain-specific job role customization, and STAR framework-based feedback scoring.
+- **Continuous Speech Recognition & Input Flow:** Real-time speech transcription continuously fills the message input box without auto-sending, allowing users to edit or refine before dispatching.
+- **Automated Audio Cleaning & TTS:** Regex-based stage direction filtering (`clean_pause_text`) strips annotations like `(pause)` or `[sigh]` to ensure crystal-clear neural speech synthesis.
+- **Lucide SVG UI Design System:** Clean, modern interface powered by Lucide icons and vibrant responsive CSS.
 
 ---
 
-## 🏗️ 2. High-Level Architecture (HLD)
+## 🏗️ 2. System Architecture & Tech Stack
 
-The system operates on a decoupled **Two-Backend Architecture**:
+UnMute-Yourself AI operates on a high-performance **Decoupled Two-Backend Architecture**:
 
 ```text
 +-----------------------------------------------------------------------------------------------+
-|                                    FRONTEND (React / Vite)                                    |
-|   - User Dashboard & Rooms        - Audio Capture (MediaRecorder)      - Live WebSocket UI   |
+|                                    FRONTEND (HTML5 / Vanilla JS)                              |
+|   - Multi-Page Navigation          - Web Speech API (Continuous STT)   - Web Audio API        |
+|   - Lucide SVG Icon System        - Live WebSocket UI Client          - API Client (api.js)  |
 +-----------------------------------------------+-----------------------------------------------+
                         |                       |                       ^
-                        | 1. Auth, Profile,     | 2. Create Session     | 3. Live 15-20 Min WS
-                        |    History (REST)     |    (Get Token)        |    Audio & Text Stream
+                        | 1. Auth, Routes,      | 2. Create Session     | 3. Real-Time WS Stream
+                        |    History (REST)     |    (Get Session ID)   |    (Audio + JSON Stream)
                         v                       v                       v
 +-----------------------------------------------+     +-----------------------------------------+
-|          NODE.JS BACKEND (Port 5000)          |     |      PYTHON AI BACKEND (FastAPI : 8000) |
+|      NODE.JS REST BACKEND (Port 5000)         |     |   PYTHON FASTAPI AI ENGINE (Port 8000)  |
 |                                               |     |                                         |
-|  [ Auth & JWT Controller ]                    |     |  [ WebSocket Room Manager ]             |
-|  [ User Profile & Streak Tracker ]            |     |  [ Multi-Agent GD Orchestrator ]        |
-|  [ Session Lifecycle Manager ]                |     |  [ Debate & Rebuttal Engine ]           |
-|                                               |     |  [ Adaptive Interviewer Engine ]        |
-|  +-----------------------------------------+  |     |  [ STT Whisper & TTS Engine ]           |
-|  | Database: MongoDB / PostgreSQL          |  |     |  [ Scoring & Analytics Engine ]         |
+|  [ Auth Routes & JWT Middleware ]             |     |  [ Real-Time WebSocket Router ]         |
+|  [ User & Session Controllers ]               |     |  [ GD Multi-Agent Simulation Engine ]   |
+|  [ Static HTML Page Server ]                  |     |  [ 1v1 Debate Engine (Vikram Opposer) ] |
+|  [ SQLite Database (Sequelize ORM) ]          |     |  [ Interview & Resume Parser (PyPDF) ]  |
+|  [ Internal Sync Endpoint ]                   |     |  [ Gemini 2.0 LLM & Edge-TTS Engine ]   |
+|                                               |     |  [ Speech Sanitizer & Scoring Engine ]  |
 |  +-----------------------------------------+  |     +--------------------+--------------------+
+|  | Database File: database.sqlite          |  |                          |
+|  +-----------------------------------------+  |                          |
 |                       ^                       |                          |
 |                       | 4. Push Final Report  |                          |
 |                       +-----------------------+--------------------------+
@@ -43,343 +50,238 @@ The system operates on a decoupled **Two-Backend Architecture**:
                                                                            |
                                                                            v
                                                               +-------------------------+
-                                                              |    LLM & Speech Cloud   |
-                                                              | (Gemini 2.0 Flash/Groq) |
+                                                              |    Cloud AI Infrastructure|
+                                                              | Google Gemini 2.0 Flash |
+                                                              | Microsoft Edge Neural   |
                                                               +-------------------------+
 ```
 
----
-
-## 🔄 3. Detailed Session Lifecycle & Python Handoff Flow
-
-Understanding how a practice room starts, runs, and wraps up between **Node.js** and **Python FastAPI**:
-
-```text
-[ FRONTEND (React) ]                      [ NODE.JS BACKEND ]                [ PYTHON FASTAPI (AI) ]
-         |                                         |                                    |
-         | -- 1. POST /api/sessions/create ------> |                                    |
-         |    (Headers: JWT, Body: mode, topic)    |                                    |
-         |                                         | -- 2. Auth Check & Insert Doc      |
-         |                                         |    Status: "IN_PROGRESS"           |
-         | <--- 3. Returns { sessionId: "sess_123"}|                                    |
-         |                                                                              |
-         | ========================= HANDOFF TO PYTHON ================================ |
-         |                                                                              |
-         | -- 4. Connect WebSocket: ws://localhost:8000/ws/gd/sess_123 ---------------> |
-         |                                                                              |
-         |                                                                   5. Accepts connection
-         |                                                                      Spawns AI Personas
-         |                                                                      Starts Session Timer
-         |                                                                              |
-         | <--- 6. Moderator AI: "Welcome! Today's topic is..." ----------------------- |
-         |                                                                              |
-         | ================= LIVE 15-20 MIN SPEECH/AUDIO LOOP ========================== |
-         |                                                                              |
-         | -- 7. User Speech Chunks / Transcripts ------------------------------------> |
-         | <--- 8. AI Agent Audio & Text Responses ------------------------------------ |
-         |                                                                              |
-         | ================= SESSION COMPLETION & EVALUATION =========================== |
-         |                                                                              |
-         |                                                                   9. Runs Evaluator LLM
-         |                                         | <--- 10. POST /api/internal/... ---|
-         |                                         |     (Pushes final report)          |
-         |                                         |     (Status: "COMPLETED")          |
-         | <--- 11. WS returns Final Scorecard JSON ------------------------------------|
-```
-
-### ⚙️ Step-by-Step Breakdown
-
-#### Phase 1: Session Initialization (Node.js)
-1. **User clicks "Start Practice"**: Frontend sends `POST /api/sessions/create` to Node.js with the user's JWT.
-2. **Node.js Verifies User**: Validates JWT, verifies user quotas/streaks.
-3. **Generates `sessionId`**: Creates a unique ID (e.g. `sess_987654`).
-4. **Inserts Initial DB Document**: Saves session record with status `"IN_PROGRESS"` in MongoDB/PostgreSQL:
-   ```json
-   {
-     "_id": "sess_987654",
-     "userId": "usr_101",
-     "mode": "GROUP_DISCUSSION",
-     "topic": "Will AI Replace Software Engineers?",
-     "durationMinutes": 20,
-     "status": "IN_PROGRESS",
-     "startedAt": "2026-09-22T21:05:00Z",
-     "transcript": [],
-     "report": null
-   }
-   ```
-5. **Returns Credentials**: Node.js sends back `{ sessionId, topic, wsUrl }`.
-
-#### Phase 2: Python Connection Establishment (FastAPI WebSocket)
-1. **Frontend opens WebSocket directly to Python**:
-   ```javascript
-   const ws = new WebSocket(`ws://localhost:8000/ws/gd/${sessionId}`);
-   ```
-2. **FastAPI accepts handshake**:
-   ```python
-   @app.websocket("/ws/gd/{session_id}")
-   async def gd_room(websocket: WebSocket, session_id: str):
-       await websocket.accept()
-       # In-memory session state
-       active_rooms[session_id] = { "transcript": [], "start_time": time.time() }
-   ```
-3. **Moderator Intro**: Python AI initiates the room by sending the Moderator's opening speech (audio + text).
-
-#### Phase 3: Active Session (15–20 Min Speech Loop)
-* User speaks $\rightarrow$ Speech-to-Text (STT) converts audio to text.
-* Turn manager orchestrates which AI agent speaks next (Analyst vs Contrarian vs Moderator).
-* Text-to-Speech (TTS) streams agent voice back to the frontend.
-* Lightweight ping/pong packets every 15s ensure the WebSocket never drops.
-
-#### Phase 4: Session Wrap-up & Scoring
-* At timer expiry (or user ends session), Python's Evaluator Engine computes scores (Clarity, Confidence, Grammar, Fillers, Rebuttal quality).
-* Python saves the report by calling Node.js: `POST /api/internal/sessions/{sessionId}/report`.
-* Node.js updates the MongoDB document status to `"COMPLETED"` and saves the final analytics.
-* Frontend receives the scorecard and redirects to the detailed Performance Report page.
+### 🛠️ Technology Stack Breakdown
+- **Frontend:** HTML5, Vanilla CSS3 (Glassmorphism design, responsive grid), JavaScript (ES6+), Lucide Icons CDN, Web Speech API (`webkitSpeechRecognition`), HTML5 Audio (`AudioContext`).
+- **REST & Auth Backend (Node.js):** Express.js, Sequelize ORM, SQLite (`database.sqlite`), JWT Authentication (`jsonwebtoken`), `bcryptjs`, CORS middleware.
+- **AI & WebSocket Engine (Python):** FastAPI, Uvicorn, WebSockets (`asyncio`), `google-genai` (Gemini 2.0 Flash), `edge-tts` (Microsoft Edge Neural Voices), `pypdf` (Resume processing).
 
 ---
 
-## 👥 4. Team Division & Required Skillsets
-
-### 🅰️ Python AI Backend (Lead: AI Engineer)
-* **Core Responsibilities:**
-  * Real-time WebSocket connection handling for 15–20 min active sessions.
-  * Multi-agent conversation state machines (Turn-taking, interruptions, silence detection).
-  * Prompt engineering for distinct AI personas (Moderator, Contrarian, Analyst).
-  * Speech-to-Text (STT) & Text-to-Speech (TTS) integration.
-  * Evaluation engine for communication analytics (WPM, fillers, clarity, sentiment).
-* **Skills Required:**
-  * Python 3.10+, FastAPI, `asyncio`, WebSockets.
-  * LLM APIs (Google Gemini 2.0 Flash / OpenAI / Groq Llama-3).
-  * Speech tooling (Faster-Whisper, Deepgram, Edge-TTS, or Web Speech API).
-  * Prompt Engineering, Structured JSON parsing (Pydantic).
-
----
-
-### 🅱️ Node.js Backend (Lead: Backend Engineer)
-* **Core Responsibilities:**
-  * Authentication (JWT, bcrypt, password hashing, session tokens).
-  * Database schema design (Users, Sessions, Scorecards, Streaks).
-  * CRUD APIs for dashboards, user history, and leaderboard/progress graphs.
-  * Internal API endpoint to receive and verify final evaluation reports from the AI backend.
-* **Skills Required:**
-  * Node.js, Express.js (or NestJS).
-  * Database (MongoDB with Mongoose OR PostgreSQL with Prisma/TypeORM).
-  * JWT Auth middleware, Input Validation (Joi/Zod), CORS handling.
-  * REST API best practices.
-
----
-
-### 🅲 Frontend (Lead: Frontend Engineer)
-* **Core Responsibilities:**
-  * Modern, responsive UI with smooth animations, mic visualizers, and dark mode.
-  * Audio recording and playback using the Web Audio API / `MediaRecorder`.
-  * Persistent WebSocket client management with auto-reconnect and keep-alive pinging.
-  * Post-session analytics dashboard with graphs (Radar charts, timeline breakdown).
-* **Skills Required:**
-  * React.js (Vite), JavaScript / TypeScript, TailwindCSS / CSS Modules.
-  * WebSocket handling & audio streaming in the browser.
-  * Charting libraries (Recharts / Chart.js) and Icon sets (Lucide-react).
-
----
-
-## 🔌 5. Detailed API Specifications
-
-### 🟢 Node.js REST APIs (`http://localhost:5000`)
-
-#### 1. Authentication & Profile
-| Method | Endpoint | Description | Request Body | Response |
-| :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/api/auth/register` | Register a new user | `{ name, email, password }` | `{ user, token }` |
-| `POST` | `/api/auth/login` | Login existing user | `{ email, password }` | `{ user, token }` |
-| `GET` | `/api/auth/me` | Fetch active user profile | *Bearer Token Header* | `{ userProfile, stats }` |
-
-#### 2. Session Management
-| Method | Endpoint | Description | Request Body | Response |
-| :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/api/sessions/create` | Initialize a new session | `{ userId, mode, topic, durationMins }` | `{ sessionId, sessionToken, topic, expiresAt }` |
-| `GET` | `/api/sessions/:id` | Get single session details | None | `{ session, transcript, report }` |
-| `GET` | `/api/sessions/user/:userId` | Get past session history | None | `[{ sessionId, mode, score, date }]` |
-
-#### 3. Internal AI Callback
-| Method | Endpoint | Description | Request Body | Response |
-| :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/api/internal/sessions/:id/report` | AI Backend pushes final evaluation report | Detailed Metrics JSON (see below) | `{ status: "SAVED" }` |
-
----
-
-### 🟣 Python FastAPI Endpoints & WebSockets (`http://localhost:8000`)
-
-#### 1. Health & Utility
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/health` | Check if AI services and LLM keys are operational |
-
-#### 2. Real-Time WebSockets (15–20 Min Active Rooms)
-
-##### A. Group Discussion Room (15–20 Min Live Execution)
-* **URI:** `ws://localhost:8000/ws/gd/{sessionId}`
-* **Step-by-Step Flow:**
-
-```text
-[ USER / MIC ]                   [ FRONTEND (WS CLIENT) ]              [ FASTAPI AI BACKEND ]
-      |                                     |                                     |
-      | --- 1. Connects to Room ----------> | --- WebSocket Handshake ----------> |
-      |                                     | <--- Moderator Intro Audio/Text --- |
-      |                                     |                                     |
-      | === PHASE: OPEN DISCUSSION (Minutes 1:00 - 18:00) ====================== |
-      | --- Speaks into Microphone -------> |                                     |
-      |                                     | --- Audio / Text Chunk -----------> | (VAD / STT)
-      |                                     |                                     | (Decides Next Speaker)
-      |                                     | <--- AI Agent Audio/Text Chunk ---- | (TTS Generation)
-      | <--- Plays Agent Audio in Ear ----- |                                     |
-      |                                     |                                     |
-      | === PHASE: CLOSING ROUND (Minutes 18:00 - 20:00) ======================= |
-      |                                     | <--- Moderator: "2 mins left..." -- |
-      | --- Speaks Final Summary ---------> | --- Final Speech Chunk -----------> |
-      |                                     |                                     |
-      | === PHASE: EVALUATION & CLOSURE ======================================== |
-      |                                     |                                     | (Runs Evaluator Engine)
-      |                                     |                                     | ---> Pushes Report to Node.js
-      |                                     | <--- Returns Final Scorecard JSON - |
-      | <--- Views Performance Dashboard -- |                                     |
-```
-
-##### B. Debate Arena
-* **URI:** `ws://localhost:8000/ws/debate/{sessionId}`
-* **Workflow:** Round 1 (Opening Statements) -> Round 2 & 3 (Rebuttals & Cross-examination) -> Round 4 (Closing Statements) -> Verdict & Scorecard.
-
-##### C. Mock Interview
-* **URI:** `ws://localhost:8000/ws/interview/{sessionId}`
-* **Workflow:** Greeting & Resume context -> Dynamic technical/behavioral questions -> Follow-up probes based on weak answers -> Structured interview scorecard.
-
----
-
-## 📡 6. WebSocket Message Protocol (JSON Schemas)
-
-### Client $\rightarrow$ Server Messages
-
-```json
-// 1. Sending Speech Transcript or Audio Chunk
-{
-  "event": "USER_SPEECH",
-  "text": "I believe artificial intelligence creates more jobs than it displaces because...",
-  "durationSeconds": 12.4
-}
-
-// 2. Keep-Alive Heartbeat (Sent every 15s)
-{
-  "event": "PING"
-}
-
-// 3. User voluntarily ends session early
-{
-  "event": "END_SESSION_REQUEST"
-}
-```
-
-### Server $\rightarrow$ Client Messages
-
-```json
-// 1. AI Agent Speaking (Text + Audio)
-{
-  "event": "AGENT_SPEAKING",
-  "agentName": "Aarav (The Contrarian)",
-  "text": "While that sounds promising, historical data shows sudden disruptions leave blue-collar workers displaced without safety nets.",
-  "audioBase64": "UklGRi...",
-  "turnState": "AGENT_TURN"
-}
-
-// 2. Room Notification / Time Alert
-{
-  "event": "MODERATOR_ALERT",
-  "message": "2 minutes remaining. Please present your concluding arguments.",
-  "timeRemainingSeconds": 120
-}
-
-// 3. Final Session Report (End of Session)
-{
-  "event": "SESSION_COMPLETED",
-  "report": {
-    "overallScore": 84,
-    "metrics": {
-      "clarity": 82,
-      "confidence": 88,
-      "relevance": 85,
-      "vocabularyGrammar": 79,
-      "speakingTimeRatio": 0.28,
-      "fillerWordsCount": 6,
-      "fillerWordsList": ["um", "like", "basically"],
-      "wordsPerMinute": 138
-    },
-    "feedback": {
-      "strengths": ["Clear voice modulation", "Strong opening rebuttal"],
-      "areasToImprove": ["Reduce filler words when transitioning", "Support economic arguments with specific statistics"]
-    }
-  }
-}
-```
-
----
-
-## 📁 7. Recommended Repository Structure
+## 📁 3. Repository Directory Structure
 
 ```
-UnMute-Yourself-AI/
-├── ai-backend/                      # Python FastAPI (AI Services)
+PBL/
+├── ai-backend/                      # Python FastAPI AI Engine
 │   ├── app/
-│   │   ├── api/                     # WebSocket & REST routes
-│   │   │   ├── gd_socket.py         # Group Discussion WS Handler
-│   │   │   ├── debate_socket.py     # Debate WS Handler
-│   │   │   └── interview_socket.py  # Interview WS Handler
-│   │   ├── core/                    # Config, Prompts, Personas
-│   │   │   ├── config.py            # API Keys, Environment variables
-│   │   │   └── prompts/             # Prompt engineering templates
-│   │   ├── services/                # Business logic
-│   │   │   ├── llm_service.py       # Gemini / OpenAI / Groq client
-│   │   │   ├── stt_service.py       # Speech-to-Text handler
-│   │   │   ├── tts_service.py       # Text-to-Speech handler
-│   │   │   ├── turn_manager.py      # Turn-taking & GD moderation logic
-│   │   │   └── evaluator.py         # Evaluation & grading engine
-│   │   └── app.py                   # FastAPI Application Entry
-│   ├── requirements.txt
-│   └── .env
+│   │   ├── api/                     # WebSocket Handlers
+│   │   │   ├── debate_socket.py     # 1v1 Debate WebSocket router & room manager
+│   │   │   ├── gd_socket.py         # Group Discussion WebSocket router & turn orchestrator
+│   │   │   └── interview_socket.py  # Mock Interview WebSocket router
+│   │   ├── core/                    # Core Configuration & Environment Setup
+│   │   │   └── config.py            # API Keys, LLM parameters, persona settings
+│   │   ├── services/                # Business Logic & AI Engines
+│   │   │   ├── debate_service.py    # Vikram debate rebuttal logic & state machine
+│   │   │   ├── gd_service.py        # 4-Persona GD orchestration & pause cleaning
+│   │   │   ├── interview_service.py # Adaptive interview engine & STAR evaluation
+│   │   │   ├── llm_service.py       # Google Gemini 2.0 Flash SDK client wrapper
+│   │   │   ├── resume_service.py    # PyPDF text extraction & profile analysis
+│   │   │   └── tts_service.py       # Edge-TTS voice generation & audio base64 encoder
+│   │   └── app.py                   # FastAPI Application initialization
+│   └── requirements.txt             # Python backend dependencies
 │
-├── node_backend/                    # Node.js Express (User, Auth, DB)
+├── node_backend/                    # Node.js Express Server & Auth Gateway
 │   ├── src/
-│   │   ├── config/                  # DB connection (MongoDB/PostgreSQL)
-│   │   ├── controllers/             # Auth, User, Session, Report controllers
-│   │   ├── middleware/              # JWT auth, Error handling
-│   │   ├── models/                  # User.js, Session.js, Report.js
-│   │   ├── routes/                  # /api/auth, /api/sessions, /api/internal
-│   │   └── index.js                 # Express Server Entry
-│   ├── package.json
-│   └── .env
+│   │   ├── config/                  # Sequelize SQLite database configuration (`db.js`)
+│   │   ├── controllers/             # Auth & Session business controllers
+│   │   ├── middleware/              # JWT verification middleware (`authMiddleware.js`)
+│   │   ├── models/                  # Sequelize Models (`User.js`, `Session.js`)
+│   │   └── routes/                  # Express endpoints (`authRoutes.js`, `sessionRoutes.js`, `internalRoutes.js`)
+│   ├── package.json                 # Node.js dependencies
+│   └── server.js                    # Node.js main server entry point (Port 5000)
 │
-├── frontend/                        # React / Vite (Client UI)
-│   ├── src/
-│   │   ├── components/              # AudioVisualizer, MicButton, Timer, TranscriptView
-│   │   ├── hooks/                   # useWebSocket.js, useAudioRecorder.js
-│   │   ├── pages/                   # Login, Register, Dashboard, GDRoom, ReportPage
-│   │   ├── services/                # API client (Axios/Fetch)
-│   │   └── App.jsx
-│   ├── package.json
-│   └── .env
+├── frontend/                        # Frontend Application UI
+│   ├── html/                        # HTML Pages with Lucide SVG Icons
+│   │   ├── landing.html             # Platform hero & features landing page
+│   │   ├── index.html               # Main User Dashboard & practice launch hub
+│   │   ├── login.html               # User authentication login page
+│   │   ├── register.html            # New user registration page
+│   │   ├── gd.html                  # Interactive 2D GD Studio (5 Personas + Audio Visualizer)
+│   │   ├── debate.html              # 1v1 AI Debate Arena (You vs. Vikram + Topic Shuffle)
+│   │   ├── interview.html           # Adaptive Mock Interview Studio & Resume Upload
+│   │   └── test_gd_websocket.html   # Standalone WebSocket debugging playground
+│   └── js/
+│       └── api.js                   # Client REST API wrapper, token storage, & global utils
 │
-├── main.py                          # Root convenience launcher
-└── README.md
+├── database.sqlite                  # Local SQLite Database (auto-generated by Sequelize)
+├── main.py                          # Python launcher script for FastAPI (`uvicorn app.app:app`)
+├── requirements.txt                 # Root Python requirements file
+├── package.json                     # Root configuration file
+└── README.md                        # Project documentation
 ```
 
 ---
 
-## 🚀 8. Step-by-Step Prototype Roadmap
+## 🔄 4. Detailed End-to-End Execution Flow
 
-1. **Milestone 1 (AI Backend Standalone Test):**
-   * Build the FastAPI WebSocket endpoint for **Group Discussion**.
-   * Test simulated 2-agent responses using Google Gemini API.
-2. **Milestone 2 (Node.js Auth & Session Store):**
-   * Setup Express server with MongoDB.
-   * Build `POST /api/auth/login` and `POST /api/sessions/create`.
-3. **Milestone 3 (Frontend Minimal Room):**
-   * Build a single page that connects to the FastAPI WebSocket, records mic audio, and renders agent responses.
-4. **Milestone 4 (Analytics & Report Generation):**
-   * Implement the scoring prompt on session finish and display the results on the frontend report page.
+```text
+[ USER UI / BROWSER ]                     [ NODE.JS BACKEND (5000) ]           [ PYTHON FASTAPI (8000) ]
+         |                                             |                                    |
+         | -- 1. POST /api/auth/login standard ------->|                                    |
+         | <--- Returns JWT Token & User Info ---------|                                    |
+         |                                             |                                    |
+         | -- 2. POST /api/sessions/create ----------->|                                    |
+         |    (Body: mode="GD", topic="AI Jobs")       |                                    |
+         |                                             | -- Creates DB Session Record       |
+         |                                             |    Status: "IN_PROGRESS"           |
+         | <--- Returns { session_id: "sess_abc123" } -|                                    |
+         |                                             |                                    |
+         | ========================= WEBSOCKET HANDOFF ===================================== |
+         |                                                                                  |
+         | -- 3. Connect WS: ws://127.0.0.1:8000/gd/ws/sess_abc123 ------------------------> |
+         |                                                                                  |
+         |                                                                       4. Spawns Room Engine
+         |                                                                          Loads 4 Personas
+         | <--- 5. Moderator Intro Message (Text + Base64 Edge-TTS Voice) ----------------- |
+         |                                                                                  |
+         | ================= LIVE INTERACTIVE SPEECH & VOICE LOOP ========================== |
+         |                                                                                  |
+         | -- 6. Mic Open -> Transcribes continuously into input box (Web Speech API) ----> |
+         | -- 7. User clicks Send / Enter -> WS Sends USER_MESSAGE -----------------------> |
+         |                                                                                  |
+         |                                                                       8. Gemini 2.0 Flash
+         |                                                                          Generates AI response
+         |                                                                          Applies clean_pause_text
+         |                                                                          Generates Edge-TTS
+         | <--- 9. Stream AGENT_SPEECH (Speaker Name + Script + Base64 Audio) ------------- |
+         |                                                                                  |
+         | ================= SESSION FINALIZATION & REPORT SYNC ============================ |
+         |                                                                                  |
+         | -- 10. Session Ends -> WS triggers Evaluator Engine ----------------------------> |
+         |                                             | <--- 11. POST /api/internal/... ----|
+         |                                             |     (Pushes Evaluation Metrics)    |
+         |                                             |     (Status: "COMPLETED")          |
+         | <--- 12. Receives Final Scorecard Modal JSON ------------------------------------ |
+```
+
+---
+
+## 🗣️ 5. Curated Topics & Module Configurations
+
+### 💬 A. Group Discussion Topics (17 Curated Topics)
+1. `AI: Opportunity or Threat to Jobs`
+2. `Technology Makes Life Better or Worse`
+3. `Importance of Communication Skills`
+4. `Hard Work vs. Smart Work`
+5. `Teamwork vs. Individual Work`
+6. `Money vs. Job Satisfaction`
+7. `Leadership vs. Teamwork`
+8. `Should College Students Have Part-Time Jobs?`
+9. `Is Attendance Necessary in College?`
+10. `Impact of Mobile Phones on Students`
+11. `Online Shopping vs. Offline Shopping`
+12. `Should Exams Be Replaced by Continuous Assessment?`
+13. `Is Social Media Good for Students?`
+14. `Success: Hard Work or Luck?`
+15. `Should Students Be Allowed to Use AI for Assignments?`
+16. `Is Competition Good for Students?`
+17. `Importance of Soft Skills vs. Technical Skills`
+
+### ⚔️ B. 1v1 Debate Motions (11 Curated Topics)
+1. `Skills Are More Important Than Degrees`
+2. `Technical Skills Are More Important Than Soft Skills`
+3. `Work From Home is Better Than Work From Office`
+4. `Job Security is More Important Than Salary`
+5. `Entrepreneurship is Better Than a Job`
+6. `Part-Time Jobs Are Beneficial for College Students`
+7. `Internships Should Be Mandatory for College Students`
+8. `College Education Should Focus More on Practical Skills`
+9. `Marks Do Not Define a Student's Ability`
+10. `Experience is More Important Than Qualification`
+11. `AI: Pros vs Cons`
+
+---
+
+## 🎭 6. AI Personas & Voice Specifications
+
+| Room / Role | Persona Name | Trait / Stance | Edge Neural Voice Model |
+| :--- | :--- | :--- | :--- |
+| **GD Moderator** | Kavita R. | Neutral steer, timing, structured summary | `en-IN-NeerjaExpressiveNeural` / `en-US-AvaNeural` |
+| **GD Analyst** | Rohan S. | Data-driven, balanced, logical examples | `en-US-GuyNeural` |
+| **GD Peacemaker** | Sneha P. | Consensual, bridging opposing viewpoints | `en-US-EmmaNeural` |
+| **GD Contrarian** | Aarav M. | Counter-arguments, challenging assumptions | `en-US-EricNeural` |
+| **1v1 Debate** | Vikram | Opposer, sharp rebuttals, direct counter-attacks | `en-US-ChristopherNeural` |
+
+---
+
+## 🔌 7. Key API Endpoint Reference
+
+### 🟢 Node.js REST Endpoints (`http://localhost:5000`)
+- **`POST /api/auth/register`**: Creates new user account in SQLite DB.
+- **`POST /api/auth/login`**: Authenticates user and returns signed JWT token.
+- **`GET /api/auth/me`**: Fetches active authenticated user profile details.
+- **`POST /api/sessions/create`**: Creates new session document in DB with `IN_PROGRESS` status.
+- **`GET /api/sessions/user/:userId`**: Retrieves full past session history and scorecards.
+- **`POST /api/internal/sessions/:id/report`**: Internal callback for Python AI backend to save final evaluation report.
+
+### 🟣 Python FastAPI WebSocket Endpoints (`ws://127.0.0.1:8000`)
+- **`ws://127.0.0.1:8000/gd/ws/{room_id}`**: Group Discussion 4-Persona WebSocket studio.
+- **`ws://127.0.0.1:8000/debate/ws/{room_id}`**: 1v1 Debate Arena WebSocket stream.
+- **`ws://127.0.0.1:8000/interview/ws/{room_id}`**: Adaptive Mock Interview WebSocket stream.
+
+---
+
+## 💻 8. Installation & Setup Guide
+
+### 📋 Prerequisites
+- **Node.js**: v18.0.0 or higher
+- **Python**: v3.10 or higher
+- **Google Gemini API Key** (set in environment file)
+
+### 1️⃣ Environment Configuration
+Create a `.env` file in the root / `ai-backend` directory:
+```env
+GEMINI_API_KEY=your_google_gemini_api_key_here
+PORT=5000
+JWT_SECRET=your_jwt_secret_key_here
+```
+
+### 2️⃣ Setting Up & Running the Node.js Backend
+```bash
+cd node_backend
+npm install
+node server.js
+```
+*The Node.js server will run on `http://localhost:5000` and serve both REST endpoints and frontend pages.*
+
+### 3️⃣ Setting Up & Running the Python AI Engine
+Open a second terminal window in the project root:
+```bash
+# Create and activate python virtual environment (Optional but recommended)
+python -m venv venv
+# Windows:
+venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the Python AI Engine launcher
+python main.py
+```
+*The Python FastAPI Engine will start on `http://127.0.0.1:8000`.*
+
+### 4️⃣ Accessing the Application
+Open your browser and navigate to:
+```text
+http://localhost:5000
+```
+- Click **Get Started / Register** to create an account.
+- Choose between **Group Discussion Studio**, **1v1 AI Debate Arena**, or **Mock Interview Prep**.
+- Grant microphone access when prompted to experience real-time speech transcription and neural voice responses!
+
+---
+
+## ⚡ 9. Verification & Testing
+
+- **Backend Health Check:** `http://localhost:5000/health`
+- **AI Engine Health Check:** `http://127.0.0.1:8000/health`
+- **Standalone WebSocket Debugger:** `http://localhost:5000/html/test_gd_websocket.html`
+
+---
+
+> **UnMute-Yourself AI** — *Master your voice, command the room.*
