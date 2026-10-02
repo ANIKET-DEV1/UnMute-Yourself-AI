@@ -1180,22 +1180,26 @@
 
     function displayParsedResume(data) {
       document.getElementById('reuploadAlert').style.display = 'none';
-      document.getElementById('parsedCandidateName').innerText = data.candidate_name || "Candidate";
-      document.getElementById('parsedMatchScore').innerText = `${data.role_match_score || 85}% Role Match`;
-      document.getElementById('parsedExpYears').innerText = `${data.experience_years || 2}+ Yrs Experience`;
+      document.getElementById('parsedCandidateName').innerText = data.candidate_name || "Candidate Profile";
+      document.getElementById('parsedMatchScore').innerText = `${data.role_match_score || 88}% Role Match`;
 
+      const exp = data.skills ? (data.years_experience || data.experience_years || "1-2 years") : "1-2 years";
+      document.getElementById('parsedExpYears').innerText = typeof exp === 'string' && exp.includes('year') ? exp : `${exp}+ Yrs Experience`;
+
+      const extractedSkills = (data.skills && data.skills.length > 0) ? data.skills : ((data.primary_skills && data.primary_skills.length > 0) ? data.primary_skills : ['Software Engineering', 'System Architecture']);
       const skillsChips = document.getElementById('parsedSkillsChips');
       skillsChips.innerHTML = '';
-      (data.primary_skills || ['JavaScript', 'System Architecture']).forEach(skill => {
+      extractedSkills.forEach(skill => {
         const chip = document.createElement('span');
         chip.className = 'extracted-chip';
         chip.innerText = `⚡ ${skill}`;
         skillsChips.appendChild(chip);
       });
 
+      const extractedProjects = (data.key_projects && data.key_projects.length > 0) ? data.key_projects : ['Technical Portfolio Project'];
       const projectsChips = document.getElementById('parsedProjectsChips');
       projectsChips.innerHTML = '';
-      (data.key_projects || ['Cloud Microservices App', 'Real-time WebSocket Platform']).forEach(proj => {
+      extractedProjects.forEach(proj => {
         const chip = document.createElement('span');
         chip.className = 'extracted-chip';
         chip.style.borderColor = 'rgba(37, 99, 235, 0.3)';
