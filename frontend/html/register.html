@@ -437,6 +437,7 @@
         </div>
     </div>
 
+    <script src="../js/api.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const registerForm = document.getElementById('registerForm');
@@ -475,7 +476,7 @@
             setupInputListeners(confirmPasswordInput, confirmPasswordGroup, 'confirmPasswordError');
 
             // Handle form submission
-            registerForm.addEventListener('submit', (e) => {
+            registerForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 let hasError = false;
 
@@ -512,7 +513,7 @@
                     hasError = true;
                 }
 
-                // If no errors, simulate registration request
+                // If no errors, call Node backend register API
                 if (!hasError) {
                     // Update button state to loading
                     btnText.style.display = 'none';
@@ -521,19 +522,19 @@
                     registerBtn.style.pointerEvents = 'none';
                     registerBtn.style.opacity = '0.9';
 
-                    // Simulate API delay
-                    setTimeout(() => {
-                        // Reset button
+                    try {
+                        const response = await API.auth.register(name, email, password);
+                        console.log('Registration success:', response);
+                        window.location.href = 'index.html';
+                    } catch (err) {
+                        alert(err.message || 'Registration failed. Please try again.');
+                    } finally {
                         btnText.style.display = 'block';
                         btnIcon.style.display = 'block';
                         btnSpinner.style.display = 'none';
                         registerBtn.style.pointerEvents = 'auto';
                         registerBtn.style.opacity = '1';
-                        
-                        alert('Registration successful! Welcome to UnMute-Yourself AI.');
-                        // In a real app, you would redirect here:
-                        // window.location.href = 'login.html';
-                    }, 1500);
+                    }
                 }
             });
             
@@ -562,3 +563,4 @@
     </script>
 </body>
 </html>
+

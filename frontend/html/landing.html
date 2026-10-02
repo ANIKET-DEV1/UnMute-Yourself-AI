@@ -415,14 +415,14 @@
         </div>
         
         <div class="nav-right">
-            <!-- These links match the screenshot -->
+            <!-- Navigation links -->
             <ul class="nav-links">
-                <li><a href="#"><i class="fa-solid fa-users"></i> GD Arena</a></li>
-                <li><a href="#"><i class="fa-solid fa-khanda"></i> 1v1 Debate</a></li>
-                <li><a href="#"><i class="fa-solid fa-briefcase"></i> Mock Interview</a></li>
+                <li><a href="gd.html"><i class="fa-solid fa-users"></i> GD Arena</a></li>
+                <li><a href="debate.html"><i class="fa-solid fa-khanda"></i> 1v1 Debate</a></li>
+                <li><a href="interview.html"><i class="fa-solid fa-briefcase"></i> Mock Interview</a></li>
             </ul>
             
-            <div class="auth-buttons">
+            <div class="auth-buttons" id="landing-auth-buttons">
                 <a href="login.html" class="btn btn-outline">Log in</a>
                 <a href="register.html" class="btn btn-primary">Sign up</a>
             </div>
@@ -438,7 +438,7 @@
         <p>Sharpen your communication, articulation, and quick thinking with realistic AI personas in immersive, timed simulation rooms.</p>
     </div>
 
-    <!-- Feature Cards based on Image -->
+    <!-- Feature Cards -->
     <div class="cards-container">
         <!-- Group Discussion -->
         <div class="feature-card card-gd">
@@ -447,7 +447,7 @@
             </div>
             <h3>Group Discussion</h3>
             <p>Real-time 5-member circular GD arena with AI personas (Moderator, Analyst, Contrarian, Peacemaker). Features topic draw, 15m prep, and 20m debate.</p>
-            <a href="login.html" class="card-btn">Enter GD Arena</a>
+            <a href="gd.html" class="card-btn">Enter GD Arena</a>
         </div>
 
         <!-- 1v1 Debate -->
@@ -457,7 +457,7 @@
             </div>
             <h3>1v1 AI Debate</h3>
             <p>Head-to-head competitive debate against an aggressive AI adversary with timed cross-examinations and rebuttals.</p>
-            <a href="login.html" class="card-btn">Start 1v1 Debate</a>
+            <a href="debate.html" class="card-btn">Start 1v1 Debate</a>
         </div>
 
         <!-- Mock Interview -->
@@ -467,9 +467,23 @@
             </div>
             <h3>1-on-1 Mock Interview</h3>
             <p>Select role & language, upload resume with smart extraction, and enter a 15-20 min adaptive interview from intro to tough system design.</p>
-            <a href="login.html" class="card-btn">Start Mock Interview</a>
+            <a href="interview.html" class="card-btn">Start Mock Interview</a>
         </div>
     </div>
 
+    <script src="../js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const authContainer = document.getElementById('landing-auth-buttons');
+            if (Auth.isLoggedIn()) {
+                const user = Auth.getUser();
+                authContainer.innerHTML = `
+                    <a href="index.html" class="btn btn-outline" style="border-color: #6e46eb; color: #6e46eb;">Dashboard (${user?.name || 'User'})</a>
+                    <a href="#" onclick="Auth.logout()" class="btn btn-primary">Logout</a>
+                `;
+            }
+        });
+    </script>
 </body>
 </html>
+

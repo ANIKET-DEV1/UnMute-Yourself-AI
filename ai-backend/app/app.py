@@ -1,12 +1,13 @@
 """FastAPI Application Entry Point for AI Backend."""
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import os
 from app.core.config import settings
-from app.api.gd_socket import gd
-from app.api.interview_socket import interview_router
+from app.api.gd_socket import gd, group_discussion_ws
+from app.api.interview_socket import interview_router, mock_interview_ws
+from app.api.debate_socket import debate_router, debate_1v1_ws
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -23,9 +24,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register API Routers
+# Register Routers
 app.include_router(gd)
 app.include_router(interview_router)
+app.include_router(debate_router)
+
+# Direct top-level WebSocket alias routes matching README specifications
+@app.websocket("/ws/gd/{room_id}")
+async def ws_gd_alias(websocket: WebSocket, room_id: str):
+    await group_discussion_ws(websocket, room_id)
+
+@app.websocket("/ws/debate/{room_id}")
+async def ws_debate_alias(websocket: WebSocket, room_id: str):
+    await debate_1v1_ws(websocket, room_id)
+
+@app.websocket("/ws/interview/{room_id}")
+async def ws_interview_alias(websocket: WebSocket, room_id: str):
+    await mock_interview_ws(websocket, room_id)
 
 # Serve Static HTML & Avatars (Frontend)
 frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "html"))
@@ -41,6 +56,22 @@ def serve_index():
     if os.path.exists(index_file):
         return FileResponse(index_file)
     return {"status": "online", "service": settings.PROJECT_NAME}
+
+@app.get("/login.html")
+@app.get("/login")
+def serve_login():
+    login_file = os.path.join(frontend_dir, "login.html")
+    if os.path.exists(login_file):
+        return FileResponse(login_file)
+    return {"error": "login.html not found"}
+
+@app.get("/register.html")
+@app.get("/register")
+def serve_register():
+    register_file = os.path.join(frontend_dir, "register.html")
+    if os.path.exists(register_file):
+        return FileResponse(register_file)
+    return {"error": "register.html not found"}
 
 @app.get("/interview.html")
 @app.get("/mock-interview")

@@ -7,6 +7,7 @@ from app.services.gd_service import get_or_create_room
 gd = APIRouter(prefix="/gd")
 
 @gd.websocket("/ws/{room_id}")
+@gd.websocket("/{room_id}")
 async def group_discussion_ws(websocket: WebSocket, room_id: str):
     await websocket.accept()
 
@@ -48,7 +49,7 @@ async def group_discussion_ws(websocket: WebSocket, room_id: str):
                         "audio": turn["audio"],
                         "turnState": turn["turnState"]
                     })
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(1.5)
 
             # Stage: End & Evaluation Request
             elif event_type == "END_SESSION":
@@ -74,38 +75,31 @@ async def group_discussion_ws(websocket: WebSocket, room_id: str):
                 if not user_text:
                     continue
 
-                session.record_user_speech(user_text, filler_count=filler_count)
-
-                await websocket.send_json({
-                    "event": "USER_SPEECH_ACK",
-                    "message": "User speech recorded. AI participants are debating..."
-                })
-
-                # Stream 2 sequential AI peer turns
-                num_turns = 2
-                for i in range(num_turns):
-                    ai_response = await session.generate_next_agent_turn()
-                    is_last = (i == num_turns - 1)
-
+                if getattr(session, 'phase', 'OPEN_DISCUSSION') == 'INTRODUCTIONS':
+                    # User is introducing themselves: Moderator welcomes them and opens main debate phase
+                    mod_turn = await session.handle_user_introduction_response(user_text, filler_count=filler_count)
                     await websocket.send_json({
                         "event": "AGENT_SPEAKING",
-                        "sender": ai_response["speaker"],
-                        "text": ai_response["text"],
-                        "audio": ai_response.get("audio", ""),
-                        "turnState": "USER_TURN" if is_last else "AGENT_TURN"
+                        "sender": mod_turn["speaker"],
+                        "text": mod_turn["text"],
+                        "audio": mod_turn.get("audio", ""),
+                        "turnState": mod_turn["turnState"]
+                    })
+                else:
+                    # Open Discussion Phase: AI peers debate and counter-argue active points
+                    session.record_user_speech(user_text, filler_count=filler_count)
+
+                    await websocket.send_json({
+                        "event": "USER_SPEECH_ACK",
+                        "message": "User speech recorded. AI participants are debating..."
                     })
 
-                    if not is_last:
-                        await asyncio.sleep(0.5)
-
-            else:
-                user_text = data.get("text") or str(data)
-                filler_count = data.get("filler_count", 0) if isinstance(data, dict) else 0
-                if user_text:
-                    session.record_user_speech(user_text, filler_count=filler_count)
-                    for i in range(2):
+                    # Stream 2 sequential AI peer turns
+                    num_turns = 2
+                    for i in range(num_turns):
                         ai_response = await session.generate_next_agent_turn()
-                        is_last = (i == 1)
+                        is_last = (i == num_turns - 1)
+
                         await websocket.send_json({
                             "event": "AGENT_SPEAKING",
                             "sender": ai_response["speaker"],
@@ -113,8 +107,37 @@ async def group_discussion_ws(websocket: WebSocket, room_id: str):
                             "audio": ai_response.get("audio", ""),
                             "turnState": "USER_TURN" if is_last else "AGENT_TURN"
                         })
+
                         if not is_last:
-                            await asyncio.sleep(0.5)
+                            await asyncio.sleep(1.5)
+
+            else:
+                user_text = data.get("text") or str(data)
+                filler_count = data.get("filler_count", 0) if isinstance(data, dict) else 0
+                if user_text:
+                    if getattr(session, 'phase', 'OPEN_DISCUSSION') == 'INTRODUCTIONS':
+                        mod_turn = await session.handle_user_introduction_response(user_text, filler_count=filler_count)
+                        await websocket.send_json({
+                            "event": "AGENT_SPEAKING",
+                            "sender": mod_turn["speaker"],
+                            "text": mod_turn["text"],
+                            "audio": mod_turn.get("audio", ""),
+                            "turnState": mod_turn["turnState"]
+                        })
+                    else:
+                        session.record_user_speech(user_text, filler_count=filler_count)
+                        for i in range(2):
+                            ai_response = await session.generate_next_agent_turn()
+                            is_last = (i == 1)
+                            await websocket.send_json({
+                                "event": "AGENT_SPEAKING",
+                                "sender": ai_response["speaker"],
+                                "text": ai_response["text"],
+                                "audio": ai_response.get("audio", ""),
+                                "turnState": "USER_TURN" if is_last else "AGENT_TURN"
+                            })
+                            if not is_last:
+                                await asyncio.sleep(1.5)
 
     except WebSocketDisconnect:
         print(f"[WebSocket] Client disconnected from GD room: {room_id}")

@@ -94,13 +94,37 @@
     .gd-header-badge { font-family: var(--font-tech); font-size: 11px; font-weight: 900; color: var(--accent-cyan); }
     .teller-status { font-size: 13px; font-weight: 600; color: #f8fafc; }
 
-    .participant-seat-2d { position: absolute; }
-    .seat-rohan { left: 16%; top: 32%; }
-    .seat-kavita { left: 38%; top: 18%; }
-    .seat-aarav { right: 16%; top: 32%; }
-    .seat-sneha { right: 28%; top: 58%; }
-    .seat-user { left: 28%; top: 58%; }
-    .seat-tag-2d { background: rgba(15,23,42,0.85); border-radius: 12px; padding: 6px 14px; color: white; font-size: 12px; font-weight: 700; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+    .participant-seat-2d { position: absolute; transform: translate(-50%, -100%); transition: all 0.3s ease; }
+    .seat-rohan { left: 19.5%; top: 37%; }
+    .seat-kavita { left: 38.5%; top: 37%; }
+    .seat-sneha { left: 80.5%; top: 37%; }
+    .seat-aarav { left: 61.5%; top: 37%; }
+    .seat-user { left: 50%; top: 74%; }
+
+    .seat-tag-2d {
+      background: rgba(15,23,42,0.9);
+      border-radius: 12px;
+      padding: 6px 14px;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      border: 2px solid rgba(255,255,255,0.2);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .seat-tag-2d.speaking {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.9);
+      border-color: #38bdf8 !important;
+      animation: seatPulse 1.2s infinite alternate;
+    }
+
+    @keyframes seatPulse {
+      0% { box-shadow: 0 0 10px rgba(56, 189, 248, 0.6); }
+      100% { box-shadow: 0 0 25px rgba(56, 189, 248, 1); }
+    }
 
     .interview-sidebar { background: #ffffff; border-left: 1px solid var(--border-color); display: flex; flex-direction: column; height: 100%; overflow: hidden; }
     .panel-title { padding: 14px 20px; border-bottom: 1px solid var(--border-color); font-family: var(--font-tech); font-weight: 700; font-size: 13px; text-transform: uppercase; color: var(--text-main); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
@@ -287,6 +311,7 @@
     </div>
   </div>
 
+  <script src="../js/api.js"></script>
   <script>
     let currentTopic = "Will AI Replace Software Engineers in the Upcoming Era?";
     let ws = null;
@@ -307,22 +332,97 @@
       "Impact of Remote Work & Hybrid Models on Team Innovation & Productivity"
     ];
 
-    function enqueueAudio(audioB64) {
-      if (!audioB64) return;
-      audioQueue.push(audioB64);
-      processAudioQueue();
+    let gdTurnQueue = [];
+    let isProcessingGDTurn = false;
+
+    function cleanPauseText(text) {
+      if (!text) return '';
+      return text.replace(/[\(\[\{]\s*(?:pause|pauses|short pause|brief pause|silent|sigh)\s*[\)\]\}]/gi, '...').replace(/\s+/g, ' ').trim();
     }
 
-    function processAudioQueue() {
-      if (isAudioPlaying || audioQueue.length === 0) return;
-      const b64 = audioQueue.shift();
-      isAudioPlaying = true;
-      try {
-        currentAudioElement = new Audio("data:audio/mp3;base64," + b64);
-        currentAudioElement.onended = () => { isAudioPlaying = false; processAudioQueue(); };
-        currentAudioElement.onerror = () => { isAudioPlaying = false; processAudioQueue(); };
-        currentAudioElement.play().catch(e => { isAudioPlaying = false; processAudioQueue(); });
-      } catch(e) { isAudioPlaying = false; processAudioQueue(); }
+    function updateTellerStatusThinking() {
+      const tellerEl = document.getElementById('tellerStatus');
+      const headerBadgeEl = document.querySelector('.gd-2d-header');
+      document.querySelectorAll('.seat-tag-2d').forEach(tag => tag.classList.remove('speaking'));
+      if (tellerEl) tellerEl.innerHTML = `<span style="color: #38bdf8; font-weight: 800;">⏳ AI is thinking...</span> Please wait for reply`;
+      if (headerBadgeEl) headerBadgeEl.style.borderColor = 'rgba(56, 189, 248, 0.8)';
+    }
+
+    function highlightActiveSpeaker(speakerName) {
+      document.querySelectorAll('.seat-tag-2d').forEach(tag => tag.classList.remove('speaking'));
+      let seatId = null;
+      const sLower = (speakerName || '').toLowerCase();
+      if (sLower.includes('kavita') || sLower.includes('moderator')) seatId = 'seat-Kavita';
+      else if (sLower.includes('rohan') || sLower.includes('analyst')) seatId = 'seat-Rohan';
+      else if (sLower.includes('aarav') || sLower.includes('contrarian')) seatId = 'seat-Aarav';
+      else if (sLower.includes('sneha') || sLower.includes('peacemaker')) seatId = 'seat-Sneha';
+      else if (sLower.includes('you') || sLower.includes('user') || sLower.includes('participant')) seatId = 'seat-User';
+
+      if (seatId) {
+        const seatTag = document.querySelector(`#${seatId} .seat-tag-2d`);
+        if (seatTag) seatTag.classList.add('speaking');
+      }
+    }
+
+    function updateTellerStatus(speakerName, isUserTurn) {
+      const tellerEl = document.getElementById('tellerStatus');
+      const headerBadgeEl = document.querySelector('.gd-2d-header');
+
+      if (isUserTurn) {
+        if (tellerEl) tellerEl.innerHTML = `<span style="color: #fbbf24; font-weight: 800;">👉 YOUR TURN!</span> Click mic or type to speak`;
+        if (headerBadgeEl) headerBadgeEl.style.borderColor = 'rgba(251, 191, 36, 0.8)';
+        highlightActiveSpeaker('User');
+      } else {
+        if (tellerEl) tellerEl.innerHTML = `<span style="color: #38bdf8; font-weight: 800;">🎙️ ${speakerName}</span> is speaking...`;
+        if (headerBadgeEl) headerBadgeEl.style.borderColor = 'rgba(56, 189, 248, 0.8)';
+        highlightActiveSpeaker(speakerName);
+      }
+    }
+
+    function enqueueGDTurn(turnData) {
+      gdTurnQueue.push(turnData);
+      processGDTurnQueue();
+    }
+
+    function processGDTurnQueue() {
+      if (isProcessingGDTurn) return;
+
+      if (gdTurnQueue.length === 0) {
+        // Queue is empty -> It's the User's turn to speak!
+        updateTellerStatus('You', true);
+        return;
+      }
+
+      isProcessingGDTurn = true;
+      const turn = gdTurnQueue.shift();
+
+      // Update speaker status & highlight head tag
+      const isUser = turn.turnState === 'USER_TURN';
+      updateTellerStatus(turn.sender || 'AI Participant', false);
+
+      appendGDTranscript(turn.sender || 'AI', turn.text);
+
+      const finishTurnAndPause = () => {
+        // 1.5 second pause between speakers
+        setTimeout(() => {
+          isProcessingGDTurn = false;
+          processGDTurnQueue();
+        }, 1500);
+      };
+
+      if (turn.audio) {
+        try {
+          currentAudioElement = new Audio("data:audio/mp3;base64," + turn.audio);
+          currentAudioElement.onended = finishTurnAndPause;
+          currentAudioElement.onerror = finishTurnAndPause;
+          currentAudioElement.play().catch(finishTurnAndPause);
+        } catch(e) {
+          finishTurnAndPause();
+        }
+      } else {
+        const estDisplayTime = Math.max(2500, Math.min(8000, (turn.text.length / 15) * 1000));
+        setTimeout(finishTurnAndPause, estDisplayTime);
+      }
     }
 
     function showScreen(screenId) {
@@ -386,11 +486,30 @@
       connectAndStartGD();
     }
 
-    function connectAndStartGD() {
-      const url = "ws://127.0.0.1:8000/gd/ws/room_demo_101?topic=" + encodeURIComponent(currentTopic);
+    async function connectAndStartGD() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let sessionId = urlParams.get('sessionId');
+
+      if (!sessionId && typeof API !== 'undefined') {
+        try {
+          const s = await API.sessions.createSession('GROUP_DISCUSSION', currentTopic, 20);
+          sessionId = s.sessionId;
+        } catch (e) {
+          sessionId = 'room_gd_' + Date.now();
+        }
+      } else if (!sessionId) {
+        sessionId = 'room_gd_' + Date.now();
+      }
+
+      const host = window.location.hostname || '127.0.0.1';
+      // Python WS connection (support both /gd/ws/ and /ws/gd/)
+      const url = `ws://${host}:8000/ws/gd/${sessionId}?topic=` + encodeURIComponent(currentTopic);
+      const fallbackUrl = `ws://${host}:8000/gd/ws/${sessionId}?topic=` + encodeURIComponent(currentTopic);
+
       document.getElementById('tellerStatus').innerText = "Connecting to GD arena...";
-      try {
-        ws = new WebSocket(url);
+      
+      const connectWS = (targetUrl) => {
+        ws = new WebSocket(targetUrl);
         ws.onopen = () => {
           document.getElementById('tellerStatus').innerText = "Connected! GD session in progress.";
           startGD20MinTimer();
@@ -400,15 +519,34 @@
           try {
             const data = JSON.parse(event.data);
             if (data.event === 'AGENT_SPEAKING') {
-              appendGDTranscript(data.sender || 'AI', data.text);
-              enqueueAudio(data.audio);
+              enqueueGDTurn({
+                sender: data.sender || 'AI Participant',
+                text: data.text,
+                audio: data.audio
+              });
+            } else if (data.event === 'USER_SPEECH_ACK') {
+              updateTellerStatusThinking();
             } else if (data.event === 'SESSION_COMPLETED') {
               showScorecardModal(data.scorecard);
+              if (typeof API !== 'undefined' && sessionId) {
+                API.sessions.saveReport(sessionId, data.scorecard || data.report).catch(console.error);
+              }
             }
           } catch(e) { console.error(e); }
         };
+        ws.onerror = () => {
+          if (targetUrl === url) {
+            console.log("Primary WS endpoint failed, trying fallback WS route...");
+            connectWS(fallbackUrl);
+          }
+        };
+      };
+
+      try {
+        connectWS(url);
       } catch(err) { alert("Failed to connect GD: " + err.message); }
     }
+
 
     function startGD20MinTimer() {
       sessionSeconds = 20 * 60;
@@ -425,9 +563,11 @@
     function appendGDTranscript(speaker, text) {
       const feed = document.getElementById('transcriptFeed');
       if (!feed) return;
+      const cleanText = cleanPauseText(text);
+      if (!cleanText) return;
       const bubble = document.createElement('div');
       bubble.className = 'feed-bubble';
-      bubble.innerHTML = `<div class="feed-speaker">${speaker}</div><div>${text}</div>`;
+      bubble.innerHTML = `<div class="feed-speaker">${speaker}</div><div>${cleanText}</div>`;
       feed.appendChild(bubble);
       feed.scrollTop = feed.scrollHeight;
     }
@@ -467,33 +607,49 @@
 
     function toggleMic() {
       const btn = document.getElementById('btnMic');
+      const micStatus = document.getElementById('micStatus');
       if (!isRecording) {
         isRecording = true;
-        finalGDSpeech = "";
+        finalGDSpeech = document.getElementById('userInput').value.trim();
+        if (finalGDSpeech.length > 0) finalGDSpeech += ' ';
         interimGDSpeech = "";
         btn.classList.add('recording');
-        document.getElementById('micStatus').innerText = "🎙️ Recording... Click to Send";
+        if (micStatus) micStatus.innerText = "🎙️ Recording... Speak & click Send when ready";
         if (gdRecognition) {
           try { gdRecognition.start(); } catch(e){}
         }
       } else {
         isRecording = false;
         btn.classList.remove('recording');
-        document.getElementById('micStatus').innerText = "Click Mic to Speak (up to 1m)";
+        if (micStatus) micStatus.innerText = "Mic Paused. Click Send to submit speech";
         if (gdRecognition) {
           try { gdRecognition.stop(); } catch(e){}
         }
-        const text = document.getElementById('userInput').value.trim() || (finalGDSpeech + interimGDSpeech).trim();
-        if (text) sendTextInput();
+        // Keep transcribed text in input box until user clicks Send or hits Enter
       }
     }
 
     function sendTextInput() {
-      const text = document.getElementById('userInput').value.trim() || (finalGDSpeech + interimGDSpeech).trim();
+      const textInput = document.getElementById('userInput');
+      const text = textInput ? textInput.value.trim() : '';
       if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
+
+      // Stop mic if recording when user clicks Send
+      if (isRecording) {
+        isRecording = false;
+        const btn = document.getElementById('btnMic');
+        if (btn) btn.classList.remove('recording');
+        const micStatus = document.getElementById('micStatus');
+        if (micStatus) micStatus.innerText = "Click Mic to Speak (up to 1m)";
+        if (gdRecognition) {
+          try { gdRecognition.stop(); } catch(e){}
+        }
+      }
+
       appendGDTranscript('You', text);
+      updateTellerStatusThinking();
       ws.send(JSON.stringify({ event: 'USER_SPEECH', text: text, filler_count: 0 }));
-      document.getElementById('userInput').value = '';
+      if (textInput) textInput.value = '';
       finalGDSpeech = '';
       interimGDSpeech = '';
     }

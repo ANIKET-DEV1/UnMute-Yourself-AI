@@ -1,6 +1,9 @@
 """Group Discussion (GD) Multi-Agent Session Orchestrator & State Machine."""
+# pyrefly: ignore [missing-import]
 from app.services.llm_service import director_chain, agent_chain, evaluator_chain
+# pyrefly: ignore [missing-import]
 from app.services.tts_service import generate_neural_audio_b64, PERSONA_VOICES
+# pyrefly: ignore [missing-import]
 from app.core.prompts.gd import (
     GDRouterDecision,
     GDEvaluationScorecard,
@@ -19,6 +22,7 @@ class GDRoomSession:
         self.transcript: list[dict] = []
         self.last_speaker: str = "Moderator"
         self.user_filler_count: int = 0
+        self.phase: str = "INTRODUCTIONS"
 
     def get_recent_history(self, k: int = 6) -> str:
         """Returns the most recent k conversation turns."""
@@ -38,6 +42,7 @@ class GDRoomSession:
 
     async def generate_introductions_list(self) -> list[dict]:
         """Generates introduction turns and neural audio for all 4 AI personas."""
+        self.phase = "INTRODUCTIONS"
         intros = [
             ("Moderator (Kavita)", MODERATOR_INTRO_PROMPT.format(topic=self.topic), PERSONA_VOICES["Moderator"]),
             ("Analyst (Rohan)", ANALYST_INTRO_PROMPT, PERSONA_VOICES["Analyst"]),
@@ -56,6 +61,27 @@ class GDRoomSession:
                 "turnState": "USER_TURN" if speaker.startswith("Peacemaker") else "AGENT_TURN"
             })
         return intro_turns
+
+    async def handle_user_introduction_response(self, user_text: str, filler_count: int = 0) -> dict:
+        """Handles user's introduction speech utterance and transitions smoothly into open discussion."""
+        self.record_user_speech(user_text, filler_count=filler_count)
+        self.phase = "OPEN_DISCUSSION"
+
+        text = (
+            f"Thanks for introducing yourself! Now that everyone around the table has introduced themselves, "
+            f"our discussion on '{self.topic}' is officially open. Who would like to start off with the first main argument?"
+        )
+        audio_b64 = await generate_neural_audio_b64(text, PERSONA_VOICES["Moderator"])
+        self.transcript.append({"speaker": "Moderator (Kavita)", "text": text})
+        self.last_speaker = "Moderator"
+
+        return {
+            "speaker": "Moderator (Kavita)",
+            "text": text,
+            "persona": "Moderator",
+            "audio": audio_b64,
+            "turnState": "USER_TURN"
+        }
 
     async def generate_next_agent_turn(self) -> dict:
         """Orchestrates next speaker selection, speech generation, and neural audio synthesis."""
@@ -101,6 +127,11 @@ class GDRoomSession:
             reply_text = f"That brings up a crucial point regarding {self.topic}. Let me build on that for a second."
 
         reply_clean = reply_text.strip()
+        # Remove literal stage directions like (pause), [pause], (pauses) so TTS doesn't speak "pause"
+        import re
+        reply_clean = re.sub(r'[\(\[\{]\s*(?:pause|pauses|short pause|brief pause|silent|sigh)\s*[\)\]\}]', '...', reply_clean, flags=re.IGNORECASE)
+        reply_clean = re.sub(r'\s+', ' ', reply_clean).strip()
+
         speaker_display = SPEAKER_NAMES.get(chosen_agent, f"{chosen_agent} AI")
 
         # Step 3: Neural Voice Synthesis

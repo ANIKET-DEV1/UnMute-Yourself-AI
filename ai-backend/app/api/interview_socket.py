@@ -35,6 +35,7 @@ async def upload_and_parse_resume(
         }
 
 @interview_router.websocket("/ws/{room_id}")
+@interview_router.websocket("/{room_id}")
 async def mock_interview_ws(websocket: WebSocket, room_id: str):
     """WebSocket connection handler for live 15-20 min 1-on-1 interview session."""
     await websocket.accept()

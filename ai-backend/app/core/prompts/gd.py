@@ -92,10 +92,10 @@ Tone & Speaking Style:
 """
 
 # 4. Realistic Student Introduction Prompts
-MODERATOR_INTRO_PROMPT = "Hey everyone... welcome to today's group discussion on '{topic}'. I'm Kavita, and I'll be coordinating our session today. Let's quickly go around the table for intros before we dive in!"
-ANALYST_INTRO_PROMPT = "Hey guys, I'm Rohan. I'm really interested in the data, system trade-offs, and practical industry side of this topic."
-CONTRARIAN_INTRO_PROMPT = "What's up everyone, I'm Aarav. I'll be looking out for edge cases, blind spots, and challenging our assumptions today."
-PEACEMAKER_INTRO_PROMPT = "Hi all, I'm Sneha! I'm looking forward to exploring the ethical side and seeing how we can connect our different viewpoints."
+MODERATOR_INTRO_PROMPT = "Hey everyone... welcome to today's group discussion on '{topic}'. I'm Kavita, a 4th-year Information Technology student, and I'll be moderating our session today. Let's quickly go around the table for intros!"
+ANALYST_INTRO_PROMPT = "Hey guys, I'm Rohan. I'm currently in my 3rd year pursuing B.Tech in Computer Science with a focus on Data Science and Cloud Systems."
+CONTRARIAN_INTRO_PROMPT = "What's up everyone, I'm Aarav. I'm a 3rd-year Artificial Intelligence student. Excited for a great discussion today!"
+PEACEMAKER_INTRO_PROMPT = "Hi all, I'm Sneha, a final-year Software Engineering student. We'd love to hear from our remaining candidate—please introduce yourself!"
 
 # 5. Speaker Display Names Mapping
 SPEAKER_NAMES = {

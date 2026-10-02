@@ -918,6 +918,7 @@
     </div>
   </div>
 
+  <script src="../js/api.js"></script>
   <script>
     /* Global State */
     let interviewWs = null;
@@ -1128,10 +1129,25 @@
     }
 
     /* Start Live Interview */
-    function startInterviewSession() {
+    async function startInterviewSession() {
       const role = document.getElementById('interviewRoleSelect').value;
       const language = document.getElementById('interviewLangSelect').value;
-      const roomId = 'room_interview_' + Date.now();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      let sessionId = urlParams.get('sessionId');
+
+      if (!sessionId && typeof API !== 'undefined') {
+        try {
+          const s = await API.sessions.createSession('MOCK_INTERVIEW', role, 20);
+          sessionId = s.sessionId;
+        } catch (e) {
+          sessionId = 'room_interview_' + Date.now();
+        }
+      } else if (!sessionId) {
+        sessionId = 'room_interview_' + Date.now();
+      }
+
+      window.currentInterviewSessionId = sessionId;
 
       // Configure Speech Recognition Language
       configureSpeechRecognitionLanguage(language);
@@ -1146,50 +1162,60 @@
       appendInterviewTranscript('System', `🚀 Connecting to 1-on-1 Interview Room for ${role}...`, 'system');
 
       startInterviewTimer();
-      connectInterviewWebSocket(roomId, role, language);
+      connectInterviewWebSocket(sessionId, role, language);
     }
 
     function connectInterviewWebSocket(roomId, role, language) {
-      const url = `ws://127.0.0.1:8000/interview/ws/${roomId}?role=${encodeURIComponent(role)}&language=${encodeURIComponent(language)}`;
+      const host = window.location.hostname || '127.0.0.1';
+      const url = `ws://${host}:8000/ws/interview/${roomId}?role=${encodeURIComponent(role)}&language=${encodeURIComponent(language)}`;
+      const fallbackUrl = `ws://${host}:8000/interview/ws/${roomId}?role=${encodeURIComponent(role)}&language=${encodeURIComponent(language)}`;
 
-      try {
-        interviewWs = new WebSocket(url);
+      const connectWS = (targetUrl) => {
+        try {
+          interviewWs = new WebSocket(targetUrl);
 
-        interviewWs.onopen = () => {
-          appendInterviewTranscript('System', ` Connected! Alex (Lead Interviewer) is reviewing your resume...`, 'system');
-          interviewWs.send(JSON.stringify({
-            event: 'INIT_INTERVIEW',
-            resumeData: parsedResumeData || {
-              candidate_name: "Candidate",
-              target_role: role,
-              primary_skills: ["Core Engineering Principles"],
-              key_projects: ["Recent Engineering Project"]
+          interviewWs.onopen = () => {
+            appendInterviewTranscript('System', ` Connected! Alex (Lead Interviewer) is reviewing your resume...`, 'system');
+            interviewWs.send(JSON.stringify({
+              event: 'INIT_INTERVIEW',
+              resumeData: parsedResumeData || {
+                candidate_name: "Candidate",
+                target_role: role,
+                primary_skills: ["Core Engineering Principles"],
+                key_projects: ["Recent Engineering Project"]
+              }
+            }));
+          };
+
+          interviewWs.onmessage = (event) => {
+            try {
+              const data = JSON.parse(event.data);
+              handleInterviewServerEvent(data);
+            } catch (e) {
+              console.error("WS Parse error:", e);
             }
-          }));
-        };
+          };
 
-        interviewWs.onmessage = (event) => {
-          try {
-            const data = JSON.parse(event.data);
-            handleInterviewServerEvent(data);
-          } catch (e) {
-            console.error("WS Parse error:", e);
-          }
-        };
+          interviewWs.onclose = () => {
+            appendInterviewTranscript('System', `🔒 Interview session ended.`, 'system');
+            if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+          };
 
-        interviewWs.onclose = () => {
-          appendInterviewTranscript('System', `🔒 Interview session ended.`, 'system');
-          if (sessionTimerInterval) clearInterval(sessionTimerInterval);
-        };
+          interviewWs.onerror = () => {
+            if (targetUrl === url) {
+              console.log("Primary WS failed, connecting fallback route...");
+              connectWS(fallbackUrl);
+            } else {
+              appendInterviewTranscript('System', `⚠️ Error connecting to interview server.`, 'system');
+            }
+          };
 
-        interviewWs.onerror = (err) => {
-          console.error("Interview WS Error:", err);
-          appendInterviewTranscript('System', `⚠️ Error connecting to interview server.`, 'system');
-        };
+        } catch (err) {
+          alert("Failed to connect: " + err.message);
+        }
+      };
 
-      } catch (err) {
-        alert("Failed to connect: " + err.message);
-      }
+      connectWS(url);
     }
 
     function handleInterviewServerEvent(data) {
@@ -1224,8 +1250,12 @@
       }
       else if (eventType === 'INTERVIEW_COMPLETED') {
         showInterviewScorecardModal(data.scorecard);
+        if (typeof API !== 'undefined' && window.currentInterviewSessionId) {
+          API.sessions.saveReport(window.currentInterviewSessionId, data.scorecard).catch(console.error);
+        }
       }
     }
+
 
     function updateInterviewPhaseHUD(phase) {
       const steps = ['intro', 'easy', 'medium', 'hard', 'closing'];

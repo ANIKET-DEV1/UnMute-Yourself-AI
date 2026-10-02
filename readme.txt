@@ -50,5 +50,5 @@ note to run :
 9) open new terminal cd frontend
 10) run: npm run dev
 11) backend : localhost:8000
-12) frontend : localhost:5173
+12) frontend : localhost:5000
 13) try not to create conflict amoung branch 

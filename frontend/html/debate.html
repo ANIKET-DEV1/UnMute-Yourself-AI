@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>1v1 AI Debate Arena | UnMute-Yourself AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --bg-main: #f8fafc;
       --bg-surface: #ffffff;
-      --bg-card: #ffffff;
       --border-color: #e2e8f0;
       --accent-purple: #7e22ce;
       --accent-blue: #2563eb;
@@ -22,11 +22,11 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-primary); }
-    body { background-color: var(--bg-main); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
-    header { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(226, 232, 240, 0.9); padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; z-index: 20; }
+    header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
     .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
-    .brand-logo { width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 14px rgba(126, 34, 206, 0.25); }
+    .brand-logo { width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; box-shadow: 0 4px 14px rgba(126, 34, 206, 0.25); }
     .brand-text-main { font-family: var(--font-display); font-weight: 800; font-size: 16px; }
     .brand-hud-badge { font-family: var(--font-tech); font-size: 10px; font-weight: 700; color: var(--accent-purple); background: rgba(126, 34, 206, 0.08); border: 1px solid rgba(126, 34, 206, 0.2); padding: 2px 8px; border-radius: 6px; text-transform: uppercase; }
 
@@ -34,12 +34,47 @@
     .btn-nav-link { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; }
     .btn-nav-link:hover { background: #e2e8f0; }
 
-    .debate-stage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; max-width: 800px; margin: 0 auto; width: 100%; }
-    .debate-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 24px; padding: 36px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
-    .btn-launch { width: 100%; padding: 14px 28px; border-radius: 14px; font-family: var(--font-tech); font-weight: 700; font-size: 15px; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); color: white; border: none; cursor: pointer; box-shadow: 0 6px 18px rgba(126, 34, 206, 0.25); margin-top: 24px; }
+    .timer-pill { font-family: var(--font-tech); font-weight: 700; font-size: 13px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 6px 14px; border-radius: 20px; display: none; }
+
+    .debate-container { flex: 1; max-width: 1000px; margin: 20px auto; width: 100%; padding: 0 20px; display: flex; flex-direction: column; gap: 20px; }
+
+    .topic-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .topic-title { font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--text-main); }
+
+    .arena-grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; flex: 1; }
+
+    .adversary-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+    .avatar-wrapper { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #f3e8ff, #e9d5ff); border: 3px solid var(--accent-purple); display: flex; align-items: center; justify-content: center; font-size: 44px; margin-bottom: 16px; position: relative; transition: all 0.3s; }
+    .avatar-wrapper.speaking { box-shadow: 0 0 0 10px rgba(126, 34, 206, 0.2); transform: scale(1.05); }
+
+    .transcript-box { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 20px; display: flex; flex-direction: column; height: 480px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+    .transcript-feed { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+    
+    .feed-bubble { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 14px 16px; font-size: 14px; line-height: 1.5; }
+    .feed-bubble.adversary { background: #faf5ff; border-color: rgba(126, 34, 206, 0.3); }
+    .feed-bubble.user { background: #eff6ff; border-color: rgba(37, 99, 235, 0.3); }
+
+    .feed-speaker { font-family: var(--font-tech); font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.04em; }
+    .feed-speaker.adversary { color: var(--accent-purple); }
+    .feed-speaker.user { color: var(--accent-blue); }
+
+    .controls-bar { padding: 16px 20px; border-top: 1px solid var(--border-color); background: #ffffff; display: flex; gap: 12px; align-items: center; }
+    .input-speech { flex: 1; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 14px; outline: none; }
+    .input-speech:focus { border-color: var(--accent-purple); }
+
+    .btn-mic { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); color: white; border: none; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .btn-mic.recording { background: linear-gradient(135deg, var(--accent-red), #b91c1c); animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5); } 70% { box-shadow: 0 0 0 12px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
+
+    .btn-action { padding: 12px 20px; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); color: white; border: none; border-radius: 12px; font-family: var(--font-tech); font-weight: 700; font-size: 13px; cursor: pointer; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+    .modal-card { background: white; border-radius: 24px; padding: 32px; max-width: 600px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto; }
   </style>
 </head>
 <body>
+
   <header>
     <a class="brand" href="index.html">
       <div class="brand-logo">⚔️</div>
@@ -52,29 +87,244 @@
       </div>
     </a>
     <div class="header-actions">
+      <span class="timer-pill" id="debateTimerPill">⏱️ 20:00</span>
+      <button class="btn-action" onclick="endDebateSession()" style="background: #ef4444;">End Debate 🏁</button>
       <a href="index.html" class="btn-nav-link">🏠 Dashboard</a>
-      <a href="gd.html" class="btn-nav-link">👥 GD Room</a>
-      <a href="interview.html" class="btn-nav-link">💼 Mock Interview</a>
     </div>
   </header>
 
-  <div class="debate-stage">
-    <div class="debate-card">
-      <div style="font-size: 48px; margin-bottom: 12px;">⚔️</div>
-      <h1 style="font-family: var(--font-display); font-size: 32px; font-weight: 900; margin-bottom: 8px;">1v1 AI Competitive Debate</h1>
-      <p style="font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px;">Engage in high-intensity structured debates against an aggressive, analytical AI adversary with timed opening arguments, cross-examinations, and rebuttals.</p>
-      
-      <div style="text-align: left; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 16px; padding: 18px; margin-bottom: 20px;">
-        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Featured Debate Format:</div>
-        <ul style="padding-left: 20px; font-size: 13px; line-height: 1.7; color: var(--text-main);">
-          <li><strong>Round 1:</strong> Opening Proposition & Affirmative Arguments (2 min)</li>
-          <li><strong>Round 2:</strong> AI Adversary Cross-Examination & Direct Rebuttal (2 min)</li>
-          <li><strong>Round 3:</strong> Final Summary & Impact Comparison</li>
-        </ul>
+  <div class="debate-container">
+    <div class="topic-card">
+      <div>
+        <div style="font-size: 11px; font-weight: 700; color: var(--accent-purple); text-transform: uppercase; margin-bottom: 4px;">Motion Topic</div>
+        <div class="topic-title" id="debateTopicDisplay">Universal Basic Income vs Job Guarantees</div>
+      </div>
+      <button class="btn-action" id="btnStartDebate" onclick="startDebateMatch()">Start Debate ⚔️</button>
+    </div>
+
+    <div class="arena-grid">
+      <!-- Adversary Profile -->
+      <div class="adversary-card">
+        <div class="avatar-wrapper" id="adversaryAvatar">⚔️</div>
+        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 800;">Vikram</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Aggressive AI Debate Adversary</p>
+        <span style="font-size: 11px; background: rgba(126, 34, 206, 0.08); color: var(--accent-purple); font-weight: 700; padding: 4px 10px; border-radius: 12px;">Opposing Stance</span>
       </div>
 
-      <a href="gd.html" class="btn-launch" style="text-decoration: none; display: inline-block;">Launch Debate Session ⚔️</a>
+      <!-- Live Rebuttal Feed -->
+      <div class="transcript-box">
+        <div class="transcript-feed" id="debateTranscriptFeed">
+          <div class="feed-bubble adversary">
+            <div class="feed-speaker adversary">System</div>
+            Click <strong>Start Debate ⚔️</strong> to trigger Vikram's opening statement.
+          </div>
+        </div>
+
+        <div class="controls-bar">
+          <button class="btn-mic" id="btnMic" onclick="toggleDebateMic()"><i class="fa-solid fa-microphone"></i></button>
+          <input type="text" class="input-speech" id="userDebateInput" placeholder="Type or speak your rebuttal..." onkeypress="handleKeyPress(event)" />
+          <button class="btn-action" onclick="sendDebateRebuttal()">Send Rebuttal</button>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- Scorecard Modal -->
+  <div class="modal-overlay" id="scorecardModal">
+    <div class="modal-card">
+      <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 900; margin-bottom: 12px;">🏆 Debate Scorecard & Analysis</h2>
+      <div style="font-size: 14px; margin-bottom: 20px; color: var(--text-muted);">
+        Winner: <strong id="winnerName" style="color: var(--accent-purple);">User (Participant)</strong>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px;">
+        <div style="background: #f8fafc; padding: 14px; border-radius: 12px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--text-muted);">OVERALL SCORE</div>
+          <div style="font-size: 24px; font-weight: 900; color: var(--accent-purple);" id="scoreOverall">85%</div>
+        </div>
+        <div style="background: #f8fafc; padding: 14px; border-radius: 12px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--text-muted);">REBUTTAL SHARPNESS</div>
+          <div style="font-size: 24px; font-weight: 900; color: var(--accent-blue);" id="scoreRebuttal">8/10</div>
+        </div>
+      </div>
+      <p id="feedbackText" style="font-size: 13px; color: var(--text-main); line-height: 1.6; margin-bottom: 20px;"></p>
+      <button class="btn-action" style="width: 100%;" onclick="closeScorecardModal()">Close Scorecard</button>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script>
+    let ws = null;
+    let sessionId = null;
+    let topic = "Universal Basic Income vs Job Guarantees";
+    let isRecording = false;
+    let recognition = null;
+    let finalSpeech = "";
+    let interimSpeech = "";
+    let timerInterval = null;
+    let timerSeconds = 20 * 60;
+    let audioQueue = [];
+    let isAudioPlaying = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      sessionId = urlParams.get('sessionId');
+      if (urlParams.get('topic')) topic = decodeURIComponent(urlParams.get('topic'));
+      document.getElementById('debateTopicDisplay').innerText = topic;
+      setupSpeechRecognition();
+    });
+
+    async function startDebateMatch() {
+      document.getElementById('btnStartDebate').style.display = 'none';
+      document.getElementById('debateTimerPill').style.display = 'inline-block';
+      
+      if (!sessionId && typeof API !== 'undefined') {
+        try {
+          const s = await API.sessions.createSession('DEBATE', topic, 20);
+          sessionId = s.sessionId;
+        } catch(e) {
+          sessionId = 'room_debate_' + Date.now();
+        }
+      } else if (!sessionId) {
+        sessionId = 'room_debate_' + Date.now();
+      }
+
+      connectDebateWS();
+    }
+
+    function connectDebateWS() {
+      const host = window.location.hostname || '127.0.0.1';
+      const wsUrl = `ws://${host}:8000/ws/debate/${sessionId}?topic=` + encodeURIComponent(topic);
+      const fallbackUrl = `ws://${host}:8000/debate/ws/${sessionId}?topic=` + encodeURIComponent(topic);
+
+      const connect = (targetUrl) => {
+        ws = new WebSocket(targetUrl);
+        ws.onopen = () => {
+          appendFeed('System', 'Connected to Debate Arena. Opponent is ready.', 'adversary');
+          ws.send(JSON.stringify({ event: 'START_DEBATE' }));
+          startTimer();
+        };
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.event === 'AGENT_SPEAKING') {
+              appendFeed(data.sender || 'Vikram (Adversary)', data.text, 'adversary');
+              enqueueAudio(data.audio);
+            } else if (data.event === 'SESSION_COMPLETED') {
+              showScorecard(data.scorecard);
+              if (typeof API !== 'undefined' && sessionId) {
+                API.sessions.saveReport(sessionId, data.scorecard).catch(console.error);
+              }
+            }
+          } catch(e) { console.error(e); }
+        };
+        ws.onerror = () => {
+          if (targetUrl === wsUrl) connect(fallbackUrl);
+        };
+      };
+
+      connect(wsUrl);
+    }
+
+    function sendDebateRebuttal() {
+      const text = document.getElementById('userDebateInput').value.trim() || (finalSpeech + interimSpeech).trim();
+      if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
+      appendFeed('You (Debater)', text, 'user');
+      ws.send(JSON.stringify({ event: 'USER_REBUTTAL', text: text, filler_count: 0 }));
+      document.getElementById('userDebateInput').value = '';
+      finalSpeech = ''; interimSpeech = '';
+    }
+
+    function handleKeyPress(e) { if (e.key === 'Enter') sendDebateRebuttal(); }
+
+    function endDebateSession() {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ event: 'END_DEBATE' }));
+      }
+    }
+
+    function appendFeed(speaker, text, type) {
+      const feed = document.getElementById('debateTranscriptFeed');
+      const b = document.createElement('div');
+      b.className = `feed-bubble ${type}`;
+      b.innerHTML = `<div class="feed-speaker ${type}">${speaker}</div><div>${text}</div>`;
+      feed.appendChild(b);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    function enqueueAudio(audioB64) {
+      if (!audioB64) return;
+      audioQueue.push(audioB64);
+      processAudioQueue();
+    }
+
+    function processAudioQueue() {
+      if (isAudioPlaying || audioQueue.length === 0) return;
+      isAudioPlaying = true;
+      const b64 = audioQueue.shift();
+      const avatar = document.getElementById('adversaryAvatar');
+      if (avatar) avatar.classList.add('speaking');
+
+      const audio = new Audio("data:audio/mp3;base64," + b64);
+      audio.onended = () => {
+        isAudioPlaying = false;
+        if (avatar) avatar.classList.remove('speaking');
+        processAudioQueue();
+      };
+      audio.play().catch(e => { isAudioPlaying = false; if (avatar) avatar.classList.remove('speaking'); });
+    }
+
+    function setupSpeechRecognition() {
+      const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!Speech) return;
+      recognition = new Speech();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.onresult = (e) => {
+        interimSpeech = '';
+        for (let i = e.resultIndex; i < e.results.length; ++i) {
+          if (e.results[i].isFinal) finalSpeech += e.results[i][0].transcript + ' ';
+          else interimSpeech += e.results[i][0].transcript;
+        }
+        document.getElementById('userDebateInput').value = (finalSpeech + interimSpeech).trim();
+      };
+    }
+
+    function toggleDebateMic() {
+      const btn = document.getElementById('btnMic');
+      if (!isRecording) {
+        isRecording = true;
+        finalSpeech = document.getElementById('userDebateInput').value.trim();
+        if (finalSpeech.length > 0) finalSpeech += ' ';
+        interimSpeech = '';
+        btn.classList.add('recording');
+        if (recognition) try { recognition.start(); } catch(e){}
+      } else {
+        isRecording = false;
+        btn.classList.remove('recording');
+        if (recognition) try { recognition.stop(); } catch(e){}
+      }
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timerSeconds--;
+        const m = Math.floor(timerSeconds / 60); const s = timerSeconds % 60;
+        document.getElementById('debateTimerPill').innerText = `⏱️ ${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        if (timerSeconds <= 0) { clearInterval(timerInterval); endDebateSession(); }
+      }, 1000);
+    }
+
+    function showScorecard(card) {
+      if (!card) return;
+      document.getElementById('winnerName').innerText = card.winner_participant || "User (Participant)";
+      document.getElementById('scoreOverall').innerText = `${card.overall_score || 85}%`;
+      document.getElementById('scoreRebuttal').innerText = `${card.rebuttal_effectiveness || 8}/10`;
+      document.getElementById('feedbackText').innerText = card.summary_feedback || 'Solid debate performance.';
+      document.getElementById('scorecardModal').style.display = 'flex';
+    }
+
+    function closeScorecardModal() { document.getElementById('scorecardModal').style.display = 'none'; }
+  </script>
 </body>
 </html>

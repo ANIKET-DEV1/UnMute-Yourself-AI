@@ -423,10 +423,11 @@
         </div>
 
         <div class="signup-prompt">
-            Don't have an account? <a href="#">Sign up for free</a>
+            Don't have an account? <a href="register.html">Sign up for free</a>
         </div>
     </div>
 
+    <script src="../js/api.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const loginForm = document.getElementById('loginForm');
@@ -457,7 +458,7 @@
             });
 
             // Handle form submission
-            loginForm.addEventListener('submit', (e) => {
+            loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 let hasError = false;
 
@@ -478,7 +479,7 @@
                     hasError = true;
                 }
 
-                // If no errors, simulate login request
+                // If no errors, make API call to Node.js backend
                 if (!hasError) {
                     // Update button state to loading
                     btnText.style.display = 'none';
@@ -487,19 +488,19 @@
                     loginBtn.style.pointerEvents = 'none';
                     loginBtn.style.opacity = '0.9';
 
-                    // Simulate API delay
-                    setTimeout(() => {
-                        // Reset button
+                    try {
+                        const response = await API.auth.login(email, password);
+                        console.log('Login success:', response);
+                        window.location.href = 'index.html';
+                    } catch (err) {
+                        alert(err.message || 'Login failed. Please check your credentials.');
+                    } finally {
                         btnText.style.display = 'block';
                         btnIcon.style.display = 'block';
                         btnSpinner.style.display = 'none';
                         loginBtn.style.pointerEvents = 'auto';
                         loginBtn.style.opacity = '1';
-                        
-                        alert('Login successful! Connecting to UnMute-Yourself AI...');
-                        // In a real app, you would redirect here:
-                        // window.location.href = '/dashboard';
-                    }, 1500);
+                    }
                 }
             });
             
@@ -528,3 +529,4 @@
     </script>
 </body>
 </html>
+

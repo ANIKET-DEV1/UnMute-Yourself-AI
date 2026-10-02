@@ -266,6 +266,7 @@
       <a href="gd.html" class="nav-pill">👥 GD Arena</a>
       <a href="debate.html" class="nav-pill">⚔️ 1v1 Debate</a>
       <a href="interview.html" class="nav-pill" style="color: var(--accent-green);">💼 Mock Interview</a>
+      <span id="auth-nav-slot"></span>
     </div>
   </header>
 
@@ -277,30 +278,66 @@
 
     <div class="modules-grid">
       <!-- 1. Group Discussion -->
-      <a href="gd.html" class="module-card gd">
+      <div onclick="startModule('GROUP_DISCUSSION', 'Will AI Replace Software Engineers?', 'gd.html')" class="module-card gd" style="cursor: pointer;">
         <div class="module-icon icon-gd">👥</div>
         <div class="module-name">Group Discussion</div>
         <div class="module-desc">Real-time 5-member circular GD arena with AI personas (Moderator, Analyst, Contrarian, Peacemaker). Features topic draw, 15m prep, and 20m debate.</div>
         <div class="btn-launch btn-gd">Start GD Session 🚀</div>
-      </a>
+      </div>
 
       <!-- 2. 1v1 Debate -->
-      <a href="debate.html" class="module-card debate">
+      <div onclick="startModule('DEBATE', 'Universal Basic Income vs Job Guarantees', 'debate.html')" class="module-card debate" style="cursor: pointer;">
         <div class="module-icon icon-debate">⚔️</div>
         <div class="module-name">1v1 AI Debate</div>
         <div class="module-desc">Head-to-head competitive debate against an aggressive AI adversary with timed cross-examinations and rebuttals.</div>
         <div class="btn-launch btn-debate">Launch Debate ⚔️</div>
-      </a>
+      </div>
 
       <!-- 3. Mock Interview -->
-      <a href="interview.html" class="module-card interview">
+      <div onclick="startModule('MOCK_INTERVIEW', 'Senior Full-Stack & System Design Interview', 'interview.html')" class="module-card interview" style="cursor: pointer;">
         <div class="module-icon icon-interview">💼</div>
         <div class="module-name">1-on-1 Mock Interview</div>
         <div class="module-desc">Select role & language, upload resume with smart extraction, and enter a 15–20 min adaptive interview from intro to tough system design.</div>
         <div class="btn-launch btn-interview">Start Interview 💼</div>
-      </a>
+      </div>
     </div>
   </div>
 
+  <script src="../js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const authSlot = document.getElementById('auth-nav-slot');
+      if (Auth.isLoggedIn()) {
+        const user = Auth.getUser();
+        authSlot.innerHTML = `
+          <a href="login.html" onclick="Auth.logout()" class="nav-pill" style="border: 1px solid #cbd5e1;">Logout (${user?.name || 'User'})</a>
+        `;
+      } else {
+        authSlot.innerHTML = `
+          <a href="login.html" class="nav-pill" style="background: var(--accent-blue); color: white;">Login</a>
+          <a href="register.html" class="nav-pill" style="border: 1px solid var(--accent-blue); color: var(--accent-blue);">Register</a>
+        `;
+      }
+    });
+
+    async function startModule(mode, defaultTopic, targetHtml) {
+      try {
+        if (!Auth.isLoggedIn()) {
+          // If user is not logged in, redirect to login page
+          window.location.href = `login.html`;
+          return;
+        }
+        // Initialize session on Node.js backend
+        const data = await API.sessions.createSession(mode, defaultTopic, 20);
+        console.log('Session initialized:', data);
+        window.location.href = `${targetHtml}?sessionId=${data.sessionId}&topic=${encodeURIComponent(data.topic)}`;
+      } catch (err) {
+        console.error('Failed to initialize session:', err);
+        // Fallback navigation
+        window.location.href = `${targetHtml}?mode=${mode}`;
+      }
+    }
+  </script>
 </body>
 </html>
+
