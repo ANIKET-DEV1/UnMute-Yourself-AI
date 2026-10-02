@@ -1,7 +1,10 @@
 """1v1 AI Debate Session Manager and Rebuttal Engine."""
 from langchain_core.prompts import ChatPromptTemplate
+# pyrefly: ignore [missing-import]
 from app.services.llm_service import llm
+# pyrefly: ignore [missing-import]
 from app.services.tts_service import generate_neural_audio_b64
+# pyrefly: ignore [missing-import]
 from app.core.prompts.debate import (
     DebateTurnDecision,
     DebateEvaluationScorecard,
@@ -35,14 +38,22 @@ debate_eval_prompt = ChatPromptTemplate.from_messages([
 debate_eval_chain = debate_eval_prompt | debate_eval_llm
 
 
+import re
+
+def clean_pause_text(text: str) -> str:
+    if not text:
+        return ""
+    cleaned = re.sub(r'[\(\[\{]\s*(?:pause|pauses|short pause|brief pause|silent|sigh)\s*[\)\]\}]', '...', text, flags=re.IGNORECASE)
+    return re.sub(r'\s+', ' ', cleaned).strip()
+
 class DebateSession:
     """Manages an active 1v1 head-to-head debate room."""
-    def __init__(self, topic: str = "Universal Basic Income vs Job Guarantees"):
+    def __init__(self, topic: str = "AI pros vs Cons"):
         self.topic = topic
         self.transcript: list[dict] = []
         self.current_phase = "OPENING"
         self.user_filler_count = 0
-        self.adversary_voice = "en-IN-PrabhatNeural"
+        self.adversary_voice = "en-IN-MadhurNeural"
 
     def get_recent_history(self, k: int = 6) -> str:
         recent = self.transcript[-k:]
@@ -62,7 +73,7 @@ class DebateSession:
             f"Welcome to the 1v1 Debate Arena. Today's motion is: '{self.topic}'. "
             f"I take the opposing stance. You have the floor for your opening argument. State your main thesis."
         )
-        audio_b64 = await generate_neural_audio_b64(text, self.adversary_voice)
+        audio_b64 = await generate_neural_audio_b64(clean_pause_text(text), self.adversary_voice)
         self.transcript.append({"speaker": "Vikram (AI Adversary)", "text": text})
         return {
             "speaker": "Vikram (AI Adversary)",
@@ -92,12 +103,13 @@ class DebateSession:
             speaker = "Vikram (AI Adversary)"
             text = f"While you raise an interesting point on {self.topic}, you overlook key economic trade-offs. How do you address the risk of market inflation and long-term fiscal deficits?"
 
-        audio_b64 = await generate_neural_audio_b64(text, self.adversary_voice)
-        self.transcript.append({"speaker": speaker, "text": text})
+        clean_text = clean_pause_text(text)
+        audio_b64 = await generate_neural_audio_b64(clean_text, self.adversary_voice)
+        self.transcript.append({"speaker": speaker, "text": clean_text})
 
         return {
             "speaker": speaker,
-            "text": text,
+            "text": clean_text,
             "phase": self.current_phase,
             "audio": audio_b64,
             "turnState": "USER_TURN"

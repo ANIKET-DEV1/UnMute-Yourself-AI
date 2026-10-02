@@ -6,6 +6,7 @@
   <title>1v1 AI Debate Arena | UnMute-Yourself AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root {
       --bg-main: #f8fafc;
@@ -59,11 +60,11 @@
     .topic-banner { background: rgba(255,255,255,0.9); border: 1px solid var(--border-color); border-radius: 30px; padding: 6px 20px; font-size: 13px; font-weight: 700; max-width: 480px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     .header-actions { display: flex; align-items: center; gap: 12px; }
-    .btn-nav-link { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+    .btn-nav-link { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
     .btn-nav-link:hover { background: #e2e8f0; }
 
-    .btn-header { background: rgba(220, 38, 38, 0.08); color: var(--accent-red); border: 1px solid rgba(220, 38, 38, 0.25); padding: 8px 18px; border-radius: 12px; font-family: var(--font-tech); font-weight: 700; font-size: 13px; cursor: pointer; }
-    .timer-pill { background: rgba(126, 34, 206, 0.08); color: var(--accent-purple); border: 1px solid rgba(126, 34, 206, 0.25); padding: 6px 16px; border-radius: 20px; font-family: var(--font-tech); font-weight: 700; font-size: 13px; }
+    .btn-header { background: rgba(220, 38, 38, 0.08); color: var(--accent-red); border: 1px solid rgba(220, 38, 38, 0.25); padding: 8px 18px; border-radius: 12px; font-family: var(--font-tech); font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+    .timer-pill { background: rgba(126, 34, 206, 0.08); color: var(--accent-purple); border: 1px solid rgba(126, 34, 206, 0.25); padding: 6px 16px; border-radius: 20px; font-family: var(--font-tech); font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
 
     /* Screen Views */
     .view-screen { flex: 1; display: none; flex-direction: column; overflow: hidden; }
@@ -81,12 +82,12 @@
     .topic-select { flex: 1; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; outline: none; }
     .custom-topic-input { flex: 1; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 12px 16px; border-radius: 12px; font-size: 13px; outline: none; }
 
-    .btn-action-purple { background: linear-gradient(135deg, var(--accent-purple), #6b21a8); color: white; border: none; padding: 12px 20px; font-weight: 700; font-size: 13px; border-radius: 12px; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+    .btn-action-purple { background: linear-gradient(135deg, var(--accent-purple), #6b21a8); color: white; border: none; padding: 12px 20px; font-weight: 700; font-size: 13px; border-radius: 12px; cursor: pointer; white-space: nowrap; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
     .btn-action-purple:hover { opacity: 0.95; transform: translateY(-1px); }
-    .btn-subtle { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border-color); padding: 12px 18px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .btn-subtle { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border-color); padding: 12px 18px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
     .prep-timer-box { font-family: var(--font-tech); font-size: 52px; font-weight: 800; color: var(--accent-purple); margin: 18px 0; letter-spacing: 0.06em; }
     .notes-textarea { width: 100%; max-width: 760px; height: 130px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; color: var(--text-main); font-size: 14px; outline: none; margin-bottom: 24px; resize: none; }
-    .btn-launch { width: 100%; padding: 16px 36px; border-radius: 14px; font-family: var(--font-tech); font-weight: 700; font-size: 16px; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); color: white; border: none; cursor: pointer; box-shadow: 0 6px 20px rgba(126, 34, 206, 0.3); transition: all 0.2s; }
+    .btn-launch { width: 100%; padding: 16px 36px; border-radius: 14px; font-family: var(--font-tech); font-weight: 700; font-size: 16px; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); color: white; border: none; cursor: pointer; box-shadow: 0 6px 20px rgba(126, 34, 206, 0.3); transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 
     /* DEBATE ARENA */
     .app-workspace { flex: 1; display: grid; grid-template-columns: 1fr 420px; height: calc(100vh - 64px); overflow: hidden; background: #070913; }
@@ -133,7 +134,7 @@
     .mic-diamond-btn { width: 60px; height: 60px; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); border: 2px solid rgba(255,255,255,0.6); transform: rotate(45deg); border-radius: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(126, 34, 206, 0.25); transition: all 0.25s ease; }
     .mic-diamond-btn.recording { background: linear-gradient(135deg, var(--accent-red), #b91c1c); animation: pulseMic 1.2s infinite alternate; }
     @keyframes pulseMic { 0% { transform: rotate(45deg) scale(1.0); } 100% { transform: rotate(45deg) scale(1.12); } }
-    .mic-icon-inner { transform: rotate(-45deg); font-size: 22px; color: white; }
+    .mic-icon-inner { transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; }
     .mic-status-label { font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center; }
     .input-fallback-row { width: 100%; display: flex; gap: 8px; }
     .input-fallback-row input { flex: 1; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; }
@@ -154,7 +155,7 @@
   <!-- Header Navigation -->
   <header>
     <a class="brand" href="index.html">
-      <div class="brand-logo">⚔️</div>
+      <div class="brand-logo"><i data-lucide="swords" style="width: 22px; height: 22px;"></i></div>
       <div>
         <div class="brand-text-main">UnMute-Yourself AI</div>
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -166,14 +167,14 @@
 
     <div id="headerTopicBox" class="topic-banner" style="display: none;">
       <span style="font-family: var(--font-tech); color: var(--accent-purple); font-size: 11px; margin-right: 6px;">[MOTION]</span>
-      <span id="topicText">Verbal Communication vs Non-Verbal Communication</span>
+      <span id="topicText">Skills Are More Important Than Degrees</span>
     </div>
 
     <div class="header-actions">
-      <a href="index.html" class="btn-nav-link">🏠 Dashboard</a>
-      <a href="gd.html" class="btn-nav-link">👥 GD Arena</a>
-      <button id="btnHeaderEval" class="btn-header" style="display: none;" onclick="endDebateSession()">🛑 End Debate & Evaluate</button>
-      <div id="debateTimerPill" class="timer-pill" style="display: none;">⏱️ 20:00</div>
+      <a href="index.html" class="btn-nav-link"><i data-lucide="home" style="width: 15px; height: 15px;"></i> Dashboard</a>
+      <a href="gd.html" class="btn-nav-link"><i data-lucide="users" style="width: 15px; height: 15px;"></i> GD Arena</a>
+      <button id="btnHeaderEval" class="btn-header" style="display: none;" onclick="endDebateSession()"><i data-lucide="square" style="width: 14px; height: 14px;"></i> End Debate & Evaluate</button>
+      <div id="debateTimerPill" class="timer-pill" style="display: none;"><i data-lucide="timer" style="width: 15px; height: 15px;"></i> <span id="timerVal">20:00</span></div>
     </div>
   </header>
 
@@ -181,7 +182,9 @@
   <div id="screenPrep" class="view-screen active">
     <div class="prep-stage">
       <div style="font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: var(--accent-purple); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">[STAGE 1: DEBATE MOTION SELECTION & PREP]</div>
-      <h1 style="font-family: var(--font-display); font-size: 32px; font-weight: 800; margin-bottom: 8px;">🎲 Select or Shuffle Your Debate Motion</h1>
+      <h1 style="font-family: var(--font-display); font-size: 32px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; justify-content: center;">
+        <i data-lucide="dices" style="width: 32px; height: 32px; color: var(--accent-purple);"></i> Select or Shuffle Your Debate Motion
+      </h1>
       <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Choose accessible debate topics, shuffle randomly, or enter a custom debate motion.</p>
 
       <div class="slot-box">
@@ -190,7 +193,7 @@
 
       <div class="topic-selection-card">
         <div class="topic-opt-row">
-          <label class="topic-opt-label">📚 Select Curated Debate Motion:</label>
+          <label class="topic-opt-label"><i data-lucide="book-open" style="width: 16px; height: 16px; color: var(--accent-purple);"></i> Select Curated Debate Motion:</label>
           <div style="display: flex; gap: 10px; width: 100%;">
             <select id="topicDropdown" class="topic-select" onchange="onTopicDropdownChange(this.value)">
               <option value="" disabled selected>-- Choose a Debate Motion --</option>
@@ -206,12 +209,12 @@
               <option value="Experience is More Important Than Qualification">Experience is More Important Than Qualification</option>
               <option value="AI Pros vs Cons">AI Pros vs Cons</option>
             </select>
-            <button class="btn-subtle" onclick="startTopicDraw()">🎲 Shuffle Topic</button>
+            <button class="btn-subtle" onclick="startTopicDraw()"><i data-lucide="dices" style="width: 15px; height: 15px;"></i> Shuffle Topic</button>
           </div>
         </div>
 
         <div class="topic-opt-row" style="margin-top: 16px;">
-          <label class="topic-opt-label">✍️ Or Enter Custom Debate Motion:</label>
+          <label class="topic-opt-label"><i data-lucide="pen-tool" style="width: 16px; height: 16px; color: var(--accent-purple);"></i> Or Enter Custom Debate Motion:</label>
           <div style="display: flex; gap: 10px; width: 100%;">
             <input type="text" id="customTopicInput" class="custom-topic-input" placeholder="e.g. Cashless Economy vs Physical Cash, Electric Vehicles vs Hybrid Systems..." onkeydown="if(event.key==='Enter') setCustomTopic()" />
             <button class="btn-action-purple" onclick="setCustomTopic()">Set Motion</button>
@@ -221,7 +224,9 @@
 
       <div id="prepTimerBox" class="prep-timer-box" style="display: none;">05:00</div>
       <textarea id="notesArea" class="notes-textarea" placeholder="Jot down your key rebuttal points, statistics, and counter-arguments here..."></textarea>
-      <button id="btnPrepared" class="btn-launch" style="max-width: 420px;" onclick="finishPrepAndStartDebate()">I'm Prepared - Start Debate Match ⚔️</button>
+      <button id="btnPrepared" class="btn-launch" style="max-width: 420px;" onclick="finishPrepAndStartDebate()">
+        I'm Prepared - Start Debate Match <i data-lucide="swords" style="width: 18px; height: 18px;"></i>
+      </button>
     </div>
   </div>
 
@@ -237,7 +242,9 @@
         <div class="versus-container">
           <!-- User Profile -->
           <div class="combatant-card">
-            <div class="combatant-avatar" style="border-color: #38bdf8; background: linear-gradient(135deg, #0369a1, #1e40af);">👤</div>
+            <div class="combatant-avatar" style="border-color: #38bdf8; background: linear-gradient(135deg, #0369a1, #1e40af);">
+              <i data-lucide="user" style="width: 48px; height: 48px; color: #ffffff;"></i>
+            </div>
             <div class="combatant-name">You (Participant)</div>
             <div class="combatant-role">Proponent / Rebuttal Debater</div>
             <div class="stance-badge stance-support">Proponent Stance</div>
@@ -247,7 +254,9 @@
 
           <!-- AI Adversary Profile -->
           <div class="combatant-card">
-            <div id="adversaryAvatar" class="combatant-avatar">⚔️</div>
+            <div id="adversaryAvatar" class="combatant-avatar">
+              <i data-lucide="swords" style="width: 48px; height: 48px; color: #ffffff;"></i>
+            </div>
             <div class="combatant-name">Vikram</div>
             <div class="combatant-role">Aggressive AI Debate Adversary</div>
             <div class="stance-badge stance-oppose">Opposing Stance</div>
@@ -258,12 +267,12 @@
       <!-- Transcript & Speech Sidebar -->
       <div class="interview-sidebar">
         <div class="panel-title">
-          <span>⚔️ Debate Live Transcript</span>
+          <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="file-text" style="width: 16px; height: 16px; color: var(--accent-purple);"></i> Debate Live Transcript</span>
         </div>
         <div id="debateTranscriptFeed" class="transcript-feed"></div>
         <div class="mic-control-box">
           <div id="btnMic" class="mic-diamond-btn" onclick="toggleDebateMic()">
-            <span class="mic-icon-inner">🎙️</span>
+            <span class="mic-icon-inner"><i data-lucide="mic" style="width: 22px; height: 22px; color: white;"></i></span>
           </div>
           <div id="micStatus" class="mic-status-label">Click Mic to Speak (up to 1m)</div>
           <div class="input-fallback-row">
@@ -279,8 +288,10 @@
   <div id="scorecardModal" class="modal-overlay">
     <div class="modal-card">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-family: var(--font-display); font-size: 24px; font-weight: 800;">🏆 Debate Evaluation Scorecard</h3>
-        <button class="btn-subtle" onclick="closeScorecardModal()">✕ Close</button>
+        <h3 style="font-family: var(--font-display); font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+          <i data-lucide="trophy" style="width: 24px; height: 24px; color: #eab308;"></i> Debate Evaluation Scorecard
+        </h3>
+        <button class="btn-subtle" onclick="closeScorecardModal()"><i data-lucide="x" style="width: 16px; height: 16px;"></i> Close</button>
       </div>
 
       <div class="verdict-banner">
@@ -294,13 +305,19 @@
       </div>
 
       <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-top: 14px; font-size: 13px; line-height: 1.6;">
-        <h4 style="font-family: var(--font-tech); font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">💬 Summary Feedback</h4>
+        <h4 style="font-family: var(--font-tech); font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+          <i data-lucide="message-square" style="width: 15px; height: 15px; color: var(--accent-purple);"></i> Summary Feedback
+        </h4>
         <p id="feedbackText"></p>
       </div>
 
       <div style="display: flex; gap: 12px; margin-top: 24px;">
-        <a href="index.html" class="btn-launch" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">Return to Dashboard 🏠</a>
-        <button class="btn-subtle" onclick="location.reload()">🔄 Practice Another Topic</button>
+        <a href="index.html" class="btn-launch" style="flex: 1; text-align: center; text-decoration: none;">
+          Return to Dashboard <i data-lucide="home" style="width: 18px; height: 18px;"></i>
+        </a>
+        <button class="btn-subtle" onclick="location.reload()">
+          <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i> Practice Another Topic
+        </button>
       </div>
     </div>
   </div>
@@ -335,10 +352,15 @@
       "AI Pros vs Cons"
     ];
 
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+
     function showScreen(screenId) {
       document.querySelectorAll('.view-screen').forEach(s => s.classList.remove('active'));
       const screenEl = document.getElementById(screenId);
       if (screenEl) { screenEl.classList.add('active'); screenEl.scrollTop = 0; }
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function onTopicDropdownChange(val) {
@@ -391,8 +413,8 @@
       showScreen('screenArena');
       document.getElementById('headerTopicBox').style.display = 'flex';
       document.getElementById('topicText').innerText = currentTopic;
-      document.getElementById('btnHeaderEval').style.display = 'block';
-      document.getElementById('debateTimerPill').style.display = 'block';
+      document.getElementById('btnHeaderEval').style.display = 'inline-flex';
+      document.getElementById('debateTimerPill').style.display = 'inline-flex';
       connectAndStartDebate();
     }
 
@@ -581,11 +603,11 @@
     function startTimer() {
       sessionSeconds = 20 * 60;
       if (sessionTimerInterval) clearInterval(sessionTimerInterval);
-      const timerPill = document.getElementById('debateTimerPill');
+      const timerPill = document.getElementById('timerVal');
       sessionTimerInterval = setInterval(() => {
         sessionSeconds--;
         const m = Math.floor(sessionSeconds / 60); const s = sessionSeconds % 60;
-        if (timerPill) timerPill.innerText = `⏱️ ${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        if (timerPill) timerPill.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
         if (sessionSeconds <= 0) { clearInterval(sessionTimerInterval); endDebateSession(); }
       }, 1000);
     }
@@ -597,6 +619,7 @@
       document.getElementById('scoreRebuttal').innerText = `${card.rebuttal_effectiveness || 8}/10`;
       document.getElementById('feedbackText').innerText = card.summary_feedback || 'Solid debate performance with clear rebuttals.';
       document.getElementById('scorecardModal').style.display = 'flex';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function closeScorecardModal() { document.getElementById('scorecardModal').style.display = 'none'; }

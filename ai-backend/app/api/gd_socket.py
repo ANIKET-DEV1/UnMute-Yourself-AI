@@ -2,6 +2,7 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import json
 import asyncio
+# pyrefly: ignore [missing-import]
 from app.services.gd_service import get_or_create_room
 
 gd = APIRouter(prefix="/gd")
@@ -11,11 +12,9 @@ gd = APIRouter(prefix="/gd")
 async def group_discussion_ws(websocket: WebSocket, room_id: str):
     await websocket.accept()
 
-    # Extract topic from query parameters or use default
     topic = websocket.query_params.get("topic", "Will AI Replace Software Engineers?")
     session = get_or_create_room(room_id, topic=topic)
 
-    # 1. Connection acknowledgment
     await websocket.send_json({
         "event": "CONNECTED",
         "sender": "System",
