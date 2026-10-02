@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UnMute-Yourself AI | AI Communication & Interview Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root {
       --bg-main: #f8fafc;
@@ -68,7 +69,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      color: white;
       box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
     }
 
@@ -106,6 +107,9 @@
       padding: 8px 16px;
       border-radius: 12px;
       transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     .nav-pill:hover {
       background: rgba(37, 99, 235, 0.06);
@@ -202,7 +206,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 40px;
       margin-bottom: 24px;
     }
     .icon-gd { background: linear-gradient(135deg, rgba(2, 132, 199, 0.1), rgba(37, 99, 235, 0.15)); border: 1px solid rgba(2, 132, 199, 0.25); }
@@ -235,8 +238,10 @@
       letter-spacing: 0.02em;
       color: white;
       border: none;
-      display: inline-block;
-      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       box-shadow: 0 6px 18px rgba(0,0,0,0.1);
       transition: all 0.25s ease;
     }
@@ -252,7 +257,7 @@
   <!-- Top Header Navigation -->
   <header>
     <a class="brand" href="index.html">
-      <div class="brand-logo">🎙️</div>
+      <div class="brand-logo"><i data-lucide="mic" style="width: 22px; height: 22px; color: white;"></i></div>
       <div>
         <div class="brand-text-main">UnMute-Yourself AI</div>
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -263,42 +268,42 @@
     </a>
 
     <div class="header-nav-links">
-      <a href="gd.html" class="nav-pill">👥 GD Arena</a>
-      <a href="debate.html" class="nav-pill">⚔️ 1v1 Debate</a>
-      <a href="interview.html" class="nav-pill" style="color: var(--accent-green);">💼 Mock Interview</a>
+      <a href="gd.html" class="nav-pill"><i data-lucide="users" style="width: 15px; height: 15px;"></i> GD Arena</a>
+      <a href="debate.html" class="nav-pill"><i data-lucide="swords" style="width: 15px; height: 15px;"></i> 1v1 Debate</a>
+      <a href="interview.html" class="nav-pill" style="color: var(--accent-green);"><i data-lucide="briefcase" style="width: 15px; height: 15px;"></i> Mock Interview</a>
       <span id="auth-nav-slot"></span>
     </div>
   </header>
 
   <!-- Main Hero Hub -->
   <div class="home-hero">
-    <div class="hero-hud-chip">⚡ Real-time Multi-Agent AI Platform</div>
+    <div class="hero-hud-chip"><i data-lucide="zap" style="width: 14px; height: 14px;"></i> Real-time Multi-Agent AI Platform</div>
     <h1 class="home-title">Master Communication & Technical Interviews with AI</h1>
     <p class="home-subtitle">Sharpen your communication, articulation, and quick thinking with realistic AI personas in immersive, timed simulation rooms.</p>
 
     <div class="modules-grid">
       <!-- 1. Group Discussion -->
-      <div onclick="startModule('GROUP_DISCUSSION', 'Will AI Replace Software Engineers?', 'gd.html')" class="module-card gd" style="cursor: pointer;">
-        <div class="module-icon icon-gd">👥</div>
+      <div onclick="startModule('GROUP_DISCUSSION', 'AI: Opportunity or Threat to Jobs', 'gd.html')" class="module-card gd" style="cursor: pointer;">
+        <div class="module-icon icon-gd"><i data-lucide="users" style="width: 36px; height: 36px; color: var(--accent-cyan);"></i></div>
         <div class="module-name">Group Discussion</div>
         <div class="module-desc">Real-time 5-member circular GD arena with AI personas (Moderator, Analyst, Contrarian, Peacemaker). Features topic draw, 15m prep, and 20m debate.</div>
-        <div class="btn-launch btn-gd">Start GD Session 🚀</div>
+        <div class="btn-launch btn-gd">Start GD Session <i data-lucide="rocket" style="width: 16px; height: 16px;"></i></div>
       </div>
 
       <!-- 2. 1v1 Debate -->
-      <div onclick="startModule('DEBATE', 'Universal Basic Income vs Job Guarantees', 'debate.html')" class="module-card debate" style="cursor: pointer;">
-        <div class="module-icon icon-debate">⚔️</div>
+      <div onclick="startModule('DEBATE', 'Skills Are More Important Than Degrees', 'debate.html')" class="module-card debate" style="cursor: pointer;">
+        <div class="module-icon icon-debate"><i data-lucide="swords" style="width: 36px; height: 36px; color: var(--accent-purple);"></i></div>
         <div class="module-name">1v1 AI Debate</div>
         <div class="module-desc">Head-to-head competitive debate against an aggressive AI adversary with timed cross-examinations and rebuttals.</div>
-        <div class="btn-launch btn-debate">Launch Debate ⚔️</div>
+        <div class="btn-launch btn-debate">Launch Debate <i data-lucide="swords" style="width: 16px; height: 16px;"></i></div>
       </div>
 
       <!-- 3. Mock Interview -->
       <div onclick="startModule('MOCK_INTERVIEW', 'Senior Full-Stack & System Design Interview', 'interview.html')" class="module-card interview" style="cursor: pointer;">
-        <div class="module-icon icon-interview">💼</div>
+        <div class="module-icon icon-interview"><i data-lucide="briefcase" style="width: 36px; height: 36px; color: var(--accent-green);"></i></div>
         <div class="module-name">1-on-1 Mock Interview</div>
         <div class="module-desc">Select role & language, upload resume with smart extraction, and enter a 15–20 min adaptive interview from intro to tough system design.</div>
-        <div class="btn-launch btn-interview">Start Interview 💼</div>
+        <div class="btn-launch btn-interview">Start Interview <i data-lucide="briefcase" style="width: 16px; height: 16px;"></i></div>
       </div>
     </div>
   </div>
@@ -306,6 +311,7 @@
   <script src="../js/api.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
       const authSlot = document.getElementById('auth-nav-slot');
       if (Auth.isLoggedIn()) {
         const user = Auth.getUser();
@@ -318,26 +324,22 @@
           <a href="register.html" class="nav-pill" style="border: 1px solid var(--accent-blue); color: var(--accent-blue);">Register</a>
         `;
       }
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     });
 
     async function startModule(mode, defaultTopic, targetHtml) {
       try {
         if (!Auth.isLoggedIn()) {
-          // If user is not logged in, redirect to login page
           window.location.href = `login.html`;
           return;
         }
-        // Initialize session on Node.js backend
         const data = await API.sessions.createSession(mode, defaultTopic, 20);
-        console.log('Session initialized:', data);
         window.location.href = `${targetHtml}?sessionId=${data.sessionId}&topic=${encodeURIComponent(data.topic)}`;
       } catch (err) {
         console.error('Failed to initialize session:', err);
-        // Fallback navigation
         window.location.href = `${targetHtml}?mode=${mode}`;
       }
     }
   </script>
 </body>
 </html>
-

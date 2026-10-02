@@ -161,7 +161,7 @@
   <!-- Top Header Navigation -->
   <header>
     <a class="brand" href="index.html">
-      <div class="brand-logo">👥</div>
+      <div class="brand-logo"><i data-lucide="users" style="width: 22px; height: 22px; color: white;"></i></div>
       <div>
         <div class="brand-text-main">UnMute-Yourself AI</div>
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -173,14 +173,14 @@
 
     <div id="headerTopicBox" class="topic-banner" style="display: none;">
       <span style="font-family: var(--font-tech); color: var(--accent-cyan); font-size: 11px; margin-right: 6px;">[TOPIC]</span>
-      <span id="topicText">Will AI Replace Software Engineers in the Upcoming Era?</span>
+      <span id="topicText">AI: Opportunity or Threat to Jobs</span>
     </div>
 
     <div class="header-actions">
-      <a href="index.html" class="btn-nav-link">🏠 Dashboard</a>
-      <a href="interview.html" class="btn-nav-link">💼 Mock Interview</a>
-      <button id="btnHeaderEval" class="btn-header" style="display: none;" onclick="endGDSession()">🛑 End GD & Evaluate</button>
-      <div id="gdTimerPill" class="timer-pill" style="display: none;">⏱️ 20:00</div>
+      <a href="index.html" class="btn-nav-link"><i data-lucide="home" style="width: 15px; height: 15px;"></i> Dashboard</a>
+      <a href="interview.html" class="btn-nav-link"><i data-lucide="briefcase" style="width: 15px; height: 15px;"></i> Mock Interview</a>
+      <button id="btnHeaderEval" class="btn-header" style="display: none;" onclick="endGDSession()"><i data-lucide="square" style="width: 14px; height: 14px;"></i> End GD & Evaluate</button>
+      <div id="gdTimerPill" class="timer-pill" style="display: none;"><i data-lucide="timer" style="width: 15px; height: 15px;"></i> <span id="gdTimerVal">20:00</span></div>
     </div>
   </header>
 
@@ -188,7 +188,9 @@
   <div id="screenPrep" class="view-screen active">
     <div class="prep-stage">
       <div style="font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: var(--accent-cyan); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">[STAGE 1: TOPIC SELECTION & PREPARATION]</div>
-      <h1 style="font-family: var(--font-display); font-size: 32px; font-weight: 800; margin-bottom: 8px;">🎲 Select or Draw Your GD Topic</h1>
+      <h1 style="font-family: var(--font-display); font-size: 32px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; justify-content: center;">
+        <i data-lucide="dices" style="width: 32px; height: 32px; color: var(--accent-cyan);"></i> Select or Draw Your GD Topic
+      </h1>
       <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Choose from curated study topics, draw randomly, or enter a custom academic topic.</p>
 
       <div class="slot-box">
@@ -197,7 +199,7 @@
 
       <div class="topic-selection-card">
         <div class="topic-opt-row">
-          <label class="topic-opt-label">📚 Select from Curated Study Topics:</label>
+          <label class="topic-opt-label"><i data-lucide="book-open" style="width: 16px; height: 16px; color: var(--accent-cyan);"></i> Select from Curated Topics:</label>
           <div style="display: flex; gap: 10px; width: 100%;">
             <select id="topicDropdown" class="topic-select" onchange="onTopicDropdownChange(this.value)">
               <option value="" disabled selected>-- Choose a Discussion Topic --</option>
@@ -219,12 +221,12 @@
               <option value="Is Competition Good for Students?">Is Competition Good for Students?</option>
               <option value="Importance of Soft Skills vs. Technical Skills">Importance of Soft Skills vs. Technical Skills</option>
             </select>
-            <button class="btn-subtle" onclick="startTopicDraw()">🎲 Random Draw</button>
+            <button class="btn-subtle" onclick="startTopicDraw()"><i data-lucide="dices" style="width: 15px; height: 15px;"></i> Random Draw</button>
           </div>
         </div>
 
         <div class="topic-opt-row" style="margin-top: 16px;">
-          <label class="topic-opt-label">✍️ Or Enter Custom Study Topic:</label>
+          <label class="topic-opt-label"><i data-lucide="pen-tool" style="width: 16px; height: 16px; color: var(--accent-cyan);"></i> Or Enter Custom Study Topic:</label>
           <div style="display: flex; gap: 10px; width: 100%;">
             <input type="text" id="customTopicInput" class="custom-topic-input" placeholder="e.g. Distributed Consensus in Blockchain, Deep Learning in Robotics..." onkeydown="if(event.key==='Enter') setCustomTopic()" />
             <button class="btn-action-topic" onclick="setCustomTopic()">Set Topic</button>
@@ -234,7 +236,9 @@
 
       <div id="prepTimerBox" class="prep-timer-box" style="display: none;">15:00</div>
       <textarea id="notesArea" class="notes-textarea" placeholder="Jot down your key arguments, statistics, and opening points here..."></textarea>
-      <button id="btnPrepared" class="btn-launch" style="padding: 16px 40px; font-size: 16px; max-width: 400px;" onclick="finishPrepAndStartGD()">I'm Prepared - Start GD Now 🚀</button>
+      <button id="btnPrepared" class="btn-launch" style="padding: 16px 40px; font-size: 16px; max-width: 400px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;" onclick="finishPrepAndStartGD()">
+        I'm Prepared - Start GD Now <i data-lucide="rocket" style="width: 18px; height: 18px;"></i>
+      </button>
     </div>
   </div>
 
@@ -254,11 +258,11 @@
           <div id="seat-Kavita" class="participant-seat-2d seat-kavita">
             <div class="seat-tag-2d" style="border-color: #38bdf8;">Kavita R. (Moderator)</div>
           </div>
-          <div id="seat-Aarav" class="participant-seat-2d seat-aarav">
-            <div class="seat-tag-2d" style="border-color: #ef4444;">Aarav M. (Contrarian)</div>
-          </div>
           <div id="seat-Sneha" class="participant-seat-2d seat-sneha">
             <div class="seat-tag-2d" style="border-color: #22c55e;">Sneha P. (Peacemaker)</div>
+          </div>
+          <div id="seat-Aarav" class="participant-seat-2d seat-aarav">
+            <div class="seat-tag-2d" style="border-color: #ef4444;">Aarav M. (Contrarian)</div>
           </div>
           <div id="seat-User" class="participant-seat-2d seat-user">
             <div class="seat-tag-2d" style="border-color: #f59e0b;">You (Participant)</div>
@@ -268,12 +272,12 @@
 
       <div class="interview-sidebar">
         <div class="panel-title">
-          <span>📝 GD Live Transcript</span>
+          <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="file-text" style="width: 16px; height: 16px; color: var(--accent-cyan);"></i> GD Live Transcript</span>
         </div>
         <div id="transcriptFeed" class="transcript-feed"></div>
         <div class="mic-control-box">
           <div id="btnMic" class="mic-diamond-btn" onclick="toggleMic()">
-            <span class="mic-icon-inner">🎙️</span>
+            <span class="mic-icon-inner"><i data-lucide="mic" style="width: 22px; height: 22px; color: white;"></i></span>
           </div>
           <div id="micStatus" class="mic-status-label">Click Mic to Speak (up to 1m)</div>
           <div class="input-fallback-row">
@@ -289,8 +293,10 @@
   <div id="scorecardModal" class="modal-overlay">
     <div class="modal-card">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-family: var(--font-display); font-size: 24px; font-weight: 800;">🏆 GD Evaluation & Winner Scorecard</h3>
-        <button class="btn-subtle" onclick="closeScorecardModal()">✕ Close</button>
+        <h3 style="font-family: var(--font-display); font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+          <i data-lucide="trophy" style="width: 24px; height: 24px; color: #eab308;"></i> GD Evaluation & Winner Scorecard
+        </h3>
+        <button class="btn-subtle" onclick="closeScorecardModal()"><i data-lucide="x" style="width: 16px; height: 16px;"></i> Close</button>
       </div>
 
       <div class="verdict-banner">
@@ -308,24 +314,30 @@
       </div>
 
       <div class="feedback-section">
-        <h4>⚠️ Areas for Improvement</h4>
+        <h4 style="display: flex; align-items: center; gap: 6px;"><i data-lucide="alert-triangle" style="width: 16px; height: 16px; color: #eab308;"></i> Areas for Improvement</h4>
         <div id="weaknessText"></div>
       </div>
 
       <div class="feedback-section">
-        <h4>💬 Summary Feedback</h4>
+        <h4 style="display: flex; align-items: center; gap: 6px;"><i data-lucide="message-square" style="width: 16px; height: 16px; color: var(--accent-cyan);"></i> Summary Feedback</h4>
         <p id="feedbackText"></p>
       </div>
 
       <div style="display: flex; gap: 12px; margin-top: 24px;">
-        <a href="index.html" class="btn-launch" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">Return to Dashboard 🏠</a>
-        <button class="btn-subtle" onclick="location.reload()">🔄 Practice Another Topic</button>
+        <a href="index.html" class="btn-launch" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          Return to Dashboard <i data-lucide="home" style="width: 18px; height: 18px;"></i>
+        </a>
+        <button class="btn-subtle" onclick="location.reload()"><i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i> Practice Another Topic</button>
       </div>
     </div>
   </div>
 
   <script src="../js/api.js"></script>
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+
     let currentTopic = "AI: Opportunity or Threat to Jobs";
     let ws = null;
     let prepSeconds = 15 * 60;
@@ -454,6 +466,7 @@
       document.querySelectorAll('.view-screen').forEach(s => s.classList.remove('active'));
       const screenEl = document.getElementById(screenId);
       if (screenEl) { screenEl.classList.add('active'); screenEl.scrollTop = 0; }
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function onTopicDropdownChange(val) {
@@ -576,11 +589,11 @@
     function startGD20MinTimer() {
       sessionSeconds = 20 * 60;
       if (sessionTimerInterval) clearInterval(sessionTimerInterval);
-      const timerPill = document.getElementById('gdTimerPill');
+      const timerVal = document.getElementById('gdTimerVal') || document.getElementById('gdTimerPill');
       sessionTimerInterval = setInterval(() => {
         sessionSeconds--;
         const mins = Math.floor(sessionSeconds / 60); const secs = sessionSeconds % 60;
-        timerPill.innerText = `⏱️ ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        if (timerVal) timerVal.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         if (sessionSeconds <= 0) { clearInterval(sessionTimerInterval); endGDSession(); }
       }, 1000);
     }

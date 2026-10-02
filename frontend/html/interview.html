@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>1-on-1 AI Mock Interview | UnMute-Yourself AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root {
       --bg-main: #f8fafc;
@@ -684,7 +685,7 @@
   <!-- Top Header Navigation -->
   <header>
     <a class="brand" href="index.html">
-      <div class="brand-logo">💼</div>
+      <div class="brand-logo"><i data-lucide="briefcase" style="width: 22px; height: 22px; color: white;"></i></div>
       <div>
         <div class="brand-text-main">UnMute-Yourself AI</div>
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -695,23 +696,23 @@
     </a>
 
     <div class="header-actions">
-      <a href="index.html" class="btn-nav-link">🏠 Dashboard</a>
-      <a href="gd.html" class="btn-nav-link">👥 GD Room</a>
-      <button id="btnHeaderEval" class="btn-header" style="display: none;" onclick="endInterviewSession()">🛑 End & Score</button>
-      <div id="interviewTimerPill" class="timer-pill" style="display: none;">⏱️ 20:00</div>
+      <a href="index.html" class="btn-nav-link" style="display: inline-flex; align-items: center; gap: 6px;"><i data-lucide="home" style="width: 15px; height: 15px;"></i> Dashboard</a>
+      <a href="gd.html" class="btn-nav-link" style="display: inline-flex; align-items: center; gap: 6px;"><i data-lucide="users" style="width: 15px; height: 15px;"></i> GD Room</a>
+      <button id="btnHeaderEval" class="btn-header" style="display: none;" onclick="endInterviewSession()"><i data-lucide="square" style="width: 14px; height: 14px;"></i> End & Score</button>
+      <div id="interviewTimerPill" class="timer-pill" style="display: none;"><i data-lucide="timer" style="width: 15px; height: 15px;"></i> <span id="timerVal">20:00</span></div>
     </div>
   </header>
 
   <!-- SCREEN 1: PRE-INTERVIEW SETUP & RESUME PARSER -->
   <div id="screenSetup" class="view-screen active">
     <div class="setup-stage">
-      <span class="setup-hud-pill">💼 Step 1: Pre-Interview Configuration</span>
+      <span class="setup-hud-pill" style="display: inline-flex; align-items: center; gap: 6px;"><i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> Step 1: Pre-Interview Configuration</span>
       <h1 class="setup-header-title">1-on-1 AI Mock Interview Setup</h1>
       <p class="setup-header-desc">Select your target engineering role, interview language, and upload your resume for adaptive technical and behavioral questioning from intro to tough system design.</p>
 
       <!-- Role & Language Selection Card -->
       <div class="setup-card">
-        <div class="setup-section-title"><span>🎯</span> 1. Select Target Role & Language</div>
+        <div class="setup-section-title"><i data-lucide="target" style="width: 18px; height: 18px; color: var(--accent-green);"></i> 1. Select Target Role & Language</div>
         <div class="setup-grid-2col">
           <div>
             <label class="field-label">Target Role / Specialization</label>
@@ -739,28 +740,30 @@
 
       <!-- Resume Upload Card -->
       <div class="setup-card">
-        <div class="setup-section-title"><span>📄</span> 2. Upload Candidate Resume</div>
+        <div class="setup-section-title"><i data-lucide="file-text" style="width: 18px; height: 18px; color: var(--accent-green);"></i> 2. Upload Candidate Resume</div>
         
         <div id="resumeDropzone" class="resume-dropzone" onclick="document.getElementById('resumeFileInput').click()">
           <input type="file" id="resumeFileInput" accept=".pdf,.txt,.docx" style="display: none;" onchange="handleResumeFileSelected(this.files[0])" />
-          <div class="dropzone-icon">📤</div>
+          <div class="dropzone-icon"><i data-lucide="file-up" style="width: 36px; height: 36px; color: var(--accent-green);"></i></div>
           <div class="dropzone-text-main" id="dropzoneMainText">Drag & Drop Resume PDF / TXT here or click to browse</div>
           <div class="dropzone-text-sub">Supported formats: .pdf, .txt, .docx (Max 10MB)</div>
         </div>
 
         <!-- Loading spinner -->
         <div id="resumeParseSpinner" style="display: none; align-items: center; justify-content: center; gap: 10px; margin-top: 16px; font-weight: 700; color: var(--accent-cyan);">
-          <span>⏳ Extracting candidate skills, experience, and project data...</span>
+          <span>Extracting candidate skills, experience, and project data...</span>
         </div>
 
         <!-- Parsed Profile Preview -->
         <div id="resumeProfilePreview" class="profile-preview-box">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
             <div>
-              <span style="font-size: 11px; font-weight: 800; color: #15803d; text-transform: uppercase;">✅ Resume Parsed Successfully</span>
+              <span style="font-size: 11px; font-weight: 800; color: #15803d; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px;">
+                <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> Resume Parsed Successfully
+              </span>
               <div id="parsedCandidateName" class="candidate-name-badge">Candidate Name</div>
             </div>
-            <button class="btn-subtle" onclick="resetResumeUpload()">🔄 Replace Resume</button>
+            <button class="btn-subtle" onclick="resetResumeUpload()"><i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> Replace Resume</button>
           </div>
           <div style="font-size: 12px; color: #334155; margin-bottom: 6px;">
             <strong>Target Match:</strong> <span id="parsedMatchScore">85% Match</span> | <span id="parsedExpYears">2+ years experience</span>
@@ -778,7 +781,7 @@
         <!-- Re-upload Alert (if empty or parsing fails) -->
         <div id="reuploadAlert" class="reupload-banner">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 20px;">⚠️</span>
+            <i data-lucide="alert-triangle" style="width: 18px; height: 18px; color: var(--accent-red);"></i>
             <span style="font-size: 13px; color: var(--accent-red); font-weight: 600;" id="reuploadAlertMsg">No resume uploaded. Upload a resume for personalized project deep-dives.</span>
           </div>
           <button class="btn-send" style="background: var(--accent-red); padding: 6px 14px; font-size: 12px;" onclick="document.getElementById('resumeFileInput').click()">Re-upload Resume</button>
@@ -786,7 +789,9 @@
       </div>
 
       <!-- Enter Arena Button -->
-      <button id="btnEnterInterview" class="btn-launch" style="max-width: 500px;" onclick="startInterviewSession()">Enter 1-on-1 Interview Room (15-20 Min) 💼</button>
+      <button id="btnEnterInterview" class="btn-launch" style="max-width: 500px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;" onclick="startInterviewSession()">
+        Enter 1-on-1 Interview Room (15-20 Min) <i data-lucide="rocket" style="width: 18px; height: 18px;"></i>
+      </button>
     </div>
   </div>
 
@@ -813,20 +818,20 @@
         <!-- Center Interviewer Stage -->
         <div class="interviewer-hero-card">
           <div id="turnCountdownBadge" class="turn-countdown-badge">
-            <span>⏱️</span> <span id="turnCountdownText">Turn starts in 3s...</span>
+            <i data-lucide="timer" style="width: 14px; height: 14px;"></i> <span id="turnCountdownText">Turn starts in 3s...</span>
           </div>
 
           <div id="interviewerAvatarWrap" class="interviewer-avatar-wrapper">
             <div class="interviewer-pulse-ring"></div>
-            <div class="interviewer-avatar-circle">👨‍💼</div>
+            <div class="interviewer-avatar-circle"><i data-lucide="user-check" style="width: 48px; height: 48px; color: #ffffff;"></i></div>
           </div>
           <div class="interviewer-name">Alex Miller</div>
           <div class="interviewer-role-pill">Lead Technical Interviewer</div>
         </div>
 
         <!-- AI Coaching Hint Bubble -->
-        <div id="coachingHintBox" class="coaching-hint-bubble">
-          <span style="font-size: 18px;">💡</span>
+        <div id="coachingHintBox" class="coaching-hint-bubble" style="display: flex; align-items: flex-start; gap: 10px;">
+          <i data-lucide="lightbulb" style="width: 20px; height: 20px; color: #eab308; flex-shrink: 0; margin-top: 2px;"></i>
           <span id="coachingHintText">Welcome! Take a breath, listen carefully to each question, and structure your responses with real-world examples.</span>
         </div>
 
@@ -836,7 +841,7 @@
       <div class="interview-sidebar">
         
         <div class="panel-title">
-          <span>📝 Live Interview Feed</span>
+          <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="file-text" style="width: 16px; height: 16px; color: #16a34a;"></i> Live Interview Feed</span>
           <span id="interviewQCountBadge" style="font-family: var(--font-tech); font-size: 11px; color: var(--accent-cyan); background: #f0fdf4; border: 1px solid rgba(22, 163, 74, 0.3); padding: 2px 8px; border-radius: 6px;">Q #1</span>
         </div>
 
@@ -846,7 +851,7 @@
         <!-- Mic & Answer Controls -->
         <div class="mic-control-box">
           <div id="btnInterviewMic" class="mic-diamond-btn" onclick="toggleInterviewMic()">
-            <span class="mic-icon-inner">🎙️</span>
+            <span class="mic-icon-inner"><i data-lucide="mic" style="width: 22px; height: 22px; color: white;"></i></span>
           </div>
           
           <div class="candidate-voice-eq" id="candidateVoiceEq">
@@ -872,9 +877,11 @@
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <div>
           <span style="font-family: var(--font-tech); font-size: 11px; font-weight: 800; color: var(--accent-green); text-transform: uppercase;">Technical Interview Scorecard</span>
-          <h2 style="font-family: var(--font-display); font-size: 26px; font-weight: 900;">Hiring Assessment Report</h2>
+          <h2 style="font-family: var(--font-display); font-size: 26px; font-weight: 900; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="trophy" style="width: 24px; height: 24px; color: #eab308;"></i> Hiring Assessment Report
+          </h2>
         </div>
-        <button class="btn-subtle" onclick="closeInterviewScorecardModal()">✕ Close</button>
+        <button class="btn-subtle" onclick="closeInterviewScorecardModal()"><i data-lucide="x" style="width: 16px; height: 16px;"></i> Close</button>
       </div>
 
       <!-- Verdict Banner -->
@@ -895,31 +902,37 @@
 
       <!-- Strengths -->
       <div class="feedback-section">
-        <h4>🌟 Key Candidate Strengths</h4>
+        <h4 style="display: flex; align-items: center; gap: 6px;"><i data-lucide="star" style="width: 16px; height: 16px; color: #eab308;"></i> Key Candidate Strengths</h4>
         <div id="interviewStrengthsList"></div>
       </div>
 
       <!-- Growth Areas -->
       <div class="feedback-section" style="border-color: rgba(220, 38, 38, 0.25); background: rgba(220, 38, 38, 0.03);">
-        <h4 style="color: var(--accent-red);">⚠️ Areas for Improvement & Growth</h4>
+        <h4 style="color: var(--accent-red); display: flex; align-items: center; gap: 6px;"><i data-lucide="alert-triangle" style="width: 16px; height: 16px; color: var(--accent-red);"></i> Areas for Improvement & Growth</h4>
         <div id="interviewWeaknessList"></div>
       </div>
 
       <!-- Summary Feedback -->
       <div class="feedback-section">
-        <h4>💬 Lead Interviewer Summary</h4>
+        <h4 style="display: flex; align-items: center; gap: 6px;"><i data-lucide="message-square" style="width: 16px; height: 16px; color: var(--accent-green);"></i> Lead Interviewer Summary</h4>
         <p id="interviewSummaryFeedback" style="color: var(--text-main); font-size: 13px;"></p>
       </div>
 
       <div style="display: flex; gap: 12px; margin-top: 24px;">
-        <a href="index.html" class="btn-launch" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">Return to Dashboard 🏠</a>
-        <button class="btn-subtle" onclick="location.reload()">🔄 Retake Interview</button>
+        <a href="index.html" class="btn-launch" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          Return to Dashboard <i data-lucide="home" style="width: 18px; height: 18px;"></i>
+        </a>
+        <button class="btn-subtle" onclick="location.reload()"><i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i> Retake Interview</button>
       </div>
     </div>
   </div>
 
   <script src="../js/api.js"></script>
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+
     /* Global State */
     let interviewWs = null;
     let sessionTimerInterval = null;
@@ -1121,7 +1134,7 @@
         chip.className = 'extracted-chip';
         chip.style.borderColor = 'rgba(37, 99, 235, 0.3)';
         chip.style.color = '#1e40af';
-        chip.innerText = `🚀 ${proj}`;
+        chip.innerText = proj;
         projectsChips.appendChild(chip);
       });
 
@@ -1159,7 +1172,7 @@
 
       const feed = document.getElementById('interviewTranscript');
       feed.innerHTML = '';
-      appendInterviewTranscript('System', `🚀 Connecting to 1-on-1 Interview Room for ${role}...`, 'system');
+      appendInterviewTranscript('System', `Connecting to 1-on-1 Interview Room for ${role}...`, 'system');
 
       startInterviewTimer();
       connectInterviewWebSocket(sessionId, role, language);
@@ -1486,6 +1499,13 @@
       interviewWs.send(JSON.stringify({ event: 'END_INTERVIEW' }));
     }
 
+    function showScreen(screenId) {
+      document.querySelectorAll('.view-screen').forEach(s => s.classList.remove('active'));
+      const screenEl = document.getElementById(screenId);
+      if (screenEl) { screenEl.classList.add('active'); screenEl.scrollTop = 0; }
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
     function showInterviewScorecardModal(card) {
       if (!card) return;
 
@@ -1516,6 +1536,7 @@
       document.getElementById('interviewSummaryFeedback').innerText = card.detailed_feedback_summary || "Good overall demonstration of core technical knowledge.";
 
       document.getElementById('interviewScorecardModal').style.display = 'flex';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function closeInterviewScorecardModal() {
