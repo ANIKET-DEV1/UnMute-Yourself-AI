@@ -10,10 +10,16 @@
     :root {
       --bg-main: #f8fafc;
       --bg-surface: #ffffff;
+      --bg-card: #ffffff;
       --border-color: #e2e8f0;
+      
       --accent-purple: #7e22ce;
+      --accent-purple-light: #a855f7;
       --accent-blue: #2563eb;
+      --accent-cyan: #0284c7;
       --accent-red: #dc2626;
+      --accent-green: #16a34a;
+      
       --text-main: #0f172a;
       --text-muted: #64748b;
       --font-tech: 'Space Grotesk', sans-serif;
@@ -22,59 +28,130 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-primary); }
-    body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
-    header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Header */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      z-index: 20;
+    }
+
     .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
     .brand-logo { width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; box-shadow: 0 4px 14px rgba(126, 34, 206, 0.25); }
     .brand-text-main { font-family: var(--font-display); font-weight: 800; font-size: 16px; }
     .brand-hud-badge { font-family: var(--font-tech); font-size: 10px; font-weight: 700; color: var(--accent-purple); background: rgba(126, 34, 206, 0.08); border: 1px solid rgba(126, 34, 206, 0.2); padding: 2px 8px; border-radius: 6px; text-transform: uppercase; }
 
+    .topic-banner { background: rgba(255,255,255,0.9); border: 1px solid var(--border-color); border-radius: 30px; padding: 6px 20px; font-size: 13px; font-weight: 700; max-width: 480px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
     .header-actions { display: flex; align-items: center; gap: 12px; }
     .btn-nav-link { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; }
     .btn-nav-link:hover { background: #e2e8f0; }
 
-    .timer-pill { font-family: var(--font-tech); font-weight: 700; font-size: 13px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 6px 14px; border-radius: 20px; display: none; }
+    .btn-header { background: rgba(220, 38, 38, 0.08); color: var(--accent-red); border: 1px solid rgba(220, 38, 38, 0.25); padding: 8px 18px; border-radius: 12px; font-family: var(--font-tech); font-weight: 700; font-size: 13px; cursor: pointer; }
+    .timer-pill { background: rgba(126, 34, 206, 0.08); color: var(--accent-purple); border: 1px solid rgba(126, 34, 206, 0.25); padding: 6px 16px; border-radius: 20px; font-family: var(--font-tech); font-weight: 700; font-size: 13px; }
 
-    .debate-container { flex: 1; max-width: 1000px; margin: 20px auto; width: 100%; padding: 0 20px; display: flex; flex-direction: column; gap: 20px; }
+    /* Screen Views */
+    .view-screen { flex: 1; display: none; flex-direction: column; overflow: hidden; }
+    .view-screen.active { display: flex; }
+    #screenPrep { overflow-y: auto; scroll-behavior: smooth; }
 
-    .topic-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .topic-title { font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--text-main); }
+    /* PREP STAGE */
+    .prep-stage { min-height: 100%; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px 60px 20px; text-align: center; }
+    .slot-box { background: var(--bg-card); border: 2px solid var(--accent-purple); border-radius: 28px; padding: 24px 36px; box-shadow: 0 15px 45px rgba(126, 34, 206, 0.15); margin-bottom: 24px; max-width: 760px; width: 100%; }
+    .topic-reel { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--accent-purple); min-height: 54px; display: flex; align-items: center; justify-content: center; line-height: 1.4; }
 
-    .arena-grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; flex: 1; }
+    .topic-selection-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px 24px; max-width: 760px; width: 100%; margin-bottom: 24px; text-align: left; }
+    .topic-opt-row { display: flex; flex-direction: column; gap: 8px; }
+    .topic-opt-label { font-size: 13px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+    .topic-select { flex: 1; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; outline: none; }
+    .custom-topic-input { flex: 1; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 12px 16px; border-radius: 12px; font-size: 13px; outline: none; }
 
-    .adversary-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
-    .avatar-wrapper { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #f3e8ff, #e9d5ff); border: 3px solid var(--accent-purple); display: flex; align-items: center; justify-content: center; font-size: 44px; margin-bottom: 16px; position: relative; transition: all 0.3s; }
-    .avatar-wrapper.speaking { box-shadow: 0 0 0 10px rgba(126, 34, 206, 0.2); transform: scale(1.05); }
+    .btn-action-purple { background: linear-gradient(135deg, var(--accent-purple), #6b21a8); color: white; border: none; padding: 12px 20px; font-weight: 700; font-size: 13px; border-radius: 12px; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+    .btn-action-purple:hover { opacity: 0.95; transform: translateY(-1px); }
+    .btn-subtle { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border-color); padding: 12px 18px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .prep-timer-box { font-family: var(--font-tech); font-size: 52px; font-weight: 800; color: var(--accent-purple); margin: 18px 0; letter-spacing: 0.06em; }
+    .notes-textarea { width: 100%; max-width: 760px; height: 130px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; color: var(--text-main); font-size: 14px; outline: none; margin-bottom: 24px; resize: none; }
+    .btn-launch { width: 100%; padding: 16px 36px; border-radius: 14px; font-family: var(--font-tech); font-weight: 700; font-size: 16px; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); color: white; border: none; cursor: pointer; box-shadow: 0 6px 20px rgba(126, 34, 206, 0.3); transition: all 0.2s; }
 
-    .transcript-box { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 20px; display: flex; flex-direction: column; height: 480px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
-    .transcript-feed { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+    /* DEBATE ARENA */
+    .app-workspace { flex: 1; display: grid; grid-template-columns: 1fr 420px; height: calc(100vh - 64px); overflow: hidden; background: #070913; }
+    .arena-stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; overflow: hidden; background: radial-gradient(circle at 50% 40%, #111428 0%, #070913 90%); width: 100%; height: 100%; }
+
+    .arena-hud-header { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 30px; padding: 8px 24px; display: flex; align-items: center; gap: 14px; z-index: 10; }
+    .arena-hud-badge { font-family: var(--font-tech); font-size: 11px; font-weight: 900; color: var(--accent-purple-light); }
+    .adversary-status { font-size: 13px; font-weight: 600; color: #f8fafc; }
+
+    .versus-container { display: flex; align-items: center; justify-content: center; gap: 60px; max-width: 800px; width: 100%; }
+    .combatant-card { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 28px 24px; display: flex; flex-direction: column; align-items: center; text-align: center; width: 260px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); position: relative; transition: all 0.3s ease; }
+    .combatant-avatar { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, #2e1065, #581c87); border: 3px solid var(--accent-purple-light); display: flex; align-items: center; justify-content: center; font-size: 48px; margin-bottom: 16px; position: relative; box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3); transition: all 0.3s ease; }
     
-    .feed-bubble { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 14px 16px; font-size: 14px; line-height: 1.5; }
-    .feed-bubble.adversary { background: #faf5ff; border-color: rgba(126, 34, 206, 0.3); }
-    .feed-bubble.user { background: #eff6ff; border-color: rgba(37, 99, 235, 0.3); }
+    .combatant-avatar.speaking {
+      box-shadow: 0 0 0 12px rgba(168, 85, 247, 0.35), 0 0 40px rgba(168, 85, 247, 0.8);
+      transform: scale(1.08);
+      border-color: #e9d5ff;
+      animation: avatarPulse 1.2s infinite alternate;
+    }
+    @keyframes avatarPulse { 0% { transform: scale(1.05); } 100% { transform: scale(1.12); } }
 
+    .combatant-name { font-family: var(--font-display); font-size: 20px; font-weight: 800; color: #ffffff; }
+    .combatant-role { font-size: 12px; color: #94a3b8; margin-top: 2px; margin-bottom: 12px; }
+    .stance-badge { font-family: var(--font-tech); font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .stance-oppose { background: rgba(220, 38, 38, 0.15); color: #fca5a5; border: 1px solid rgba(220, 38, 38, 0.3); }
+    .stance-support { background: rgba(37, 99, 235, 0.15); color: #93c5fd; border: 1px solid rgba(37, 99, 235, 0.3); }
+
+    .vs-divider { font-family: var(--font-tech); font-size: 32px; font-weight: 900; color: rgba(255,255,255,0.25); text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
+
+    /* Transcript Sidebar */
+    .interview-sidebar { background: #ffffff; border-left: 1px solid var(--border-color); display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+    .panel-title { padding: 14px 20px; border-bottom: 1px solid var(--border-color); font-family: var(--font-tech); font-weight: 700; font-size: 13px; text-transform: uppercase; color: var(--text-main); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .transcript-feed { flex: 1; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+    
+    .feed-bubble { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; font-size: 13.5px; line-height: 1.5; }
+    .feed-bubble.adversary { background: #faf5ff; border-color: rgba(126, 34, 206, 0.25); }
+    .feed-bubble.user { background: #eff6ff; border-color: rgba(37, 99, 235, 0.25); }
+    
     .feed-speaker { font-family: var(--font-tech); font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.04em; }
     .feed-speaker.adversary { color: var(--accent-purple); }
     .feed-speaker.user { color: var(--accent-blue); }
 
-    .controls-bar { padding: 16px 20px; border-top: 1px solid var(--border-color); background: #ffffff; display: flex; gap: 12px; align-items: center; }
-    .input-speech { flex: 1; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 14px; outline: none; }
-    .input-speech:focus { border-color: var(--accent-purple); }
-
-    .btn-mic { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); color: white; border: none; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-    .btn-mic.recording { background: linear-gradient(135deg, var(--accent-red), #b91c1c); animation: pulse 1.2s infinite; }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5); } 70% { box-shadow: 0 0 0 12px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
-
-    .btn-action { padding: 12px 20px; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); color: white; border: none; border-radius: 12px; font-family: var(--font-tech); font-weight: 700; font-size: 13px; cursor: pointer; }
+    .mic-control-box { background: rgba(255, 255, 255, 0.98); border-top: 1px solid var(--border-color); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; align-items: center; flex-shrink: 0; }
+    .mic-diamond-btn { width: 60px; height: 60px; background: linear-gradient(135deg, var(--accent-purple), #6b21a8); border: 2px solid rgba(255,255,255,0.6); transform: rotate(45deg); border-radius: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(126, 34, 206, 0.25); transition: all 0.25s ease; }
+    .mic-diamond-btn.recording { background: linear-gradient(135deg, var(--accent-red), #b91c1c); animation: pulseMic 1.2s infinite alternate; }
+    @keyframes pulseMic { 0% { transform: rotate(45deg) scale(1.0); } 100% { transform: rotate(45deg) scale(1.12); } }
+    .mic-icon-inner { transform: rotate(-45deg); font-size: 22px; color: white; }
+    .mic-status-label { font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center; }
+    .input-fallback-row { width: 100%; display: flex; gap: 8px; }
+    .input-fallback-row input { flex: 1; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; }
 
     /* Modal */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-    .modal-card { background: white; border-radius: 24px; padding: 32px; max-width: 600px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(16px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+    .modal-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 24px; width: 100%; max-width: 650px; padding: 32px; max-height: 90vh; overflow-y: auto; }
+    .verdict-banner { background: #f0fdf4; border: 2px solid #22c55e; border-radius: 18px; padding: 18px; margin: 16px 0; text-align: center; }
+    .verdict-title { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: #16a34a; }
+    .score-grid-4col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 18px 0; }
+    .score-box { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; }
+    .score-box-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .score-val { font-family: var(--font-tech); font-size: 24px; font-weight: 800; color: var(--accent-purple); margin-top: 4px; }
   </style>
 </head>
 <body>
 
+  <!-- Header Navigation -->
   <header>
     <a class="brand" href="index.html">
       <div class="brand-logo">⚔️</div>
@@ -86,129 +163,277 @@
         </div>
       </div>
     </a>
+
+    <div id="headerTopicBox" class="topic-banner" style="display: none;">
+      <span style="font-family: var(--font-tech); color: var(--accent-purple); font-size: 11px; margin-right: 6px;">[MOTION]</span>
+      <span id="topicText">Verbal Communication vs Non-Verbal Communication</span>
+    </div>
+
     <div class="header-actions">
-      <span class="timer-pill" id="debateTimerPill">⏱️ 20:00</span>
-      <button class="btn-action" onclick="endDebateSession()" style="background: #ef4444;">End Debate 🏁</button>
       <a href="index.html" class="btn-nav-link">🏠 Dashboard</a>
+      <a href="gd.html" class="btn-nav-link">👥 GD Arena</a>
+      <button id="btnHeaderEval" class="btn-header" style="display: none;" onclick="endDebateSession()">🛑 End Debate & Evaluate</button>
+      <div id="debateTimerPill" class="timer-pill" style="display: none;">⏱️ 20:00</div>
     </div>
   </header>
 
-  <div class="debate-container">
-    <div class="topic-card">
-      <div>
-        <div style="font-size: 11px; font-weight: 700; color: var(--accent-purple); text-transform: uppercase; margin-bottom: 4px;">Motion Topic</div>
-        <div class="topic-title" id="debateTopicDisplay">Universal Basic Income vs Job Guarantees</div>
-      </div>
-      <button class="btn-action" id="btnStartDebate" onclick="startDebateMatch()">Start Debate ⚔️</button>
-    </div>
+  <!-- SCREEN 1: TOPIC SELECTION & PREPARATION -->
+  <div id="screenPrep" class="view-screen active">
+    <div class="prep-stage">
+      <div style="font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: var(--accent-purple); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">[STAGE 1: DEBATE MOTION SELECTION & PREP]</div>
+      <h1 style="font-family: var(--font-display); font-size: 32px; font-weight: 800; margin-bottom: 8px;">🎲 Select or Shuffle Your Debate Motion</h1>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Choose accessible debate topics, shuffle randomly, or enter a custom debate motion.</p>
 
-    <div class="arena-grid">
-      <!-- Adversary Profile -->
-      <div class="adversary-card">
-        <div class="avatar-wrapper" id="adversaryAvatar">⚔️</div>
-        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 800;">Vikram</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Aggressive AI Debate Adversary</p>
-        <span style="font-size: 11px; background: rgba(126, 34, 206, 0.08); color: var(--accent-purple); font-weight: 700; padding: 4px 10px; border-radius: 12px;">Opposing Stance</span>
+      <div class="slot-box">
+        <div id="topicReel" class="topic-reel">Spinning Debate Motion Reels...</div>
       </div>
 
-      <!-- Live Rebuttal Feed -->
-      <div class="transcript-box">
-        <div class="transcript-feed" id="debateTranscriptFeed">
-          <div class="feed-bubble adversary">
-            <div class="feed-speaker adversary">System</div>
-            Click <strong>Start Debate ⚔️</strong> to trigger Vikram's opening statement.
+      <div class="topic-selection-card">
+        <div class="topic-opt-row">
+          <label class="topic-opt-label">📚 Select Curated Debate Motion:</label>
+          <div style="display: flex; gap: 10px; width: 100%;">
+            <select id="topicDropdown" class="topic-select" onchange="onTopicDropdownChange(this.value)">
+              <option value="" disabled selected>-- Choose a Debate Motion --</option>
+              <option value="Skills Are More Important Than Degrees">Skills Are More Important Than Degrees</option>
+              <option value="Technical Skills Are More Important Than Soft Skills">Technical Skills Are More Important Than Soft Skills</option>
+              <option value="Work From Home is Better Than Work From Office">Work From Home is Better Than Work From Office</option>
+              <option value="Job Security is More Important Than Salary">Job Security is More Important Than Salary</option>
+              <option value="Entrepreneurship is Better Than a Job">Entrepreneurship is Better Than a Job</option>
+              <option value="Part-Time Jobs Are Beneficial for College Students">Part-Time Jobs Are Beneficial for College Students</option>
+              <option value="Internships Should Be Mandatory for College Students">Internships Should Be Mandatory for College Students</option>
+              <option value="College Education Should Focus More on Practical Skills">College Education Should Focus More on Practical Skills</option>
+              <option value="Marks Do Not Define a Student's Ability">Marks Do Not Define a Student's Ability</option>
+              <option value="Experience is More Important Than Qualification">Experience is More Important Than Qualification</option>
+              <option value="AI Pros vs Cons">AI Pros vs Cons</option>
+            </select>
+            <button class="btn-subtle" onclick="startTopicDraw()">🎲 Shuffle Topic</button>
           </div>
         </div>
 
-        <div class="controls-bar">
-          <button class="btn-mic" id="btnMic" onclick="toggleDebateMic()"><i class="fa-solid fa-microphone"></i></button>
-          <input type="text" class="input-speech" id="userDebateInput" placeholder="Type or speak your rebuttal..." onkeypress="handleKeyPress(event)" />
-          <button class="btn-action" onclick="sendDebateRebuttal()">Send Rebuttal</button>
+        <div class="topic-opt-row" style="margin-top: 16px;">
+          <label class="topic-opt-label">✍️ Or Enter Custom Debate Motion:</label>
+          <div style="display: flex; gap: 10px; width: 100%;">
+            <input type="text" id="customTopicInput" class="custom-topic-input" placeholder="e.g. Cashless Economy vs Physical Cash, Electric Vehicles vs Hybrid Systems..." onkeydown="if(event.key==='Enter') setCustomTopic()" />
+            <button class="btn-action-purple" onclick="setCustomTopic()">Set Motion</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="prepTimerBox" class="prep-timer-box" style="display: none;">05:00</div>
+      <textarea id="notesArea" class="notes-textarea" placeholder="Jot down your key rebuttal points, statistics, and counter-arguments here..."></textarea>
+      <button id="btnPrepared" class="btn-launch" style="max-width: 420px;" onclick="finishPrepAndStartDebate()">I'm Prepared - Start Debate Match ⚔️</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: LIVE 1V1 DEBATE ARENA -->
+  <div id="screenArena" class="view-screen">
+    <div class="app-workspace">
+      <div class="arena-stage">
+        <div class="arena-hud-header">
+          <div class="arena-hud-badge">1V1 LIVE ARENA</div>
+          <div id="adversaryStatus" class="adversary-status">Connecting to Debate Arena...</div>
+        </div>
+
+        <div class="versus-container">
+          <!-- User Profile -->
+          <div class="combatant-card">
+            <div class="combatant-avatar" style="border-color: #38bdf8; background: linear-gradient(135deg, #0369a1, #1e40af);">👤</div>
+            <div class="combatant-name">You (Participant)</div>
+            <div class="combatant-role">Proponent / Rebuttal Debater</div>
+            <div class="stance-badge stance-support">Proponent Stance</div>
+          </div>
+
+          <div class="vs-divider">VS</div>
+
+          <!-- AI Adversary Profile -->
+          <div class="combatant-card">
+            <div id="adversaryAvatar" class="combatant-avatar">⚔️</div>
+            <div class="combatant-name">Vikram</div>
+            <div class="combatant-role">Aggressive AI Debate Adversary</div>
+            <div class="stance-badge stance-oppose">Opposing Stance</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transcript & Speech Sidebar -->
+      <div class="interview-sidebar">
+        <div class="panel-title">
+          <span>⚔️ Debate Live Transcript</span>
+        </div>
+        <div id="debateTranscriptFeed" class="transcript-feed"></div>
+        <div class="mic-control-box">
+          <div id="btnMic" class="mic-diamond-btn" onclick="toggleDebateMic()">
+            <span class="mic-icon-inner">🎙️</span>
+          </div>
+          <div id="micStatus" class="mic-status-label">Click Mic to Speak (up to 1m)</div>
+          <div class="input-fallback-row">
+            <input type="text" id="userDebateInput" placeholder="Type your rebuttal point here..." onkeydown="handleKeyPress(event)" />
+            <button class="btn-action-purple" onclick="sendDebateRebuttal()">Send</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Scorecard Modal -->
-  <div class="modal-overlay" id="scorecardModal">
+  <!-- EVALUATION SCORECARD MODAL -->
+  <div id="scorecardModal" class="modal-overlay">
     <div class="modal-card">
-      <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 900; margin-bottom: 12px;">🏆 Debate Scorecard & Analysis</h2>
-      <div style="font-size: 14px; margin-bottom: 20px; color: var(--text-muted);">
-        Winner: <strong id="winnerName" style="color: var(--accent-purple);">User (Participant)</strong>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-family: var(--font-display); font-size: 24px; font-weight: 800;">🏆 Debate Evaluation Scorecard</h3>
+        <button class="btn-subtle" onclick="closeScorecardModal()">✕ Close</button>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px;">
-        <div style="background: #f8fafc; padding: 14px; border-radius: 12px; text-align: center;">
-          <div style="font-size: 11px; font-weight: 700; color: var(--text-muted);">OVERALL SCORE</div>
-          <div style="font-size: 24px; font-weight: 900; color: var(--accent-purple);" id="scoreOverall">85%</div>
-        </div>
-        <div style="background: #f8fafc; padding: 14px; border-radius: 12px; text-align: center;">
-          <div style="font-size: 11px; font-weight: 700; color: var(--text-muted);">REBUTTAL SHARPNESS</div>
-          <div style="font-size: 24px; font-weight: 900; color: var(--accent-blue);" id="scoreRebuttal">8/10</div>
-        </div>
+
+      <div class="verdict-banner">
+        <div id="winnerName" class="verdict-title">User (Participant)</div>
+        <div style="font-size: 14px; color: var(--text-main); margin-top: 6px;">Delivered sharp rebuttals and structured argument points.</div>
       </div>
-      <p id="feedbackText" style="font-size: 13px; color: var(--text-main); line-height: 1.6; margin-bottom: 20px;"></p>
-      <button class="btn-action" style="width: 100%;" onclick="closeScorecardModal()">Close Scorecard</button>
+
+      <div class="score-grid-4col">
+        <div class="score-box"><div class="score-box-label">Overall Match Score</div><div id="scoreOverall" class="score-val">85%</div></div>
+        <div class="score-box"><div class="score-box-label">Rebuttal Sharpness</div><div id="scoreRebuttal" class="score-val">8/10</div></div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-top: 14px; font-size: 13px; line-height: 1.6;">
+        <h4 style="font-family: var(--font-tech); font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">💬 Summary Feedback</h4>
+        <p id="feedbackText"></p>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <a href="index.html" class="btn-launch" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">Return to Dashboard 🏠</a>
+        <button class="btn-subtle" onclick="location.reload()">🔄 Practice Another Topic</button>
+      </div>
     </div>
   </div>
 
   <script src="../js/api.js"></script>
   <script>
+    let currentTopic = "Skills Are More Important Than Degrees";
     let ws = null;
     let sessionId = null;
-    let topic = "Universal Basic Income vs Job Guarantees";
+    let prepSeconds = 5 * 60;
+    let prepTimerInterval = null;
+    let sessionTimerInterval = null;
+    let sessionSeconds = 20 * 60;
     let isRecording = false;
     let recognition = null;
     let finalSpeech = "";
     let interimSpeech = "";
-    let timerInterval = null;
-    let timerSeconds = 20 * 60;
     let audioQueue = [];
     let isAudioPlaying = false;
 
-    document.addEventListener('DOMContentLoaded', () => {
+    const sampleTopics = [
+      "Skills Are More Important Than Degrees",
+      "Technical Skills Are More Important Than Soft Skills",
+      "Work From Home is Better Than Work From Office",
+      "Job Security is More Important Than Salary",
+      "Entrepreneurship is Better Than a Job",
+      "Part-Time Jobs Are Beneficial for College Students",
+      "Internships Should Be Mandatory for College Students",
+      "College Education Should Focus More on Practical Skills",
+      "Marks Do Not Define a Student's Ability",
+      "Experience is More Important Than Qualification",
+      "AI Pros vs Cons"
+    ];
+
+    function showScreen(screenId) {
+      document.querySelectorAll('.view-screen').forEach(s => s.classList.remove('active'));
+      const screenEl = document.getElementById(screenId);
+      if (screenEl) { screenEl.classList.add('active'); screenEl.scrollTop = 0; }
+    }
+
+    function onTopicDropdownChange(val) {
+      if (!val) return;
+      currentTopic = val;
+      document.getElementById('topicReel').innerText = "🎯 Selected Motion: " + val;
+      startPrepCountdown();
+    }
+
+    function setCustomTopic() {
+      const input = document.getElementById('customTopicInput');
+      const val = input.value.trim();
+      if (!val) return;
+      currentTopic = val;
+      document.getElementById('topicReel').innerText = "✍️ Custom Motion: " + val;
+      startPrepCountdown();
+    }
+
+    function startTopicDraw() {
+      const reel = document.getElementById('topicReel');
+      let count = 0;
+      const spinInterval = setInterval(() => {
+        reel.innerText = sampleTopics[count % sampleTopics.length];
+        count++;
+        if (count > 10) {
+          clearInterval(spinInterval);
+          currentTopic = sampleTopics[Math.floor(Math.random() * sampleTopics.length)];
+          reel.innerText = "🎯 Motion Drawn: " + currentTopic;
+          const dropdown = document.getElementById('topicDropdown');
+          if (dropdown) dropdown.value = currentTopic;
+          startPrepCountdown();
+        }
+      }, 140);
+    }
+
+    function startPrepCountdown() {
+      document.getElementById('prepTimerBox').style.display = 'block';
+      prepSeconds = 5 * 60;
+      if (prepTimerInterval) clearInterval(prepTimerInterval);
+      prepTimerInterval = setInterval(() => {
+        prepSeconds--;
+        const mins = Math.floor(prepSeconds / 60); const secs = prepSeconds % 60;
+        document.getElementById('prepTimerBox').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        if (prepSeconds <= 0) { clearInterval(prepTimerInterval); finishPrepAndStartDebate(); }
+      }, 1000);
+    }
+
+    function finishPrepAndStartDebate() {
+      if (prepTimerInterval) clearInterval(prepTimerInterval);
+      showScreen('screenArena');
+      document.getElementById('headerTopicBox').style.display = 'flex';
+      document.getElementById('topicText').innerText = currentTopic;
+      document.getElementById('btnHeaderEval').style.display = 'block';
+      document.getElementById('debateTimerPill').style.display = 'block';
+      connectAndStartDebate();
+    }
+
+    async function connectAndStartDebate() {
       const urlParams = new URLSearchParams(window.location.search);
       sessionId = urlParams.get('sessionId');
-      if (urlParams.get('topic')) topic = decodeURIComponent(urlParams.get('topic'));
-      document.getElementById('debateTopicDisplay').innerText = topic;
-      setupSpeechRecognition();
-    });
 
-    async function startDebateMatch() {
-      document.getElementById('btnStartDebate').style.display = 'none';
-      document.getElementById('debateTimerPill').style.display = 'inline-block';
-      
       if (!sessionId && typeof API !== 'undefined') {
         try {
-          const s = await API.sessions.createSession('DEBATE', topic, 20);
+          const s = await API.sessions.createSession('DEBATE', currentTopic, 20);
           sessionId = s.sessionId;
-        } catch(e) {
+        } catch (e) {
           sessionId = 'room_debate_' + Date.now();
         }
       } else if (!sessionId) {
         sessionId = 'room_debate_' + Date.now();
       }
 
-      connectDebateWS();
-    }
-
-    function connectDebateWS() {
       const host = window.location.hostname || '127.0.0.1';
-      const wsUrl = `ws://${host}:8000/ws/debate/${sessionId}?topic=` + encodeURIComponent(topic);
-      const fallbackUrl = `ws://${host}:8000/debate/ws/${sessionId}?topic=` + encodeURIComponent(topic);
+      const wsUrl = `ws://${host}:8000/ws/debate/${sessionId}?topic=` + encodeURIComponent(currentTopic);
+      const fallbackUrl = `ws://${host}:8000/debate/ws/${sessionId}?topic=` + encodeURIComponent(currentTopic);
 
-      const connect = (targetUrl) => {
+      document.getElementById('adversaryStatus').innerText = "Connecting to Debate Arena...";
+
+      const connectWS = (targetUrl) => {
         ws = new WebSocket(targetUrl);
         ws.onopen = () => {
-          appendFeed('System', 'Connected to Debate Arena. Opponent is ready.', 'adversary');
-          ws.send(JSON.stringify({ event: 'START_DEBATE' }));
+          document.getElementById('adversaryStatus').innerText = "Connected! Vikram is ready.";
+          appendFeed('System', 'Connected to Debate Arena. Vikram is opening the debate statement...', 'adversary');
           startTimer();
+          ws.send(JSON.stringify({ event: 'START_DEBATE' }));
         };
         ws.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data);
             if (data.event === 'AGENT_SPEAKING') {
+              updateAdversaryStatus('speaking');
               appendFeed(data.sender || 'Vikram (Adversary)', data.text, 'adversary');
               enqueueAudio(data.audio);
+            } else if (data.event === 'USER_SPEECH_ACK') {
+              updateAdversaryStatus('thinking');
             } else if (data.event === 'SESSION_COMPLETED') {
               showScorecard(data.scorecard);
               if (typeof API !== 'undefined' && sessionId) {
@@ -218,19 +443,46 @@
           } catch(e) { console.error(e); }
         };
         ws.onerror = () => {
-          if (targetUrl === wsUrl) connect(fallbackUrl);
+          if (targetUrl === wsUrl) connectWS(fallbackUrl);
         };
       };
 
-      connect(wsUrl);
+      try { connectWS(wsUrl); } catch(err) { alert("Failed to connect Debate: " + err.message); }
+    }
+
+    function updateAdversaryStatus(state) {
+      const statusEl = document.getElementById('adversaryStatus');
+      const avatarEl = document.getElementById('adversaryAvatar');
+      if (state === 'thinking') {
+        if (statusEl) statusEl.innerHTML = `<span style="color: #a855f7; font-weight: 800;">⏳ Vikram is thinking...</span> Formulating counter-point`;
+        if (avatarEl) avatarEl.classList.remove('speaking');
+      } else if (state === 'speaking') {
+        if (statusEl) statusEl.innerHTML = `<span style="color: #38bdf8; font-weight: 800;">🎙️ Vikram is speaking...</span>`;
+        if (avatarEl) avatarEl.classList.add('speaking');
+      } else {
+        if (statusEl) statusEl.innerText = "Connected! Vikram is ready.";
+        if (avatarEl) avatarEl.classList.remove('speaking');
+      }
     }
 
     function sendDebateRebuttal() {
-      const text = document.getElementById('userDebateInput').value.trim() || (finalSpeech + interimSpeech).trim();
+      const inputEl = document.getElementById('userDebateInput');
+      const text = inputEl ? inputEl.value.trim() : '';
       if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
+
+      if (isRecording) {
+        isRecording = false;
+        const btn = document.getElementById('btnMic');
+        if (btn) btn.classList.remove('recording');
+        const micStatus = document.getElementById('micStatus');
+        if (micStatus) micStatus.innerText = "Click Mic to Speak (up to 1m)";
+        if (recognition) try { recognition.stop(); } catch(e){}
+      }
+
       appendFeed('You (Debater)', text, 'user');
+      updateAdversaryStatus('thinking');
       ws.send(JSON.stringify({ event: 'USER_REBUTTAL', text: text, filler_count: 0 }));
-      document.getElementById('userDebateInput').value = '';
+      if (inputEl) inputEl.value = '';
       finalSpeech = ''; interimSpeech = '';
     }
 
@@ -244,6 +496,7 @@
 
     function appendFeed(speaker, text, type) {
       const feed = document.getElementById('debateTranscriptFeed');
+      if (!feed) return;
       const b = document.createElement('div');
       b.className = `feed-bubble ${type}`;
       b.innerHTML = `<div class="feed-speaker ${type}">${speaker}</div><div>${text}</div>`;
@@ -261,16 +514,24 @@
       if (isAudioPlaying || audioQueue.length === 0) return;
       isAudioPlaying = true;
       const b64 = audioQueue.shift();
-      const avatar = document.getElementById('adversaryAvatar');
-      if (avatar) avatar.classList.add('speaking');
+      updateAdversaryStatus('speaking');
 
       const audio = new Audio("data:audio/mp3;base64," + b64);
       audio.onended = () => {
         isAudioPlaying = false;
-        if (avatar) avatar.classList.remove('speaking');
+        updateAdversaryStatus('idle');
         processAudioQueue();
       };
-      audio.play().catch(e => { isAudioPlaying = false; if (avatar) avatar.classList.remove('speaking'); });
+      audio.onerror = () => {
+        isAudioPlaying = false;
+        updateAdversaryStatus('idle');
+        processAudioQueue();
+      };
+      audio.play().catch(e => {
+        isAudioPlaying = false;
+        updateAdversaryStatus('idle');
+        processAudioQueue();
+      });
     }
 
     function setupSpeechRecognition() {
@@ -279,39 +540,53 @@
       recognition = new Speech();
       recognition.continuous = true;
       recognition.interimResults = true;
+      recognition.lang = 'en-IN';
+
       recognition.onresult = (e) => {
         interimSpeech = '';
         for (let i = e.resultIndex; i < e.results.length; ++i) {
-          if (e.results[i].isFinal) finalSpeech += e.results[i][0].transcript + ' ';
-          else interimSpeech += e.results[i][0].transcript;
+          const seg = e.results[i][0].transcript;
+          if (e.results[i].isFinal) finalSpeech += seg + ' ';
+          else interimSpeech += seg;
         }
         document.getElementById('userDebateInput').value = (finalSpeech + interimSpeech).trim();
       };
+      recognition.onend = () => {
+        if (isRecording) {
+          try { recognition.start(); } catch(e){}
+        }
+      };
     }
+    setupSpeechRecognition();
 
     function toggleDebateMic() {
       const btn = document.getElementById('btnMic');
+      const micStatus = document.getElementById('micStatus');
       if (!isRecording) {
         isRecording = true;
         finalSpeech = document.getElementById('userDebateInput').value.trim();
         if (finalSpeech.length > 0) finalSpeech += ' ';
         interimSpeech = '';
         btn.classList.add('recording');
+        if (micStatus) micStatus.innerText = "🎙️ Recording... Speak & click Send when ready";
         if (recognition) try { recognition.start(); } catch(e){}
       } else {
         isRecording = false;
         btn.classList.remove('recording');
+        if (micStatus) micStatus.innerText = "Mic Paused. Click Send to submit speech";
         if (recognition) try { recognition.stop(); } catch(e){}
       }
     }
 
     function startTimer() {
-      if (timerInterval) clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        timerSeconds--;
-        const m = Math.floor(timerSeconds / 60); const s = timerSeconds % 60;
-        document.getElementById('debateTimerPill').innerText = `⏱️ ${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        if (timerSeconds <= 0) { clearInterval(timerInterval); endDebateSession(); }
+      sessionSeconds = 20 * 60;
+      if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+      const timerPill = document.getElementById('debateTimerPill');
+      sessionTimerInterval = setInterval(() => {
+        sessionSeconds--;
+        const m = Math.floor(sessionSeconds / 60); const s = sessionSeconds % 60;
+        if (timerPill) timerPill.innerText = `⏱️ ${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        if (sessionSeconds <= 0) { clearInterval(sessionTimerInterval); endDebateSession(); }
       }, 1000);
     }
 
@@ -320,7 +595,7 @@
       document.getElementById('winnerName').innerText = card.winner_participant || "User (Participant)";
       document.getElementById('scoreOverall').innerText = `${card.overall_score || 85}%`;
       document.getElementById('scoreRebuttal').innerText = `${card.rebuttal_effectiveness || 8}/10`;
-      document.getElementById('feedbackText').innerText = card.summary_feedback || 'Solid debate performance.';
+      document.getElementById('feedbackText').innerText = card.summary_feedback || 'Solid debate performance with clear rebuttals.';
       document.getElementById('scorecardModal').style.display = 'flex';
     }
 

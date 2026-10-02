@@ -199,12 +199,24 @@
           <label class="topic-opt-label">📚 Select from Curated Study Topics:</label>
           <div style="display: flex; gap: 10px; width: 100%;">
             <select id="topicDropdown" class="topic-select" onchange="onTopicDropdownChange(this.value)">
-              <option value="" disabled selected>-- Choose a Study / Technical Topic --</option>
-              <option value="Will AI Replace Software Engineers in the Upcoming Era?">Will AI Replace Software Engineers in the Upcoming Era?</option>
-              <option value="Monolithic Architecture vs Microservices for High Scalability Systems">Monolithic Architecture vs Microservices for High Scalability Systems</option>
-              <option value="Designing Fault-Tolerant Scalable Systems: CAP Theorem & Consistency Trade-offs">Designing Fault-Tolerant Scalable Systems: CAP Theorem & Consistency Trade-offs</option>
-              <option value="Zero Trust Security Architecture vs Traditional Perimeter Defense">Zero Trust Security Architecture vs Traditional Perimeter Defense</option>
-              <option value="Impact of Remote Work & Hybrid Models on Team Innovation & Productivity">Impact of Remote Work & Hybrid Models on Team Innovation & Productivity</option>
+              <option value="" disabled selected>-- Choose a Discussion Topic --</option>
+              <option value="AI: Opportunity or Threat to Jobs">AI: Opportunity or Threat to Jobs</option>
+              <option value="Technology Makes Life Better or Worse">Technology Makes Life Better or Worse</option>
+              <option value="Importance of Communication Skills">Importance of Communication Skills</option>
+              <option value="Hard Work vs. Smart Work">Hard Work vs. Smart Work</option>
+              <option value="Teamwork vs. Individual Work">Teamwork vs. Individual Work</option>
+              <option value="Money vs. Job Satisfaction">Money vs. Job Satisfaction</option>
+              <option value="Leadership vs. Teamwork">Leadership vs. Teamwork</option>
+              <option value="Should College Students Have Part-Time Jobs?">Should College Students Have Part-Time Jobs?</option>
+              <option value="Is Attendance Necessary in College?">Is Attendance Necessary in College?</option>
+              <option value="Impact of Mobile Phones on Students">Impact of Mobile Phones on Students</option>
+              <option value="Online Shopping vs. Offline Shopping">Online Shopping vs. Offline Shopping</option>
+              <option value="Should Exams Be Replaced by Continuous Assessment?">Should Exams Be Replaced by Continuous Assessment?</option>
+              <option value="Is Social Media Good for Students?">Is Social Media Good for Students?</option>
+              <option value="Success: Hard Work or Luck?">Success: Hard Work or Luck?</option>
+              <option value="Should Students Be Allowed to Use AI for Assignments?">Should Students Be Allowed to Use AI for Assignments?</option>
+              <option value="Is Competition Good for Students?">Is Competition Good for Students?</option>
+              <option value="Importance of Soft Skills vs. Technical Skills">Importance of Soft Skills vs. Technical Skills</option>
             </select>
             <button class="btn-subtle" onclick="startTopicDraw()">🎲 Random Draw</button>
           </div>
@@ -313,7 +325,7 @@
 
   <script src="../js/api.js"></script>
   <script>
-    let currentTopic = "Will AI Replace Software Engineers in the Upcoming Era?";
+    let currentTopic = "AI: Opportunity or Threat to Jobs";
     let ws = null;
     let prepSeconds = 15 * 60;
     let prepTimerInterval = null;
@@ -325,11 +337,23 @@
     let currentAudioElement = null;
 
     const sampleTopics = [
-      "Will AI Replace Software Engineers in the Upcoming Era?",
-      "Monolithic Architecture vs Microservices for High Scalability Systems",
-      "Designing Fault-Tolerant Scalable Systems: CAP Theorem & Consistency Trade-offs",
-      "Zero Trust Security Architecture vs Traditional Perimeter Defense",
-      "Impact of Remote Work & Hybrid Models on Team Innovation & Productivity"
+      "AI: Opportunity or Threat to Jobs",
+      "Technology Makes Life Better or Worse",
+      "Importance of Communication Skills",
+      "Hard Work vs. Smart Work",
+      "Teamwork vs. Individual Work",
+      "Money vs. Job Satisfaction",
+      "Leadership vs. Teamwork",
+      "Should College Students Have Part-Time Jobs?",
+      "Is Attendance Necessary in College?",
+      "Impact of Mobile Phones on Students",
+      "Online Shopping vs. Offline Shopping",
+      "Should Exams Be Replaced by Continuous Assessment?",
+      "Is Social Media Good for Students?",
+      "Success: Hard Work or Luck?",
+      "Should Students Be Allowed to Use AI for Assignments?",
+      "Is Competition Good for Students?",
+      "Importance of Soft Skills vs. Technical Skills"
     ];
 
     let gdTurnQueue = [];
